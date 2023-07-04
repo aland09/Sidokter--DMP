@@ -1,0 +1,21 @@
+{
+    "/css/styles.css": "/css/styles.css",
+    "/favicon.ico": "/favicon.ico",
+    "/css/main.css": "/css/main.css",
+    "/js/common.js": "/js/common.js",
+    "/js/scripts.js": "/js/scripts.js",
+    "/icon/acorn-icons-commerce.js": "/icon/acorn-icons-commerce.js",
+    "/icon/acorn-icons-interface.js": "/icon/acorn-icons-interface.js",
+    "/icon/acorn-icons-learning.js": "/icon/acorn-icons-learning.js",
+    "/icon/acorn-icons-medical.js": "/icon/acorn-icons-medical.js",
+    "/icon/acorn-icons.js": "/icon/acorn-icons.js",
+    "/icon/index.html": "/icon/index.html",
+    "/json/chat.json": "/json/chat.json",
+    "/json/contacts.json": "/json/contacts.json",
+    "/json/events.json": "/json/events.json",
+    "/json/icons.json": "/json/icons.json",
+    "/json/mailbox.json": "/json/mailbox.json",
+    "/json/products.json": "/json/products.json",
+    "/json/search.json": "/json/search.json",
+    "/json/tasks.json": "/json/tasks.json"
+}
