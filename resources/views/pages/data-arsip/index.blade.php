@@ -1,8 +1,8 @@
 @php
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
-    $title = 'Data Arsip';
-    $description = 'Halaman Data Arsip';
-    $breadcrumbs = ['/' => 'Beranda', '/data-arsip' => 'Data Arsip'];
+    $title = 'Pemberkasan';
+    $description = 'Halaman Pemberkasan';
+    $breadcrumbs = ['/' => 'Beranda', '/data-arsip' => 'Pemberkasan'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 @section('css')

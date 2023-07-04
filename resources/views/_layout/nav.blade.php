@@ -208,7 +208,7 @@
                     </li>
                     <li>
                         <a href="/data-arsip">
-                            <span class="label">Data Arsip</span>
+                            <span class="label">Pemberkasan</span>
                         </a>
                     </li>
                 </ul>
