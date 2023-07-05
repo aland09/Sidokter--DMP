@@ -16,28 +16,38 @@ class DetailDokumenController extends Controller
     */
     public function update(Request $request, DetailDokumen $detail_data_arsip)
     {
-        $rules = [
-            'dokumen_id' => 'required',
-            'kode_klasifikasi' => 'required',
-            'uraian' => 'required',
-            'tanggal_validasi' => 'required',
-            'jumlah_satuan_item' => 'required',
-            'keterangan' => 'required',
-            'no_spm' => 'required',
-            'no_sp2d' => 'required',
-            'nominal' => 'required',
-            'skpd' => 'required',
-            'pejabat_penandatangan' => 'required',
-            'unit_pengolah' => 'required',
-            'kurun_waktu' => 'required',
-            'jumlah_satuan_berkas' => 'required',
-            'tkt_perkemb' => 'required',
-            'no_box' => 'required',
-        ];
+        // $rules = [
+        //     'dokumen_id' => 'required',
+        //     'kode_klasifikasi' => 'required',
+        //     'uraian' => 'required',
+        //     'tanggal_validasi' => 'required',
+        //     'jumlah_satuan_item' => 'required',
+        //     'keterangan' => 'required',
+        //     'no_spm' => 'required',
+        //     'no_sp2d' => 'required',
+        //     'nominal' => 'required',
+        //     'skpd' => 'required',
+        //     'pejabat_penandatangan' => 'required',
+        //     'unit_pengolah' => 'required',
+        //     'kurun_waktu' => 'required',
+        //     'jumlah_satuan_berkas' => 'required',
+        //     'tkt_perkemb' => 'required',
+        //     'no_box' => 'required',
+        //     'file_dokumen' => 'required',
+        // ];    
 
-        $validatedData = $request->validate($rules);
-         
-        DetailDokumen::where('id', $detail_data_arsip->id)->update($validatedData);
+        $data = $request->except(['_token','_method']);
+
+        if ($request->hasFile('file_dokumen')){
+            $filenameWithExt = $request->file('file_dokumen')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('file_dokumen')->getClientOriginalExtension();
+            $filenameSimpan = $filename.'_'.time().'.'.$extension;
+            $path = $request->file('file_dokumen')->storeAs('public/dokumen_arsip', $filenameSimpan);
+            $data['file_dokumen'] = 'dokumen_arsip/'.$filenameSimpan;
+        }
+
+        DetailDokumen::where('id', $detail_data_arsip->id)->update($data);
 
         return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diperbaharui');
     }
