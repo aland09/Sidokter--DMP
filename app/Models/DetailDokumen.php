@@ -27,6 +27,7 @@ class DetailDokumen extends Model
         'jumlah_satuan_berkas',
         'tkt_perkemb',
         'no_box',
+        'file_dokumen'
     ];
 
     public function dokumen(){

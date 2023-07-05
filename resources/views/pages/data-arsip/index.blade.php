@@ -115,13 +115,18 @@
                         </div>
                         <!-- Title End -->
                         <!-- Top Buttons Start -->
-                        <div class="col-12 col-md-5 d-flex align-items-start justify-content-end">
+                        <div class="col-12 col-md-5 d-flex align-items-start justify-content-end gap-3">
                             <!-- Add New Button Start -->
                             <button type="button" data-bs-toggle="modal" data-bs-target="#modalImport"
                                 class="btn btn-outline-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0">
                                 <i data-acorn-icon="cloud-upload"></i>
                                 <span>Import Data</span>
                             </button>
+
+                            <a href="{{ route('data-arsip.create') }}" class="btn btn-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0">
+                                <i data-acorn-icon="plus"></i>
+                                <span>Tambah Data</span>
+                            </a>
                             <!-- Add New Button End -->
                         </div>
                         <!-- Top Buttons End -->
@@ -206,7 +211,8 @@
                                         <th class="text-muted text-small text-uppercase">Jumlah Satuan Item</th>
                                         <th class="text-muted text-small text-uppercase">Keterangan</th>
                                         <th class="text-muted text-small text-uppercase">No. SPM</th>
-                                        <th style="width: 300px !important" class="text-muted text-small text-uppercase">No. SP2D</th>
+                                        <th style="width: 300px !important" class="text-muted text-small text-uppercase">
+                                            No. SP2D</th>
                                         <th class="text-muted text-small text-uppercase">Nominal</th>
                                         <th class="text-muted text-small text-uppercase">SKPD</th>
                                         <th class="text-muted text-small text-uppercase">Pejabat Penandatangan</th>
@@ -221,9 +227,11 @@
                                 <tbody>
                                     @foreach ($dokumen ?? [] as $item)
                                         <tr>
-                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">{{ $loop->index + 1 }}.
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $loop->index + 1 }}.
                                             </td>
-                                            <td colspan="15" style="height: 42px !important" class="py-2 bg-primary text-white">
+                                            <td colspan="15" style="height: 42px !important"
+                                                class="py-2 bg-primary text-white">
                                                 {{ $item->no_sp2d }} ({{ $item->status }})
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
@@ -316,7 +324,8 @@
                                                     <div class="my-5 ps-3">
                                                         <form id="edit_{{ $item->id }}_{{ $subitem->id }}"
                                                             action="/detail-data-arsip/{{ $subitem->id }}"
-                                                            class="tooltip-label-end edit-form" novalidate method="POST">
+                                                            class="tooltip-label-end edit-form" novalidate method="POST"
+                                                            enctype="multipart/form-data">
                                                             @method('put')
                                                             @csrf
 
@@ -443,6 +452,19 @@
                                                                     value="{{ $subitem->no_box }}" required />
                                                             </div>
 
+                                                            <div class="mb-3 position-relative form-group">
+                                                                <label class="form-label text-primary fw-bold">File
+                                                                    Dokumen</label>
+                                                                @if ($subitem->file_dokumen)
+                                                                <br>
+                                                                    <a href="{{ $subitem->file_dokumen }}"
+                                                                        target="_blank"
+                                                                        class="btn btn-outline-primary mb-3">Lihat File</a>
+                                                                @endif
+                                                                <input class="form-control" type="file"
+                                                                    name="file_dokumen" />
+                                                            </div>
+
                                                             <div class="d-grid gap-2 d-md-flex justify-content-start mt-5">
                                                                 <button type="button" data-item="{{ $item->id }}"
                                                                     data-subitem="{{ $subitem->id }}"
@@ -488,11 +510,11 @@
         <div class="modal-dialog">
             <form method="POST" action="/data-arsip/import_excel" enctype="multipart/form-data">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header py-3">
                         <h5 class="modal-title" id="exampleModalLabelDefault">Import Data</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body py-3">
                         {{ csrf_field() }}
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">File Import</label>

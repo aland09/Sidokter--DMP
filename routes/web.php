@@ -31,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
     // Dashboard
     Route::view('dashboard', 'dashboards/default');
     Route::resource('data-arsip', DokumenController::class);
-    Route::post('/data-arsip/import_excel', [DokumenController::class, 'import_excel']);
+    Route::post('data-arsip/import_excel', [DokumenController::class, 'import_excel']);
     Route::resource('detail-data-arsip', DetailDokumenController::class);
+    Route::get('get-berkas-arsip/{id?}', [DokumenController::class, 'getBerkasArsip']);
 });
