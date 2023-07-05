@@ -115,13 +115,18 @@
                         </div>
                         <!-- Title End -->
                         <!-- Top Buttons Start -->
-                        <div class="col-12 col-md-5 d-flex align-items-start justify-content-end">
+                        <div class="col-12 col-md-5 d-flex align-items-start justify-content-end gap-3">
                             <!-- Add New Button Start -->
                             <button type="button" data-bs-toggle="modal" data-bs-target="#modalImport"
                                 class="btn btn-outline-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0">
                                 <i data-acorn-icon="cloud-upload"></i>
                                 <span>Import Data</span>
                             </button>
+
+                            <a href="{{ route('data-arsip.create') }}" class="btn btn-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0">
+                                <i data-acorn-icon="plus"></i>
+                                <span>Tambah Data</span>
+                            </a>
                             <!-- Add New Button End -->
                         </div>
                         <!-- Top Buttons End -->
