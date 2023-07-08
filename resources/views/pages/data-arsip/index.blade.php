@@ -40,6 +40,13 @@
             $(".modal-body #form_hapus_id").val(form_hapus_id);
         });
 
+        $(document).on("click", ".modal-verifikasi", function() {
+            var form_verifikasi_id = $(this).data('id');
+            var form_verifikasi_status = $(this).data('status');
+            $(".modal-body #form_verifikasi_id").val(form_verifikasi_id);
+            $(".modal-body #form_verifikasi_status").val(form_verifikasi_status);
+        });
+
         const submitBtnHapus = document.getElementById('submitBtnHapus');
         $(submitBtnHapus).click(function() {
             const formId = '#' + $(".modal-body #form_hapus_id").val();
@@ -282,11 +289,14 @@
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                    <a href="#"
-                                                        class="btn btn-icon btn-icon-only btn-sm btn-outline-white"
-                                                        type="button">
+                                                    <button
+                                                        class="btn btn-icon btn-icon-only btn-sm btn-outline-white modal-verifikasi"
+                                                        type="button"
+                                                        data-id="{{ $item->id }}"
+                                                        data-status="Terverifikasi"
+                                                        data-bs-toggle="modal" data-bs-target="#modalVerifikasi">
                                                         <i data-acorn-icon="check"></i>
-                                                    </a>
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -480,12 +490,12 @@
                                                             <div class="mb-3 position-relative form-group">
                                                                 <label class="form-label text-primary fw-bold">Tkt.
                                                                     Perk.</label>
-                                                                    <select name="tkt_perk" class="form-select" required>
-                                                                        <option value="{{ $subitem->tkt_perk }}">
-                                                                            {{ $subitem->tkt_perk }}</option>
-                                                                        <option value="Asli">Asli</option>
-                                                                        <option value="Tembusan">Tembusan</option>
-                                                                    </select>
+                                                                <select name="tkt_perk" class="form-select" required>
+                                                                    <option value="{{ $subitem->tkt_perk }}">
+                                                                        {{ $subitem->tkt_perk }}</option>
+                                                                    <option value="Asli">Asli</option>
+                                                                    <option value="Tembusan">Tembusan</option>
+                                                                </select>
                                                             </div>
 
                                                             <div class="mb-3 position-relative form-group">
@@ -601,6 +611,29 @@
                     <button type="button" id="submitBtnHapus" class="btn btn-primary">Ya</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal Verifikasi -->
+    <div class="modal fade" id="modalVerifikasi" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="POST" action="/data-arsip/verifikasi_dokumen">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header pt-4 pb-3" style="border-bottom: none !important">
+                        <h5 class="modal-title" id="staticBackdropLabel">Verifikasi Data?</h5>
+                    </div>
+                    <div class="modal-body d-none">
+                        <input type="hidden" name="id" id="form_verifikasi_id" value="" />
+                        <input type="hidden" name="status" id="form_verifikasi_status" value="" />
+                    </div>
+                    <div class="modal-footer pt-0 pb-4" style="border-top: none !important">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Ya</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 
