@@ -28,10 +28,22 @@
             $(".modal-body #form_edit_id").val(form_edit_id);
         });
 
+        $(document).on("click", ".modal-edit-parent", function() {
+            var form_edit_parent_id = $(this).data('id');
+            $(".modal-body #form_edit_parent_id").val(form_edit_parent_id);
+        });
+
         const submitBtnEdit = document.getElementById('submitBtnEdit');
         $(submitBtnEdit).click(function() {
             const formId = '#' + $(".modal-body #form_edit_id").val();
             $('#modalEdit').modal('hide');
+            $(formId).submit();
+        });
+
+        const submitBtnEditParent = document.getElementById('submitBtnEditParent');
+        $(submitBtnEditParent).click(function() {
+            const formId = '#' + $(".modal-body #form_edit_parent_id").val();
+            $('#modalEditParent').modal('hide');
             $(formId).submit();
         });
 
@@ -72,11 +84,42 @@
 
         });
 
+        $(document).on('click', '.btn-edit-parent', function() {
+            const item = $(this).data('item');
+            const form = '#form_' + item;
+            const tabel = '#tabel_' + item;
+
+            $(tabel).fadeOut("slow", function() {
+                $(this).addClass("d-none");
+            });
+
+            $(form).fadeIn("slow", function() {
+                $(this).removeClass("d-none");
+                $('div.data-table-responsive-wrapper').scrollLeft(0);
+            });
+
+
+        });
+
         $(document).on('click', '.btn-cancel', function() {
             const item = $(this).data('item');
             const subitem = $(this).data('subitem');
             const form = '#form_' + item + '_' + subitem;
             const tabel = '#tabel_' + item + '_' + subitem;
+
+            $(tabel).fadeIn("slow", function() {
+                $(this).removeClass("d-none");
+            });
+
+            $(form).fadeOut("slow", function() {
+                $(this).addClass("d-none");
+            });
+        });
+
+        $(document).on('click', '.btn-cancel-parent', function() {
+            const item = $(this).data('item');
+            const form = '#form_' + item;
+            const tabel = '#tabel_' + item;
 
             $(tabel).fadeIn("slow", function() {
                 $(this).removeClass("d-none");
@@ -235,7 +278,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($dokumen ?? [] as $item)
-                                        <tr>
+                                        <tr id="tabel_{{ $item->id }}">
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $loop->index + 1 }}.
                                             </td>
@@ -276,7 +319,7 @@
                                                 {{ $item->kurun_waktu }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->jumlah_satuan_berkas }}
+                                                {{ $item->jumlah_satuan_berkas }} Berkas
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $item->tkt_perkemb }}
@@ -289,14 +332,172 @@
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                    <button type="button" data-item="{{ $item->id }}"
+                                                        class="btn btn-icon btn-icon-only btn-sm btn-warning btn-edit-parent">
+                                                        <i data-acorn-icon="edit"></i>
+                                                    </button>
+
                                                     <button
-                                                        class="btn btn-icon btn-icon-only btn-sm btn-outline-white modal-verifikasi"
+                                                        class="btn btn-icon btn-icon-only btn-sm btn-white modal-verifikasi"
                                                         type="button"
                                                         data-id="{{ $item->id }}"
                                                         data-status="Terverifikasi"
                                                         data-bs-toggle="modal" data-bs-target="#modalVerifikasi">
                                                         <i data-acorn-icon="check"></i>
                                                     </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="d-none" id="form_{{ $item->id }}">
+                                            <td colspan="17">
+                                                <div class="my-5 ps-3">
+                                                    <form id="edit_{{ $item->id }}"
+                                                        action="/data-arsip/{{ $item->id }}"
+                                                        class="tooltip-label-end edit-form" novalidate method="POST"
+                                                        enctype="multipart/form-data">
+                                                        @method('put')
+                                                        @csrf
+
+                                                        <div class="mb-3 position-relative form-group">
+                                                            <label class="form-label text-primary fw-bold">Kode
+                                                                Klasifikasi</label>
+                                                            <input type="text" class="form-control"
+                                                                name="kode_klasifikasi"
+                                                                value="{{ $item->kode_klasifikasi }}" required />
+                                                        </div>
+
+                                                        <div class="mb-3 position-relative form-group">
+                                                            <label
+                                                                class="form-label text-primary fw-bold">Uraian</label>
+                                                            <textarea class="form-control" name="uraian" required>{{ $item->uraian }}</textarea>
+                                                        </div>
+
+                                                        <div class="mb-3 position-relative form-group">
+                                                            <label class="form-label text-primary fw-bold">Tanggal
+                                                                Validasi</label>
+                                                            <input type="text" class="form-control datepicker"
+                                                                name="tanggal_validasi"
+                                                                value="{{ $item->tanggal_validasi }}" required />
+                                                        </div>
+
+                                                        <div class="mb-3 position-relative form-group">
+                                                            <label class="form-label text-primary fw-bold">Jumlah
+                                                                Satuan Item</label>
+                                                            <input type="text" class="form-control"
+                                                                name="jumlah_satuan_item"
+                                                                value="{{ $item->jumlah_satuan_item }}" required />
+                                                        </div>
+
+                                                        <div class="mb-3 position-relative form-group">
+                                                            <label
+                                                                class="form-label text-primary fw-bold">Keterangan</label>
+                                                            <select name="keterangan" class="form-select" required>
+                                                                <option value="{{ $item->keterangan }}">
+                                                                    {{ $item->keterangan }}</option>
+                                                                <option value="Tekstual">Tekstual</option>
+                                                                <option value="Digital">Digital</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="mb-3 position-relative form-group">
+                                                            <label class="form-label text-primary fw-bold">No. SPM</label>
+                                                            <input type="text" class="form-control"
+                                                                name="no_spm"
+                                                                value="{{ $item->no_spm }}" required />
+                                                        </div>
+
+                                                        <div class="mb-3 position-relative form-group">
+                                                            <label class="form-label text-primary fw-bold">No.
+                                                                SP2D</label>
+                                                            <input type="text" class="form-control"
+                                                                name="no_sp2d" value="{{ $item->no_sp2d }}"
+                                                                required />
+                                                        </div>
+
+                                                        <div class="mb-3 position-relative form-group">
+                                                            <label class="form-label text-primary fw-bold">Nominal</label>
+                                                            <input type="number" class="form-control"
+                                                                name="nominal" value="{{ $item->nominal }}"
+                                                                required />
+                                                        </div>
+
+                                                        <div class="mb-3 position-relative form-group">
+                                                            <label class="form-label text-primary fw-bold">SKPD</label>
+                                                            <input type="text" class="form-control"
+                                                                name="skpd" value="{{ $item->skpd }}"
+                                                                required />
+                                                        </div>
+
+                                                        <div class="mb-3 position-relative form-group">
+                                                            <label class="form-label text-primary fw-bold">Pejabat
+                                                                Penandatangan</label>
+                                                            <input type="text" class="form-control"
+                                                                name="pejabat_penandatangan"
+                                                                value="{{ $item->pejabat_penandatangan }}"
+                                                                required />
+                                                        </div>
+
+                                                        <div class="mb-3 position-relative form-group">
+                                                            <label
+                                                                class="form-label text-primary fw-bold">Unit Pengolah</label>
+                                                            <select name="unit_pengolah" class="form-select" required>
+                                                                <option value="{{ $item->unit_pengolah }}">
+                                                                    {{ $item->unit_pengolah }}</option>
+                                                                    <option value="SBPK-JP">SBPK-JP</option>
+                                                                    <option value="SBPK-JU">SBPK-JU</option>
+                                                                    <option value="SBPK-JB">SBPK-JB</option>
+                                                                    <option value="SBPK-JS">SBPK-JS</option>
+                                                                    <option value="SBPK-JT">SBPK-JT</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="mb-3 position-relative form-group">
+                                                            <label class="form-label text-primary fw-bold">Kurun
+                                                                Waktu</label>
+                                                            <input type="number" class="form-control"
+                                                                name="kurun_waktu"
+                                                                value="{{ $item->kurun_waktu }}" required />
+                                                        </div>
+
+                                                        <div class="mb-3 position-relative form-group">
+                                                            <label class="form-label text-primary fw-bold">Jumlah Satuan Berkas</label>
+                                                            <input type="number" class="form-control"
+                                                                name="jumlah_satuan_berkas"
+                                                                value="{{ $item->jumlah_satuan_berkas }}" required />
+                                                        </div>
+
+                                                        
+
+                                                        <div class="mb-3 position-relative form-group">
+                                                            <label class="form-label text-primary fw-bold">Tkt.
+                                                                Perkemb.</label>
+                                                            <select name="tkt_perkemb" class="form-select" required>
+                                                                <option value="{{ $item->tkt_perkemb }}">
+                                                                    {{ $item->tkt_perkemb }}</option>
+                                                                <option value="Asli">Asli</option>
+                                                                <option value="Tembusan">Tembusan</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="mb-3 position-relative form-group">
+                                                            <label class="form-label text-primary fw-bold">No.
+                                                                Box</label>
+                                                            <input type="text" class="form-control" name="no_box"
+                                                                value="{{ $item->no_box }}" required />
+                                                        </div>
+
+                                                        <div class="d-grid gap-2 d-md-flex justify-content-start mt-5">
+                                                            <button type="button" data-item="{{ $item->id }}"
+                                                                class="btn btn-outline-primary btn-cancel-parent">
+                                                                Batal
+                                                            </button>
+
+                                                            <button type="button" class="btn btn-primary modal-edit-parent"
+                                                                data-id="edit_{{ $item->id }}"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modalEditParent">Simpan</button>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>
@@ -590,6 +791,25 @@
                 <div class="modal-footer pt-0 pb-4" style="border-top: none !important">
                     <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
                     <button type="button" id="submitBtnEdit" class="btn btn-primary">Ya</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit Parent-->
+    <div class="modal fade" id="modalEditParent" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header pt-4 pb-3" style="border-bottom: none !important">
+                    <h5 class="modal-title" id="staticBackdropLabel">Simpan Data?</h5>
+                </div>
+                <div class="modal-body d-none">
+                    <input type="hidden" name="form_edit_parent_id" id="form_edit_parent_id" value="" />
+                </div>
+                <div class="modal-footer pt-0 pb-4" style="border-top: none !important">
+                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" id="submitBtnEditParent" class="btn btn-primary">Ya</button>
                 </div>
             </div>
         </div>
