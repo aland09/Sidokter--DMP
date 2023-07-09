@@ -40,6 +40,13 @@
             $(".modal-body #form_hapus_id").val(form_hapus_id);
         });
 
+        $(document).on("click", ".modal-verifikasi", function() {
+            var form_verifikasi_id = $(this).data('id');
+            var form_verifikasi_status = $(this).data('status');
+            $(".modal-body #form_verifikasi_id").val(form_verifikasi_id);
+            $(".modal-body #form_verifikasi_status").val(form_verifikasi_status);
+        });
+
         const submitBtnHapus = document.getElementById('submitBtnHapus');
         $(submitBtnHapus).click(function() {
             const formId = '#' + $(".modal-body #form_hapus_id").val();
@@ -123,7 +130,8 @@
                                 <span>Import Data</span>
                             </button>
 
-                            <a href="{{ route('data-arsip.create') }}" class="btn btn-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0">
+                            <a href="{{ route('data-arsip.create') }}"
+                                class="btn btn-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0">
                                 <i data-acorn-icon="plus"></i>
                                 <span>Tambah Data</span>
                             </a>
@@ -221,6 +229,7 @@
                                         <th class="text-muted text-small text-uppercase">Jumlah Satuan Berkas</th>
                                         <th class="text-muted text-small text-uppercase">Tkt. Perkemb</th>
                                         <th class="text-muted text-small text-uppercase">No. Box</th>
+                                        <th class="text-muted text-small text-uppercase">Status</th>
                                         <th width="10%" class="empty">&nbsp;</th>
                                     </tr>
                                 </thead>
@@ -230,23 +239,89 @@
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $loop->index + 1 }}.
                                             </td>
-                                            <td colspan="15" style="height: 42px !important"
-                                                class="py-2 bg-primary text-white">
-                                                {{ $item->no_sp2d }} ({{ $item->status }})
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->kode_klasifikasi }}
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->uraian }}
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->tanggal_validasi }}
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->jumlah_satuan_item }}
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->keterangan }}
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->no_spm }}
+                                            </td>
+                                            <td style="height: 42px !important;" class="py-2 bg-primary text-white">
+                                                {{ $item->no_sp2d }}
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->nominal }}
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->skpd }}
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->pejabat_penandatangan }}
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->unit_pengolah }}
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->kurun_waktu }}
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->jumlah_satuan_berkas }}
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->tkt_perkemb }}
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->no_box }}
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->status }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                    <a href="#"
-                                                        class="btn btn-icon btn-icon-only btn-sm btn-outline-white"
-                                                        type="button">
+                                                    <button
+                                                        class="btn btn-icon btn-icon-only btn-sm btn-outline-white modal-verifikasi"
+                                                        type="button"
+                                                        data-id="{{ $item->id }}"
+                                                        data-status="Terverifikasi"
+                                                        data-bs-toggle="modal" data-bs-target="#modalVerifikasi">
                                                         <i data-acorn-icon="check"></i>
-                                                    </a>
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <th class="text-muted text-small text-uppercase">No.</th>
+                                            <th class="text-muted text-small text-uppercase">Kode Klasifikasi</th>
+                                            <th class="text-muted text-small text-uppercase">Uraian</th>
+                                            <th class="text-muted text-small text-uppercase">Tanggal Surat</th>
+                                            <th class="text-muted text-small text-uppercase">Jumlah Satuan</th>
+                                            <th class="text-muted text-small text-uppercase">Keterangan</th>
+                                            <th class="text-muted text-small text-uppercase">Jenis Naskah Dinas</th>
+                                            <th style="width: 300px !important"
+                                                class="text-muted text-small text-uppercase">
+                                                No. Surat</th>
+                                            <th class="text-muted text-small text-uppercase">Pejabat Penandatangan</th>
+                                            <th class="text-muted text-small text-uppercase">Unit Pengolah</th>
+                                            <th class="text-muted text-small text-uppercase">Kurun Waktu</th>
+                                            <th class="text-muted text-small text-uppercase">No. Box</th>
+                                            <th class="text-muted text-small text-uppercase">Tkt. Perk.</th>
+                                            <th colspan="5" width="10%" class="empty">&nbsp;</th>
+                                        </tr>
                                         @foreach ($item->detailDokumen ?? [] as $subitem)
                                             <tr id="tabel_{{ $item->id }}_{{ $subitem->id }}">
-                                                <td style="height: 42px !important" class="empty py-2">&nbsp;</td>
+                                                <td style="height: 42px !important" class="empty py-2">
+                                                    {{ $loop->index + 1 }}.</td>
                                                 <td style="height: 42px !important" class="py-2">
                                                     {{ $subitem->kode_klasifikasi }}
                                                 </td>
@@ -254,25 +329,19 @@
                                                     {{ $subitem->uraian }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->tanggal_validasi }}
+                                                    {{ $subitem->tanggal_surat }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->jumlah_satuan_item }}
+                                                    {{ $subitem->jumlah_satuan }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
                                                     {{ $subitem->keterangan }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->no_spm }}
+                                                    {{ $subitem->jenis_naskah_dinas }}
                                                 </td>
                                                 <td style="height: 42px !important;" class="py-2">
-                                                    {{ $subitem->no_sp2d }}
-                                                </td>
-                                                <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->nominal }}
-                                                </td>
-                                                <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->skpd }}
+                                                    {{ $subitem->no_surat }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
                                                     {{ $subitem->pejabat_penandatangan }}
@@ -284,15 +353,12 @@
                                                     {{ $subitem->kurun_waktu }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->jumlah_satuan_berkas }}
-                                                </td>
-                                                <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->tkt_perkemb }}
-                                                </td>
-                                                <td style="height: 42px !important" class="py-2">
                                                     {{ $subitem->no_box }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
+                                                    {{ $subitem->tkt_perk }}
+                                                </td>
+                                                <td colspan="5" style="height: 42px !important" class="py-2">
                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                         <a href="#"
                                                             class="btn btn-icon btn-icon-only btn-sm btn-outline-info"
@@ -348,53 +414,45 @@
 
                                                             <div class="mb-3 position-relative form-group">
                                                                 <label class="form-label text-primary fw-bold">Tanggal
-                                                                    Validasi</label>
+                                                                    Surat</label>
                                                                 <input type="text" class="form-control datepicker"
-                                                                    name="tanggal_validasi"
-                                                                    value="{{ $subitem->tanggal_validasi }}" required />
+                                                                    name="tanggal_surat"
+                                                                    value="{{ $subitem->tanggal_surat }}" required />
                                                             </div>
 
                                                             <div class="mb-3 position-relative form-group">
                                                                 <label class="form-label text-primary fw-bold">Jumlah
-                                                                    Satuan Item</label>
+                                                                    Satuan</label>
                                                                 <input type="text" class="form-control"
-                                                                    name="jumlah_satuan_item"
-                                                                    value="{{ $subitem->jumlah_satuan_item }}" required />
+                                                                    name="jumlah_satuan"
+                                                                    value="{{ $subitem->jumlah_satuan }}" required />
                                                             </div>
 
                                                             <div class="mb-3 position-relative form-group">
                                                                 <label
                                                                     class="form-label text-primary fw-bold">Keterangan</label>
+                                                                <select name="keterangan" class="form-select" required>
+                                                                    <option value="{{ $subitem->keterangan }}">
+                                                                        {{ $subitem->keterangan }}</option>
+                                                                    <option value="Tekstual">Tekstual</option>
+                                                                    <option value="Digital">Digital</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="mb-3 position-relative form-group">
+                                                                <label class="form-label text-primary fw-bold">Jenis Naskah
+                                                                    Dinas</label>
                                                                 <input type="text" class="form-control"
-                                                                    name="keterangan" value="{{ $subitem->keterangan }}"
+                                                                    name="jenis_naskah_dinas"
+                                                                    value="{{ $subitem->jenis_naskah_dinas }}" required />
+                                                            </div>
+
+                                                            <div class="mb-3 position-relative form-group">
+                                                                <label class="form-label text-primary fw-bold">No.
+                                                                    Surat</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="no_surat" value="{{ $subitem->no_surat }}"
                                                                     required />
-                                                            </div>
-
-                                                            <div class="mb-3 position-relative form-group">
-                                                                <label class="form-label text-primary fw-bold">No.
-                                                                    SPM</label>
-                                                                <input type="text" class="form-control" name="no_spm"
-                                                                    value="{{ $subitem->no_spm }}" required />
-                                                            </div>
-
-                                                            <div class="mb-3 position-relative form-group">
-                                                                <label class="form-label text-primary fw-bold">No.
-                                                                    SP2D</label>
-                                                                <input type="text" class="form-control" name="no_sp2d"
-                                                                    value="{{ $subitem->no_sp2d }}" required />
-                                                            </div>
-
-                                                            <div class="mb-3 position-relative form-group">
-                                                                <label
-                                                                    class="form-label text-primary fw-bold">Nominal</label>
-                                                                <input type="number" class="form-control" name="nominal"
-                                                                    value="{{ $subitem->nominal }}" required />
-                                                            </div>
-
-                                                            <div class="mb-3 position-relative form-group">
-                                                                <label class="form-label text-primary fw-bold">SKPD</label>
-                                                                <input type="text" class="form-control" name="skpd"
-                                                                    value="{{ $subitem->skpd }}" required />
                                                             </div>
 
                                                             <div class="mb-3 position-relative form-group">
@@ -409,15 +467,9 @@
                                                             <div class="mb-3 position-relative form-group">
                                                                 <label class="form-label text-primary fw-bold">Unit
                                                                     Pengolah</label>
-                                                                <select name="unit_pengolah" class="form-select" required>
-                                                                    <option value="{{ $subitem->unit_pengolah }}">
-                                                                        {{ $subitem->unit_pengolah }}</option>
-                                                                    <option value="SBPK-JP">SBPK-JP</option>
-                                                                    <option value="SBPK-JU">SBPK-JU</option>
-                                                                    <option value="SBPK-JB">SBPK-JB</option>
-                                                                    <option value="SBPK-JS">SBPK-JS</option>
-                                                                    <option value="SBPK-JT">SBPK-JT</option>
-                                                                </select>
+                                                                <input type="text" class="form-control"
+                                                                    name="unit_pengolah"
+                                                                    value="{{ $subitem->unit_pengolah }}" required />
                                                             </div>
 
                                                             <div class="mb-3 position-relative form-group">
@@ -429,23 +481,6 @@
                                                             </div>
 
                                                             <div class="mb-3 position-relative form-group">
-                                                                <label class="form-label text-primary fw-bold">Jumlah
-                                                                    Satuan Berkas</label>
-                                                                <input type="text" class="form-control"
-                                                                    name="jumlah_satuan_berkas"
-                                                                    value="{{ $subitem->jumlah_satuan_berkas }}"
-                                                                    required />
-                                                            </div>
-
-                                                            <div class="mb-3 position-relative form-group">
-                                                                <label class="form-label text-primary fw-bold">Tkt.
-                                                                    Perkemb</label>
-                                                                <input type="text" class="form-control"
-                                                                    name="tkt_perkemb"
-                                                                    value="{{ $subitem->tkt_perkemb }}" required />
-                                                            </div>
-
-                                                            <div class="mb-3 position-relative form-group">
                                                                 <label class="form-label text-primary fw-bold">No.
                                                                     Box</label>
                                                                 <input type="text" class="form-control" name="no_box"
@@ -453,10 +488,21 @@
                                                             </div>
 
                                                             <div class="mb-3 position-relative form-group">
+                                                                <label class="form-label text-primary fw-bold">Tkt.
+                                                                    Perk.</label>
+                                                                <select name="tkt_perk" class="form-select" required>
+                                                                    <option value="{{ $subitem->tkt_perk }}">
+                                                                        {{ $subitem->tkt_perk }}</option>
+                                                                    <option value="Asli">Asli</option>
+                                                                    <option value="Tembusan">Tembusan</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="mb-3 position-relative form-group">
                                                                 <label class="form-label text-primary fw-bold">File
                                                                     Dokumen</label>
                                                                 @if ($subitem->file_dokumen)
-                                                                <br>
+                                                                    <br>
                                                                     <a href="{{ $subitem->file_dokumen }}"
                                                                         target="_blank"
                                                                         class="btn btn-outline-primary mb-3">Lihat File</a>
@@ -565,6 +611,29 @@
                     <button type="button" id="submitBtnHapus" class="btn btn-primary">Ya</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal Verifikasi -->
+    <div class="modal fade" id="modalVerifikasi" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="POST" action="/data-arsip/verifikasi_dokumen">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header pt-4 pb-3" style="border-bottom: none !important">
+                        <h5 class="modal-title" id="staticBackdropLabel">Verifikasi Data?</h5>
+                    </div>
+                    <div class="modal-body d-none">
+                        <input type="hidden" name="id" id="form_verifikasi_id" value="" />
+                        <input type="hidden" name="status" id="form_verifikasi_status" value="" />
+                    </div>
+                    <div class="modal-footer pt-0 pb-4" style="border-top: none !important">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Ya</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 

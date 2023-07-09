@@ -40,14 +40,16 @@
     <div
         class="sw-lg-70 min-h-100 bg-foreground d-flex justify-content-center align-items-center shadow-deep py-5 full-page-content-right-border">
         <div class="sw-lg-50 px-5">
-            <div class="sh-11">
-                <a href="/">
-                    <img class="img-fluid h-50" src="/img/logo/logo-alt.png" alt="logo" />
-                </a>
-            </div>
-            <div class="mb-5">
-                <h2 class="cta-1 mb-0 text-primary">Welcome,</h2>
-                <h2 class="cta-1 text-primary">let's get started!</h2>
+            <div class="d-flex flex-row gap-3 mb-3 align-items-center">
+                <div class="sh-11">
+                    <a href="/">
+                        <img class="img-fluid h-100" src="/img/logo/logo-alt.png" alt="logo" />
+                    </a>
+                </div>
+                <div class="">
+                    <h2 class="cta-1 mb-0 text-primary">Welcome,</h2>
+                    <h2 class="cta-1 text-primary">let's get started!</h2>
+                </div>
             </div>
             <div class="mb-5">
                 <p class="h6">Please use your credentials to login.</p>

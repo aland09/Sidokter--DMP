@@ -14,20 +14,17 @@ class DetailDokumen extends Model
         'dokumen_id',
         'kode_klasifikasi',
         'uraian',
-        'tanggal_validasi',
-        'jumlah_satuan_item',
+        'tanggal_surat',
+        'jumlah_satuan',
         'keterangan',
-        'no_spm',
-        'no_sp2d',
-        'nominal',
-        'skpd',
+        'jenis_naskah_dinas',
+        'no_surat',
         'pejabat_penandatangan',
         'unit_pengolah',
         'kurun_waktu',
-        'jumlah_satuan_berkas',
-        'tkt_perkemb',
         'no_box',
-        'file_dokumen'
+        'tkt_perk',
+        'file_dokumen',
     ];
 
     public function dokumen(){

@@ -24,6 +24,7 @@ class DokumenController extends Controller
         $dokumen = Dokumen::with(['detailDokumen'])
                     ->latest()
                     ->filter(request(['search']))
+                    ->where('status', '=', 'Menunggu Verifikasi')
                     ->paginate($itemsPerPage)
                     ->withQueryString();
 
@@ -113,6 +114,19 @@ class DokumenController extends Controller
             return redirect()->route('data-arsip.create')->with('message','Data arsip dengan No. SP2D '.$no_sp2d_dokumen.' sudah terdapat pada sistem');
         }
 
+    }
+
+    public function verification_document(Request $request) 
+    {
+        $id         = $request['id'];
+        $status     = $request['status'];
+
+        $dokumens   = Dokumen::find($id);
+        if($dokumens) {
+            $dokumens->status = $status;
+            $dokumens->update();
+            return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diverifikasi');
+        }
     }
 
     public function import_excel(Request $request) 

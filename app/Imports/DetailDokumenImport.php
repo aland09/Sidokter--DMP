@@ -29,32 +29,17 @@ class DetailDokumenImport implements ToModel, WithHeadingRow, WithStartRow
     public function model(array $row)
     {
 
-        $dokumen = $this->dokumens->where('no_sp2d', $row['i_sppno_dok'])->first();
-        if($row['c_wil_sp2dproses'] === '1') {
-            $unit_pengolah = 'SBPK-JP';
-        } else if($row['c_wil_sp2dproses'] === '2') {
-            $unit_pengolah = 'SBPK-JU';
-        } else if($row['c_wil_sp2dproses'] === '3') {
-            $unit_pengolah = 'SBPK-JB';
-        } else if($row['c_wil_sp2dproses'] === '4') {
-            $unit_pengolah = 'SBPK-JS';
-        } else if($row['c_wil_sp2dproses'] === '5') {
-            $unit_pengolah = 'SBPK-JT';
-        }
+        $dokumen = $this->dokumens->where('no_sp2d', $row['i_sp2dno_dok'])->first();
+    
         return new DetailDokumen([
             'dokumen_id' => $dokumen->id ?? NULL,
-            'kode_klasifikasi' => 'UD.02.02',
+            'kode_klasifikasi' => $dokumen->kode_klasifikasi,
             'uraian' => $row['e_spp'],
-            'tanggal_validasi' => \Carbon\Carbon::parse($row['d_sp2d_sah'])->isoFormat('YYYY-MM-DD HH:mm:ss'),
-            'no_spm' => $row['i_spmno_dok'],
-            'no_sp2d' => $row['i_sp2dno_dok'],
-            'nominal' => $row['v_spp'],
-            'skpd' => $row['n_opd'],
-            'pejabat_penandatangan' => 'Kuasa Bendahara Umum Daerah',
-            'unit_pengolah' => $unit_pengolah,
+            'tanggal_surat' => \Carbon\Carbon::parse($row['d_sppno'])->isoFormat('YYYY-MM-DD HH:mm:ss'),
+            'no_surat' => $row['i_sppno_dok'],
+            'unit_pengolah' => $row['n_opd'],
             'kurun_waktu' => $row['c_angg_tahun'],
-            'jumlah_satuan_berkas' => '1 Berkas',
-            'tkt_perkemb' => 'Tembusan',
+            'tkt_perk' => 'Asli',
         ]);
     }
 
