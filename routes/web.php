@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DokumenController;
+use App\Http\Controllers\DokumenMasukController;
 use App\Http\Controllers\DetailDokumenController;
 
 /*
@@ -31,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
     // Dashboard
     Route::view('dashboard', 'dashboards/default');
     Route::resource('data-arsip', DokumenController::class);
+    Route::resource('dokumen-masuk', DokumenMasukController::class);
     Route::post('data-arsip/import_excel', [DokumenController::class, 'import_excel']);
     Route::post('data-arsip/verifikasi_dokumen', [DokumenController::class, 'verification_document']);
     Route::resource('detail-data-arsip', DetailDokumenController::class);
