@@ -369,7 +369,7 @@
                                                         <div class="mb-3 position-relative form-group">
                                                             <label
                                                                 class="form-label text-primary fw-bold">Uraian</label>
-                                                            <textarea class="form-control" name="uraian" required>{{ $item->uraian }}</textarea>
+                                                            <textarea class="form-control" name="uraian" disabled required>{{ $item->uraian }}</textarea>
                                                         </div>
 
                                                         <div class="mb-3 position-relative form-group">
@@ -403,7 +403,7 @@
                                                             <label class="form-label text-primary fw-bold">No. SPM</label>
                                                             <input type="text" class="form-control"
                                                                 name="no_spm"
-                                                                value="{{ $item->no_spm }}" required />
+                                                                value="{{ $item->no_spm }}" required disabled />
                                                         </div>
 
                                                         <div class="mb-3 position-relative form-group">
@@ -411,21 +411,21 @@
                                                                 SP2D</label>
                                                             <input type="text" class="form-control"
                                                                 name="no_sp2d" value="{{ $item->no_sp2d }}"
-                                                                required />
+                                                                required disabled/>
                                                         </div>
 
                                                         <div class="mb-3 position-relative form-group">
                                                             <label class="form-label text-primary fw-bold">Nominal</label>
                                                             <input type="number" class="form-control"
                                                                 name="nominal" value="{{ $item->nominal }}"
-                                                                required />
+                                                                required disabled />
                                                         </div>
 
                                                         <div class="mb-3 position-relative form-group">
                                                             <label class="form-label text-primary fw-bold">SKPD</label>
                                                             <input type="text" class="form-control"
                                                                 name="skpd" value="{{ $item->skpd }}"
-                                                                required />
+                                                                required disabled />
                                                         </div>
 
                                                         <div class="mb-3 position-relative form-group">
@@ -456,7 +456,7 @@
                                                                 Waktu</label>
                                                             <input type="number" class="form-control"
                                                                 name="kurun_waktu"
-                                                                value="{{ $item->kurun_waktu }}" required />
+                                                                value="{{ $item->kurun_waktu }}" required disabled />
                                                         </div>
 
                                                         <div class="mb-3 position-relative form-group">
@@ -610,7 +610,7 @@
                                                             <div class="mb-3 position-relative form-group">
                                                                 <label
                                                                     class="form-label text-primary fw-bold">Uraian</label>
-                                                                <textarea class="form-control" name="uraian" required>{{ $subitem->uraian }}</textarea>
+                                                                <textarea class="form-control" name="uraian" disabled required>{{ $subitem->uraian }}</textarea>
                                                             </div>
 
                                                             <div class="mb-3 position-relative form-group">
@@ -653,7 +653,7 @@
                                                                     Surat</label>
                                                                 <input type="text" class="form-control"
                                                                     name="no_surat" value="{{ $subitem->no_surat }}"
-                                                                    required />
+                                                                    required disabled />
                                                             </div>
 
                                                             <div class="mb-3 position-relative form-group">
@@ -670,7 +670,7 @@
                                                                     Pengolah</label>
                                                                 <input type="text" class="form-control"
                                                                     name="unit_pengolah"
-                                                                    value="{{ $subitem->unit_pengolah }}" required />
+                                                                    value="{{ $subitem->unit_pengolah }}" required disabled />
                                                             </div>
 
                                                             <div class="mb-3 position-relative form-group">
@@ -678,7 +678,7 @@
                                                                     Waktu</label>
                                                                 <input type="number" class="form-control"
                                                                     name="kurun_waktu"
-                                                                    value="{{ $subitem->kurun_waktu }}" required />
+                                                                    value="{{ $subitem->kurun_waktu }}" required disabled />
                                                             </div>
 
                                                             <div class="mb-3 position-relative form-group">
