@@ -46,7 +46,7 @@ class DokumenImport implements ToModel, WithHeadingRow, WithStartRow
                 'pejabat_penandatangan' => 'Kuasa Bendahara Umum Daerah',
                 'unit_pengolah' => $unit_pengolah,
                 'kurun_waktu' => $row['c_angg_tahun'],
-                'jumlah_satuan_berkas' => '1 Berkas',
+                'jumlah_satuan_berkas' => 1,
                 'tkt_perkemb' => 'Tembusan',
                 'status' => 'Menunggu Verifikasi'
             ]);

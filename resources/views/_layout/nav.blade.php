@@ -191,6 +191,24 @@
                 </a>
             </li>
             <li>
+                <a href="#userManagementMenu">
+                    <i data-acorn-icon="user" class="icon" data-acorn-size="18"></i>
+                    <span class="label">Manajemen User</span>
+                </a>
+                <ul id="userManagementMenu">
+                    <li>
+                        <a href="/roles">
+                            <span class="label">Daftar Roles</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/users">
+                            <span class="label">Daftar User</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
                 <a href="#dokumenMenu">
                     <i data-acorn-icon="notebook-1" class="icon" data-acorn-size="18"></i>
                     <span class="label">Dokumen</span>

@@ -116,6 +116,22 @@ class DokumenController extends Controller
 
     }
 
+    /**
+    * Update the specified resource in storage.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @param  \App\Dokumen  $data_arsip
+    * @return \Illuminate\Http\Response
+    */
+    public function update(Request $request, Dokumen $data_arsip)
+    {
+        $data = $request->except(['_token','_method']);
+
+        Dokumen::where('id', $data_arsip->id)->update($data);
+
+        return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diperbaharui');
+    }
+
     public function verification_document(Request $request) 
     {
         $id         = $request['id'];
