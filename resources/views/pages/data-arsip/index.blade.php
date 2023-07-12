@@ -91,8 +91,7 @@
 
         $(document).on('click', '.btn-edit-parent', function() {
             const item = $(this).data('item');
-            const subitem = $(this).data('subitem');
-            $('#form_edit_parent').attr('action', '/detail-data-arsip/' + item['id']);
+            $('#form_edit_parent').attr('action', '/data-arsip/' + item['id']);
 
             $(".modal-body #parent_kode_klasifikasi").val(item['kode_klasifikasi']);
             $(".modal-body #parent_uraian").val(item['uraian']);
