@@ -91,7 +91,8 @@
 
         $(document).on('click', '.btn-edit-parent', function() {
             const item = $(this).data('item');
-            $('#form_edit_child').attr('action', '/detail-data-arsip/' + subitem['id']);
+            const subitem = $(this).data('subitem');
+            $('#form_edit_parent').attr('action', '/detail-data-arsip/' + item['id']);
 
             $(".modal-body #parent_kode_klasifikasi").val(item['kode_klasifikasi']);
             $(".modal-body #parent_uraian").val(item['uraian']);
@@ -325,7 +326,7 @@
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                    <button type="button" data-item="{{ $item }}"
+                                                    <button type="button" data-item="{{ $item->id }}"
                                                         class="btn btn-icon btn-icon-only btn-sm btn-warning btn-edit-parent">
                                                         <i data-acorn-icon="edit"></i>
                                                     </button>
@@ -710,8 +711,7 @@
                         </div>
 
                         <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Tkt.
-                                Perkemb.</label>
+                            <label class="form-label text-primary fw-bold">Tingkat Perkembangan</label>
                             <select name="tkt_perkemb" id="parent_tkt_perkemb" class="form-select" required>
                                 <option value="Asli">Asli</option>
                                 <option value="Tembusan">Tembusan</option>
@@ -836,8 +836,7 @@
                         </div>
 
                         <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Tkt.
-                                Perk.</label>
+                            <label class="form-label text-primary fw-bold">Tingkat Perkembangan</label>
                             <select name="tkt_perk" class="form-select" required>
                                 <option value="Asli">Asli</option>
                                 <option value="Tembusan">Tembusan</option>
