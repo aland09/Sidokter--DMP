@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <title>DMP | Standalone Mailing</title>
+    <title>SiDOKTER | Standalone Mailing</title>
     <meta name="description" content="Standalone Mailing"/>
 </head>
 <body style="margin: 0; padding: 0; background-color: #f9f9f9; padding-top: 10px">
