@@ -191,6 +191,12 @@
                 </a>
             </li>
             <li>
+                <a href="https://drive.google.com/drive/folders/1OqPowOVs3g4MH05mDioXeqJODQp2xcZV?usp=sharing">
+                    <i data-acorn-icon="notebook-1" class="icon" data-acorn-size="18"></i>
+                    <span class="label">Regulasi</span>
+                </a>
+            </li>
+            <li>
                 <a href="#userManagementMenu">
                     <i data-acorn-icon="user" class="icon" data-acorn-size="18"></i>
                     <span class="label">Manajemen User</span>
