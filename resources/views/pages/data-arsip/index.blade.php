@@ -263,7 +263,7 @@
                                         <th class="text-muted text-small text-uppercase">Unit Pengolah</th>
                                         <th class="text-muted text-small text-uppercase">Kurun Waktu</th>
                                         <th class="text-muted text-small text-uppercase">Jumlah Satuan Berkas</th>
-                                        <th class="text-muted text-small text-uppercase">Tkt. Perkemb</th>
+                                        <th class="text-muted text-small text-uppercase">Tingkat Perkembangan</th>
                                         <th class="text-muted text-small text-uppercase">No. Box</th>
                                         <th class="text-muted text-small text-uppercase">Status</th>
                                         <th width="10%" class="empty">&nbsp;</th>
@@ -360,7 +360,7 @@
                                             <th class="text-muted text-small text-uppercase">Unit Pengolah</th>
                                             <th class="text-muted text-small text-uppercase">Kurun Waktu</th>
                                             <th class="text-muted text-small text-uppercase">No. Box</th>
-                                            <th class="text-muted text-small text-uppercase">Tkt. Perk.</th>
+                                            <th class="text-muted text-small text-uppercase">Tingkat Perkembangan</th>
                                             <th colspan="5" width="10%" class="empty">&nbsp;</th>
                                         </tr>
                                         @foreach ($item->detailDokumen ?? [] as $subitem)
@@ -562,7 +562,7 @@
                         </div>
 
                         <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Tkt. Perk.</label>
+                            <label class="form-label text-primary fw-bold">Tingkat Perkembangan</label>
                             <select name="tkt_perk" id="child_tkt_perk" class="form-select" required>
                                 <option value="Asli">Asli</option>
                                 <option value="Tembusan">Tembusan</option>
