@@ -7,6 +7,30 @@ use Illuminate\Http\Request;
 
 class DetailDokumenController extends Controller
 {
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $data = $request->except(['_token']);
+
+        if ($request->hasFile('file_dokumen')){
+            $filenameWithExt = $request->file('file_dokumen')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('file_dokumen')->getClientOriginalExtension();
+            $filenameSimpan = $filename.'_'.time().'.'.$extension;
+            $path = $request->file('file_dokumen')->storeAs('public/dokumen_arsip', $filenameSimpan);
+            $data['file_dokumen'] = 'dokumen_arsip/'.$filenameSimpan;
+        }
+
+        DetailDokumen::create($data);
+        return redirect()->route('data-arsip.index')->with('message','Data isi arsip berhasil ditambahkan');
+    }
+
     /**
     * Update the specified resource in storage.
     *
