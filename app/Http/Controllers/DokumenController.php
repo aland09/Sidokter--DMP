@@ -6,6 +6,9 @@ use App\Models\Dokumen;
 use App\Models\DetailDokumen;
 use App\Imports\DokumenImport;
 use App\Imports\DetailDokumenImport;
+use App\Imports\DokumenSp2dImport;
+use App\Imports\DokumenSpmImport;
+use App\Imports\DokumenSppImport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -158,7 +161,10 @@ class DokumenController extends Controller
 		$file->move('file_dokumen',$nama_file);
 
 		Excel::import(new DokumenImport, public_path('/file_dokumen/'.$nama_file));
-		Excel::import(new DetailDokumenImport, public_path('/file_dokumen/'.$nama_file));
+	    // Excel::import(new DetailDokumenImport, public_path('/file_dokumen/'.$nama_file));
+        Excel::import(new DokumenSp2dImport, public_path('/file_dokumen/'.$nama_file));
+        Excel::import(new DokumenSpmImport, public_path('/file_dokumen/'.$nama_file));
+        Excel::import(new DokumenSppImport, public_path('/file_dokumen/'.$nama_file));
 
         return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diimport');
 
