@@ -22,6 +22,18 @@
     <script src="/js/base/pagination.js"></script>
     <script src="/js/forms/validation.js"></script>
     <script src="/js/forms/controls.datepicker.js"></script>
+    <script>
+        $('.no-box-check').change(function() {
+            const id = $(this).data('id');
+            $('.no-box-check:not(#check-parent_' + id + ')').prop("checked", false);
+            $('.check-child').prop("checked", false);
+            if ($(this).is(":checked")) {
+                $('.no-box-check_' + id).prop("checked", true);
+            } else {
+                $('.no-box-check_' + id).prop("checked", false);
+            }
+        });
+    </script>
 @endsection
 @section('content')
 
@@ -112,7 +124,8 @@
                                 <thead>
                                     <tr>
                                         <th class="text-muted text-small text-uppercase">No.</th>
-                                        <th class="text-muted text-small text-uppercase">Kode Klasifikasi</th>
+                                        <th colspan="2" class="text-muted text-small text-uppercase">Kode Klasifikasi
+                                        </th>
                                         <th class="text-muted text-small text-uppercase">Uraian</th>
                                         <th class="text-muted text-small text-uppercase">Tanggal Validasi</th>
                                         <th class="text-muted text-small text-uppercase">Jumlah Satuan Item</th>
@@ -137,6 +150,13 @@
                                         <tr>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $loop->index + 1 }}.
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                <div class="mb-1 ms-3"><input type="checkbox"
+                                                        class="form-check-input no-box-check"
+                                                        id="check-parent_{{ $item->id }}"
+                                                        data-id="{{ $item->id }}">
+                                                </div>
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $item->kode_klasifikasi }}
@@ -198,7 +218,8 @@
                                         </tr>
                                         <tr>
                                             <th class="text-muted text-small text-uppercase">No.</th>
-                                            <th class="text-muted text-small text-uppercase">Kode Klasifikasi</th>
+                                            <th colspan="2" class="text-muted text-small text-uppercase">Kode
+                                                Klasifikasi</th>
                                             <th class="text-muted text-small text-uppercase">Uraian</th>
                                             <th class="text-muted text-small text-uppercase">Tanggal Surat</th>
                                             <th class="text-muted text-small text-uppercase">Jumlah Satuan</th>
@@ -218,6 +239,11 @@
                                             <tr id="tabel_{{ $item->id }}_{{ $subitem->id }}">
                                                 <td style="height: 42px !important" class="empty py-2">
                                                     {{ $loop->index + 1 }}.</td>
+                                                <td style="height: 42px !important" class="py-2">
+                                                    <div class="mb-1 ms-3"><input type="checkbox" disabled
+                                                            class="form-check-input check-child no-box-check_{{ $item->id }}">
+                                                    </div>
+                                                </td>
                                                 <td style="height: 42px !important" class="py-2">
                                                     {{ $subitem->kode_klasifikasi }}
                                                 </td>

@@ -917,7 +917,7 @@
     </div>
 
     <!-- Modal Import -->
-    <div class="modal fade" id="modalImport" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    <div class="modal modal-right fade" id="modalImport" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <form method="POST" action="/data-arsip/import_excel" enctype="multipart/form-data">
