@@ -257,6 +257,8 @@
                                         <th class="text-muted text-small text-uppercase">No. SPM</th>
                                         <th style="width: 300px !important" class="text-muted text-small text-uppercase">
                                             No. SP2D</th>
+                                        <th style="width: 300px !important" class="text-muted text-small text-uppercase">
+                                            No. SPP</th>
                                         <th class="text-muted text-small text-uppercase">Nominal</th>
                                         <th class="text-muted text-small text-uppercase">SKPD</th>
                                         <th class="text-muted text-small text-uppercase">Pejabat Penandatangan</th>
@@ -271,6 +273,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($dokumen ?? [] as $item)
+                                        
                                         <tr>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $loop->index + 1 }}.
@@ -280,6 +283,7 @@
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $item->uraian }}
+                                                
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $item->tanggal_validasi }}
@@ -295,6 +299,9 @@
                                             </td>
                                             <td style="height: 42px !important;" class="py-2 bg-primary text-white">
                                                 {{ $item->no_sp2d }}
+                                            </td>
+                                            <td style="height: 42px !important;" class="py-2 bg-primary text-white">
+                                                {{ $item->no_surat }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $item->nominal }}
@@ -325,7 +332,7 @@
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                    <button type="button" data-item="{{ $item->id }}"
+                                                    <button type="button" data-item="{{ $item}}"
                                                         class="btn btn-icon btn-icon-only btn-sm btn-warning btn-edit-parent">
                                                         <i data-acorn-icon="edit"></i>
                                                     </button>
@@ -363,8 +370,9 @@
                                             <th class="text-muted text-small text-uppercase">Tingkat Perkembangan</th>
                                             <th colspan="5" width="10%" class="empty">&nbsp;</th>
                                         </tr>
-                                        @foreach ($item->detailDokumen ?? [] as $subitem)
+                                        
                                             <tr>
+                                            @foreach ($item->detailDokumen ?? [] as $subitem)
                                                 <td style="height: 42px !important" class="empty py-2">
                                                     {{ $loop->index + 1 }}.</td>
                                                 <td style="height: 42px !important" class="py-2">
@@ -430,6 +438,8 @@
                                                     </div>
                                                 </td>
                                             </tr>
+                                        
+                                        
                                         @endforeach
                                     @endforeach
                                 </tbody>

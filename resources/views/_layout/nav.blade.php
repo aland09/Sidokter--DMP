@@ -24,7 +24,7 @@
         <a href="#" class="d-flex user position-relative" data-bs-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">
             <img class="profile rounded-circle mb-3" alt="profile" src="/img/profile/profile-3.webp" />
-            <div class="name">John Doe</div>
+            <div class="name">Admin</div>
         </a>
         <div class="dropdown-menu dropdown-menu-end user-menu wide">
             <div class="row mb-3 ms-0 me-0">
