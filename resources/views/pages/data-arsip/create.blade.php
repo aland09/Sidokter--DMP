@@ -156,8 +156,7 @@
                                                     </div>
 
                                                     <div class="mb-3 position-relative form-group">
-                                                        <label class="form-label text-primary fw-bold">Tkt.
-                                                            Perkemb</label>
+                                                        <label class="form-label text-primary fw-bold">Tingkat Perkembangan</label>
                                                         <input type="text" class="form-control"
                                                             name="tkt_perkemb[]"
                                                             value="${items.tkt_perkemb}" required />
