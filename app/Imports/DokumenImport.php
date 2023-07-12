@@ -41,6 +41,7 @@ class DokumenImport implements ToModel, WithHeadingRow, WithStartRow
                 'tanggal_validasi' => \Carbon\Carbon::parse($row['d_sp2d_sah'])->isoFormat('YYYY-MM-DD HH:mm:ss'),
                 'no_spm' => $row['i_spmno_dok'],
                 'no_sp2d' => $row['i_sp2dno_dok'],
+                'no_surat' => $row['i_sppno_dok'],
                 'nominal' => $row['v_spp'],
                 'skpd' => $row['n_opd'],
                 'pejabat_penandatangan' => 'Kuasa Bendahara Umum Daerah',

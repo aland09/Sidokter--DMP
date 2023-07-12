@@ -24,7 +24,7 @@
         <a href="#" class="d-flex user position-relative" data-bs-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">
             <img class="profile rounded-circle mb-3" alt="profile" src="/img/profile/profile-3.webp" />
-            <div class="name">John Doe</div>
+            <div class="name">Admin</div>
         </a>
         <div class="dropdown-menu dropdown-menu-end user-menu wide">
             <div class="row mb-3 ms-0 me-0">
@@ -188,6 +188,12 @@
                 <a href="/dashboard">
                     <i data-acorn-icon="dashboard-1" class="icon" data-acorn-size="18"></i>
                     <span class="label">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://drive.google.com/drive/folders/1OqPowOVs3g4MH05mDioXeqJODQp2xcZV?usp=sharing">
+                    <i data-acorn-icon="notebook-1" class="icon" data-acorn-size="18"></i>
+                    <span class="label">Regulasi</span>
                 </a>
             </li>
             <li>

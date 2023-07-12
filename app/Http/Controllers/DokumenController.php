@@ -6,6 +6,9 @@ use App\Models\Dokumen;
 use App\Models\DetailDokumen;
 use App\Imports\DokumenImport;
 use App\Imports\DetailDokumenImport;
+use App\Imports\DokumenSp2dImport;
+use App\Imports\DokumenSpmImport;
+use App\Imports\DokumenSppImport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -94,6 +97,7 @@ class DokumenController extends Controller
                     $arsipData['keterangan'] = $request['keterangan'][$key];
                     $arsipData['no_spm'] = $request['no_spm'][$key];
                     $arsipData['no_sp2d'] = $request['no_sp2d'][$key];
+                    $arsipData['no_surat'] = $request['no_surat'][$key];
                     $arsipData['nominal'] = $request['nominal'][$key];
                     $arsipData['skpd'] = $request['skpd'][$key];
                     $arsipData['pejabat_penandatangan'] = $request['pejabat_penandatangan'][$key];
@@ -158,7 +162,10 @@ class DokumenController extends Controller
 		$file->move('file_dokumen',$nama_file);
 
 		Excel::import(new DokumenImport, public_path('/file_dokumen/'.$nama_file));
-		Excel::import(new DetailDokumenImport, public_path('/file_dokumen/'.$nama_file));
+	    Excel::import(new DetailDokumenImport, public_path('/file_dokumen/'.$nama_file));
+        // Excel::import(new DokumenSp2dImport, public_path('/file_dokumen/'.$nama_file));
+        // Excel::import(new DokumenSpmImport, public_path('/file_dokumen/'.$nama_file));
+        // Excel::import(new DokumenSppImport, public_path('/file_dokumen/'.$nama_file));
 
         return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diimport');
 
@@ -176,6 +183,7 @@ class DokumenController extends Controller
                 "keterangan" => "Keterangan 00000001",
                 "no_spm" => "00000001",
                 "no_sp2d" => "00000001/SPP/10503000/VI/2023",
+                "no_surat" => "00000001/SPP/10503000/VI/2023",
                 "nominal" => "1000000",
                 "skpd" => "SKPD 00000001",
                 "pejabat_penandatangan" => "",
@@ -195,6 +203,7 @@ class DokumenController extends Controller
                 "keterangan" => "Keterangan 00000004",
                 "no_spm" => "00000004",
                 "no_sp2d" => "00000001/SPP/10503000/VI/2023",
+                "no_surat" => "00000001/SPP/10503000/VI/2023",
                 "nominal" => "1000000",
                 "skpd" => "SKPD 00000004",
                 "pejabat_penandatangan" => "",
@@ -214,6 +223,7 @@ class DokumenController extends Controller
                 "keterangan" => "Keterangan 00000002",
                 "no_spm" => "00000002",
                 "no_sp2d" => "00000002/SPP/10503000/VI/2023",
+                "no_surat" => "00000002/SPP/10503000/VI/2023",
                 "nominal" => "1000000",
                 "skpd" => "SKPD 00000002",
                 "pejabat_penandatangan" => "",

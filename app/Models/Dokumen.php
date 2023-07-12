@@ -18,6 +18,7 @@ class Dokumen extends Model
         'jumlah_satuan_item',
         'keterangan',
         'no_spm',
+        'no_surat',
         'nominal',
         'skpd',
         'pejabat_penandatangan',
