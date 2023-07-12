@@ -20,16 +20,14 @@
         <div class="w-100 w-lg-75 w-xxl-50">
             <div>
                 <div class="mb-5">
-                    <h1 class="display-3 text-white">Multiple Concepts</h1>
-                    <h1 class="display-3 text-white">Ready for Your Project</h1>
+                    <h1 class="display-3 text-white">SIDOKTER</h1>
+                    <h1 class="display-3 text-white">SISTEM DOKUMEN TERPADU</h1>
                 </div>
                 <p class="h6 text-white lh-1-5 mb-5">
-                    Dynamically target high-payoff intellectual capital for customized technologies. Objectively integrate
-                    emerging core competencies before
-                    process-centric communities...
+                   
                 </p>
                 <div class="mb-5">
-                    <a class="btn btn-lg btn-outline-white" href="/">Learn More</a>
+                    <a class="btn btn-lg btn-outline-white" href="/login">Telusuri</a>
                 </div>
             </div>
         </div>
@@ -47,17 +45,17 @@
                     </a>
                 </div>
                 <div class="">
-                    <h2 class="cta-1 mb-0 text-primary">Welcome,</h2>
-                    <h2 class="cta-1 text-primary">let's get started!</h2>
+                    <h2 class="cta-1 mb-0 text-primary">Selamat Datang,</h2>
+                    <h2 class="cta-1 text-primary">Dalam Layanan Sistem Dokumen Terpadu (SiDOKTER)</h2>
                 </div>
             </div>
             <div class="mb-5">
-                <p class="h6">Please use your credentials to login.</p>
-                <p class="h6">
+                <p class="h6">Harap masukan akun email anda.</p>
+                <!-- <p class="h6">
                     If you are not a member, please
                     <a href="/Pages/Authentication/Register">register</a>
                     .
-                </p>
+                </p> -->
             </div>
             <div>
                 <form id="loginForm" class="tooltip-end-bottom" novalidate action="/login" method="POST">
@@ -69,8 +67,8 @@
                     <div class="mb-3 filled form-group tooltip-end-top">
                         <i data-acorn-icon="lock-off"></i>
                         <input class="form-control pe-7" name="password" type="password" placeholder="Password" />
-                        <a class="text-small position-absolute t-3 e-3"
-                            href="/Pages/Authentication/ForgotPassword">Forgot?</a>
+                        <!-- <a class="text-small position-absolute t-3 e-3"
+                            href="/Pages/Authentication/ForgotPassword">Forgot?</a> -->
                     </div>
                     <button type="submit" class="btn btn-lg btn-primary" type="button">Login</button>
                 </form>
