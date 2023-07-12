@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\Importable;
 
-class DetailDokumenImport implements ToModel, WithHeadingRow, WithStartRow
+class DokumenSppImport implements ToModel, WithHeadingRow, WithStartRow
 {
     use Importable;
 
@@ -37,24 +37,6 @@ class DetailDokumenImport implements ToModel, WithHeadingRow, WithStartRow
             'uraian' => $row['e_spp'],
             'tanggal_surat' => \Carbon\Carbon::parse($row['d_spp_cetak'])->isoFormat('YYYY-MM-DD HH:mm:ss'),
             'no_surat' => $row['i_sppno_dok'],
-            'unit_pengolah' => $row['n_opd'],
-            'kurun_waktu' => $row['c_angg_tahun'],
-            'tkt_perk' => 'Asli',
-        ], [
-            'dokumen_id' => $dokumen->id ?? NULL,
-            'kode_klasifikasi' => $dokumen->kode_klasifikasi,
-            'uraian' => $row['e_spp'],
-            'tanggal_surat' => \Carbon\Carbon::parse($row['d_spm_cetak'])->isoFormat('YYYY-MM-DD HH:mm:ss'),
-            'no_surat' => $row['i_spmno_dok'],
-            'unit_pengolah' => $row['n_opd'],
-            'kurun_waktu' => $row['c_angg_tahun'],
-            'tkt_perk' => 'Asli',
-        ], [
-            'dokumen_id' => $dokumen->id ?? NULL,
-            'kode_klasifikasi' => $dokumen->kode_klasifikasi,
-            'uraian' => $row['e_spp'],
-            'tanggal_surat' => \Carbon\Carbon::parse($row['d_sp2d_sah'])->isoFormat('YYYY-MM-DD HH:mm:ss'),
-            'no_surat' => $row['i_sp2dno_dok'],
             'unit_pengolah' => $row['n_opd'],
             'kurun_waktu' => $row['c_angg_tahun'],
             'tkt_perk' => 'Asli',
