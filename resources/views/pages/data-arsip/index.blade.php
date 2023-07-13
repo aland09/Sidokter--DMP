@@ -116,6 +116,23 @@
             $(".modal-body #parent_dokumen_id").val(id);
             $('#modalSideAddParent').modal('show');
         });
+
+         $('#addSection').click(function() {
+            
+            let section = `<div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">Uraian</label>
+                            <input type="text" class="form-control" name="uraian"
+                                id="parent_uraian" required />
+                            <label class="form-label text-primary fw-bold">No. Surat</label>
+                            <input type="text" class="form-control" name="no_surat"
+                                id="parent_no_surat" required />
+                            <label class="form-label text-primary fw-bold">Tanggal Surat</label>
+                            <input type="text" class="form-control" name="tanggal_surat"
+                                id="parent_tanggal_surat" required />
+                            </div>`
+
+            $('#box').append(section);
+        });
     </script>
 @endsection
 @section('content')
@@ -619,7 +636,7 @@
             enctype="multipart/form-data">
             @method('put')
             @csrf
-            <div class="modal-dialog">
+            <div class="modal-dialog" >
                 <div class="modal-content">
                     <div class="modal-header pt-4 pb-3">
                         <h5 class="modal-title" id="staticBackdropLabel">Edit Data</h5>
@@ -731,6 +748,15 @@
                             <label class="form-label text-primary fw-bold">No.
                                 Box</label>
                             <input type="text" class="form-control" name="no_box" id="parent_no_box" required />
+                        </div>
+                        <div id="box">
+
+                        </div>
+
+                        <div class="col text-end">
+                            <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                Kegiatan</button>
+        
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -925,5 +951,6 @@
             </form>
         </div>
     </div>
+    
 
 @endsection
