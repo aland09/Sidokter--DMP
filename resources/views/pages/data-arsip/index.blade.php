@@ -100,6 +100,7 @@
             $(".modal-body #parent_keterangan").val(item['keterangan']);
             $(".modal-body #parent_no_spm").val(item['no_spm']);
             $(".modal-body #parent_no_sp2d").val(item['no_sp2d']);
+            $(".modal-body #parent_no_spp").val(item['no_surat']);
             $(".modal-body #parent_nominal").val(item['nominal']);
             $(".modal-body #parent_skpd").val(item['skpd']);
             $(".modal-body #parent_pejabat_penandatangan").val(item['pejabat_penandatangan']);
@@ -688,6 +689,12 @@
                             <label class="form-label text-primary fw-bold">No.
                                 SP2D</label>
                             <input type="text" class="form-control" name="no_sp2d" id="parent_no_sp2d" required
+                                disabled />
+                        </div>
+                        <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">No.
+                                SPP</label>
+                            <input type="text" class="form-control" name="no_surat" id="parent_no_spp" required
                                 disabled />
                         </div>
 
