@@ -100,6 +100,7 @@
             $(".modal-body #parent_keterangan").val(item['keterangan']);
             $(".modal-body #parent_no_spm").val(item['no_spm']);
             $(".modal-body #parent_no_sp2d").val(item['no_sp2d']);
+            $(".modal-body #parent_no_spp").val(item['no_surat']);
             $(".modal-body #parent_nominal").val(item['nominal']);
             $(".modal-body #parent_skpd").val(item['skpd']);
             $(".modal-body #parent_pejabat_penandatangan").val(item['pejabat_penandatangan']);
@@ -115,6 +116,23 @@
             const id = $(this).data('id');
             $(".modal-body #parent_dokumen_id").val(id);
             $('#modalSideAddParent').modal('show');
+        });
+
+         $('#addSection').click(function() {
+            
+            let section = `<div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">Uraian</label>
+                            <input type="text" class="form-control" name="uraian"
+                                id="parent_uraian" required />
+                            <label class="form-label text-primary fw-bold">No. Surat</label>
+                            <input type="text" class="form-control" name="no_surat"
+                                id="parent_no_surat" required />
+                            <label class="form-label text-primary fw-bold">Tanggal Surat</label>
+                            <input type="text" class="form-control" name="tanggal_surat"
+                                id="parent_tanggal_surat" required />
+                            </div>`
+
+            $('#box').append(section);
         });
     </script>
 @endsection
@@ -619,7 +637,7 @@
             enctype="multipart/form-data">
             @method('put')
             @csrf
-            <div class="modal-dialog">
+            <div class="modal-dialog" >
                 <div class="modal-content">
                     <div class="modal-header pt-4 pb-3">
                         <h5 class="modal-title" id="staticBackdropLabel">Edit Data</h5>
@@ -671,6 +689,12 @@
                             <label class="form-label text-primary fw-bold">No.
                                 SP2D</label>
                             <input type="text" class="form-control" name="no_sp2d" id="parent_no_sp2d" required
+                                disabled />
+                        </div>
+                        <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">No.
+                                SPP</label>
+                            <input type="text" class="form-control" name="no_surat" id="parent_no_spp" required
                                 disabled />
                         </div>
 
@@ -731,6 +755,15 @@
                             <label class="form-label text-primary fw-bold">No.
                                 Box</label>
                             <input type="text" class="form-control" name="no_box" id="parent_no_box" required />
+                        </div>
+                        <div id="box">
+
+                        </div>
+
+                        <div class="col text-end">
+                            <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                Kegiatan</button>
+        
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -925,5 +958,6 @@
             </form>
         </div>
     </div>
+    
 
 @endsection
