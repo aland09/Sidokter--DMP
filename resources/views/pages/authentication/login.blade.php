@@ -17,7 +17,7 @@
 
 @section('content_left')
     <div class="min-h-100 d-flex align-items-center">
-        <div class="w-100 w-lg-75 w-xxl-50">
+        <div class="w-100">
             <div>
                 <div class="mb-5">
                     <h1 class="display-3 text-white">SIDOKTER</h1>
@@ -39,14 +39,14 @@
         class="sw-lg-70 min-h-100 bg-foreground d-flex justify-content-center align-items-center shadow-deep py-5 full-page-content-right-border">
         <div class="sw-lg-50 px-5">
             <div class="d-flex flex-row gap-3 mb-3 align-items-center">
-                <div class="sh-11">
+                <div class="sw-14">
                     <a href="/">
                         <img class="img-fluid h-100" src="/img/logo/logo-alt.png" alt="logo" />
                     </a>
                 </div>
                 <div class="">
-                    <h2 class="cta-1 mb-0 text-primary">Selamat Datang,</h2>
-                    <h2 class="cta-1 text-primary">Dalam Layanan Sistem Dokumen Terpadu (SiDOKTER)</h2>
+                    <h2 class="cta-4 mb-0 text-primary">Selamat Datang,</h2>
+                    <h2 class="cta-4 text-primary">Dalam Layanan Sistem Dokumen Terpadu (SiDOKTER)</h2>
                 </div>
             </div>
             <div class="mb-5">
