@@ -9,6 +9,7 @@ use App\Imports\DetailDokumenImport;
 use App\Imports\DokumenSp2dImport;
 use App\Imports\DokumenSpmImport;
 use App\Imports\DokumenSppImport;
+use App\Exports\DokumenExport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -147,6 +148,11 @@ class DokumenController extends Controller
             $dokumens->update();
             return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diverifikasi');
         }
+    }
+
+    public function export_excel($ext)
+    {
+        return Excel::download(new DokumenExport, 'daftar-berkas.'.$ext);
     }
 
     public function import_excel(Request $request) 
