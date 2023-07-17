@@ -9,7 +9,9 @@ use App\Imports\DetailDokumenImport;
 use App\Imports\DokumenSp2dImport;
 use App\Imports\DokumenSpmImport;
 use App\Imports\DokumenSppImport;
+use App\Exports\DokumenExport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 
@@ -149,6 +151,11 @@ class DokumenController extends Controller
         }
     }
 
+    public function export_excel($ext)
+    {
+        return Excel::download(new DokumenExport, 'daftar-berkas.'.$ext);
+    }
+
     public function import_excel(Request $request) 
 	{
 		$this->validate($request, [
@@ -170,6 +177,86 @@ class DokumenController extends Controller
         return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diimport');
 
 	}
+
+    public function import_monitoring() {
+        $success = 0;
+        $sp2d_monitoring = DB::connection('oraclelink')->select('SELECT * FROM NEWSIPKD.VW_MONITORING_SP2D_AKUN_JENIS@NEWSIPKD WHERE ROWNUM <= 100');
+
+        foreach ($sp2d_monitoring as $value) {
+            $uraian = $value->uraian;
+            $no_spm = $value->no_spm;
+            $no_sp2d = $value->no_sp2d_full;
+            $nominal = $value->nilai_sp2d;
+            $kurun_waktu = $value->tahun;
+            $skpd = $value->nama_wp;
+
+            $unit_pengolah = '';
+            if($value->jenis === 1) {
+                $unit_pengolah = 'SBPK-JP';
+            } else if($value->jenis === 2) {
+                $unit_pengolah = 'SBPK-JU';
+            } else if($value->jenis === 3) {
+                $unit_pengolah = 'SBPK-JB';
+            } else if($value->jenis === 4) {
+                $unit_pengolah = 'SBPK-JS';
+            } else if($value->jenis === 5) {
+                $unit_pengolah = 'SBPK-JT';
+            }
+
+            // $dokumens = Dokumen::where(
+            //     [
+            //         ['uraian', '=', $uraian],
+            //         ['no_spm', '=', $no_spm],
+            //         ['no_sp2d', '=', $no_sp2d],
+            //         ['nominal', '=', $nominal],
+            //         ['kurun_waktu', '=', $kurun_waktu],
+            //         ['skpd', '=', $skpd],
+            //     ]
+            // )->first();
+            $dokumens = Dokumen::where('no_sp2d', $no_sp2d)->first();
+            if ($dokumens === null) {
+                $data['no_sp2d'] =  $no_sp2d;
+                $data['kode_klasifikasi'] = 'UD.02.02';
+                $data['uraian'] =  $uraian;
+                $data['tanggal_validasi'] =  $value->tgl_sp2d;
+                $data['jumlah_satuan_item'] =  1;
+                $data['keterangan'] =  '';
+                $data['no_spm'] =  $no_spm;
+                $data['no_surat'] =  '';
+                $data['nominal'] =  $nominal;
+                $data['skpd'] =  $skpd;
+                $data['unit_pengolah'] =  $unit_pengolah;
+                $data['kurun_waktu'] =  $kurun_waktu;
+                $data['jumlah_satuan_berkas'] =  1;
+                $data['tkt_perkemb'] = 'Tembusan';
+                $data['no_box'] = '';
+                $data['status'] = 'Menunggu Verifikasi';
+                Dokumen::create($data);
+                $success = $success + 1;
+            }
+            
+        }
+
+        foreach ($sp2d_monitoring as $value) {
+            $no_sp2d = $value->no_sp2d_full;
+            $dokumen = Dokumen::where('no_sp2d', $no_sp2d)->first();
+
+            // FOR NOW GET DATA FROM SPP BASED
+            $arsipData['dokumen_id'] = $dokumen->id ?? NULL;
+            $arsipData['kode_klasifikasi'] = 'UD.02.02';
+            $arsipData['uraian'] = $value->uraian;
+            $arsipData['tanggal_surat'] = $value->tgl_spp;
+            $arsipData['no_surat'] = $value->no_spp;
+            $arsipData['unit_pengolah'] = $value->nama_opd;
+            $arsipData['kurun_waktu'] = $value->tahun;
+            $arsipData['tkt_perk'] = 'Asli';
+            
+            DetailDokumen::create($arsipData);
+        }
+
+        return redirect()->route('data-arsip.index')->with('message', $success.' Data arsip berhasil di import.');
+        
+    }
 
     // Get Arsip Budle
     public function getBerkasArsip($id) {
