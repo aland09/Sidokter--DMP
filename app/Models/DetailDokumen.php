@@ -16,8 +16,10 @@ class DetailDokumen extends Model
         'uraian',
         'tanggal_surat',
         'jumlah_satuan',
+        'tanggal_pengerjaan',
         'keterangan',
         'jenis_naskah_dinas',
+        'jenis_belanja',
         'no_surat',
         'pejabat_penandatangan',
         'unit_pengolah',
@@ -29,5 +31,9 @@ class DetailDokumen extends Model
 
     public function dokumen(){
     	return $this->belongsTo(Dokumen::class, 'dokumen_id');
+    }
+
+    public function jenisBelanja(){
+        return $this->hasMany(JenisBelanja::class);
     }
 }

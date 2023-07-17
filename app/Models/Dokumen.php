@@ -15,6 +15,7 @@ class Dokumen extends Model
         'kode_klasifikasi',
         'uraian',
         'tanggal_validasi',
+        'tanggal_pengerjaan',
         'jumlah_satuan_item',
         'keterangan',
         'no_spm',
