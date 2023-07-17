@@ -118,8 +118,8 @@
             $('#modalSideAddParent').modal('show');
         });
 
-         $('#addSection').click(function() {
-            
+        $('#addSection').click(function() {
+
             let section = `<div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Uraian</label>
                             <input type="text" class="form-control" name="uraian"
@@ -158,6 +158,10 @@
     @endif
 
     <div class="container">
+        @foreach ($test ?? [] as $tr)
+            {{ $tr }}
+        @endforeach
+
         <div class="row">
             <div class="col">
                 <!-- Title and Top Buttons Start -->
@@ -172,11 +176,16 @@
                         <!-- Top Buttons Start -->
                         <div class="col-12 col-md-5 d-flex align-items-start justify-content-end gap-3">
                             <!-- Add New Button Start -->
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#modalImport"
-                                class="btn btn-outline-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0">
-                                <i data-acorn-icon="cloud-upload"></i>
+                            <button class="btn btn-outline-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0"
+                                data-bs-toggle="dropdown" type="button" data-bs-offset="0,3">
+                                <i data-acorn-icon="cloud-download"></i>
                                 <span>Import Data</span>
                             </button>
+                            <div class="dropdown-menu shadow dropdown-menu-end">
+                                <button class="dropdown-item" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#modalImport">Import Excel</button>
+                                <a href="/import-monitoring" class="dropdown-item">Tarik Data Monitoring</a>
+                            </div>
 
                             <a href="{{ route('data-arsip.create') }}"
                                 class="btn btn-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0">
@@ -291,7 +300,6 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($dokumen ?? [] as $item)
-                                        
                                         <tr>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $loop->index + 1 }}.
@@ -301,7 +309,7 @@
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $item->uraian }}
-                                                
+
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $item->tanggal_validasi }}
@@ -350,7 +358,7 @@
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                    <button type="button" data-item="{{ $item}}"
+                                                    <button type="button" data-item="{{ $item }}"
                                                         class="btn btn-icon btn-icon-only btn-sm btn-warning btn-edit-parent">
                                                         <i data-acorn-icon="edit"></i>
                                                     </button>
@@ -388,8 +396,8 @@
                                             <th class="text-muted text-small text-uppercase">Tingkat Perkembangan</th>
                                             <th colspan="5" width="10%" class="empty">&nbsp;</th>
                                         </tr>
-                                        
-                                            <tr>
+
+                                        <tr>
                                             @foreach ($item->detailDokumen ?? [] as $subitem)
                                                 <td style="height: 42px !important" class="empty py-2">
                                                     {{ $loop->index + 1 }}.</td>
@@ -455,30 +463,28 @@
                                                         </form>
                                                     </div>
                                                 </td>
-                                            </tr>
-                                        
-                                        
-                                        @endforeach
+                                        </tr>
                                     @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- Table End -->
-
-                        <div class="d-flex flex-row justify-content-center mt-5">
-                            {{ $dokumen->links() }}
-                        </div>
-                    @else
-                        <div class="d-flex align-items-center justify-content-center mt-5" style="height: 60vh">
-                            <div class="alert alert-warning w-75 text-center" role="alert">
-                                Data Tidak Ditemukan
-                            </div>
-                        </div>
-                    @endif
+                    @endforeach
+                    </tbody>
+                    </table>
                 </div>
-                <!-- Content End -->
+                <!-- Table End -->
+
+                <div class="d-flex flex-row justify-content-center mt-5">
+                    {{ $dokumen->links() }}
+                </div>
+            @else
+                <div class="d-flex align-items-center justify-content-center mt-5" style="height: 60vh">
+                    <div class="alert alert-warning w-75 text-center" role="alert">
+                        Data Tidak Ditemukan
+                    </div>
+                </div>
+                @endif
             </div>
+            <!-- Content End -->
         </div>
+    </div>
     </div>
 
     <!-- Modal Import -->
@@ -637,7 +643,7 @@
             enctype="multipart/form-data">
             @method('put')
             @csrf
-            <div class="modal-dialog" >
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header pt-4 pb-3">
                         <h5 class="modal-title" id="staticBackdropLabel">Edit Data</h5>
@@ -763,7 +769,7 @@
                         <div class="col text-end">
                             <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
                                 Kegiatan</button>
-        
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -958,6 +964,6 @@
             </form>
         </div>
     </div>
-    
+
 
 @endsection

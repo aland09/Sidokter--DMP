@@ -91,6 +91,18 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'oraclelink' => [
+            'driver' => 'oracle',
+            'host' => env('DB_HOST_LINK', 'localhost'),
+            'port' => env('DB_PORT_LINK', '1521'),
+            'database' => env('DB_DATABASE_LINK', 'xe'),
+            'username' => env('DB_USERNAME_LINK', 'system'),
+            'password' => env('DB_PASSWORD_LINK', 'oracle'),
+            'service_name' => env('DB_SERVICE_NAME_LINK', ''),
+            'charset' => 'AL32UTF8',
+            'prefix' => '',
+        ],
+
     ],
 
     /*
