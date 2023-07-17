@@ -235,9 +235,8 @@
                                         </span>
                                     </button>
                                     <div class="dropdown-menu shadow dropdown-menu-end">
-                                        <button class="dropdown-item export-copy" type="button">Copy</button>
-                                        <button class="dropdown-item export-excel" type="button">Excel</button>
-                                        <button class="dropdown-item export-cvs" type="button">Cvs</button>
+                                        <a target="_blank" href="data-arsip/export-excel/xlsx" class="dropdown-item export-excel">Export Daftar Arsip</a>
+                                        <a target="_blank" href="detail-data-arsip/export-excel/xlsx" class="dropdown-item export-excel">Export Daftar Isi Berkas</a>
                                     </div>
                                 </div>
                                 <!-- Export Dropdown End -->
@@ -393,8 +392,8 @@
                                             <th class="text-muted text-small text-uppercase">Unit Pengolah</th>
                                             <th class="text-muted text-small text-uppercase">Kurun Waktu</th>
                                             <th class="text-muted text-small text-uppercase">No. Box</th>
-                                            <th class="text-muted text-small text-uppercase">Tingkat Perkembangan</th>
-                                            <th colspan="5" width="10%" class="empty">&nbsp;</th>
+                                            <th colspan="5" class="text-muted text-small text-uppercase">Tingkat Perkembangan</th>
+                                            <th width="10%" class="empty">&nbsp;</th>
                                         </tr>
 
                                         <tr>
@@ -434,7 +433,7 @@
                                                 <td style="height: 42px !important" class="py-2">
                                                     {{ $subitem->no_box }}
                                                 </td>
-                                                <td style="height: 42px !important" class="py-2">
+                                                <td colspan="5" style="height: 42px !important" class="py-2">
                                                     {{ $subitem->tkt_perk }}
                                                 </td>
                                                 <td colspan="5" style="height: 42px !important" class="py-2">
@@ -491,7 +490,7 @@
     <div class="modal fade" id="modalImport" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form method="POST" action="/data-arsip/import_excel" enctype="multipart/form-data">
+            <form method="POST" action="/data-arsip/import-excel" enctype="multipart/form-data">
                 <div class="modal-content">
                     <div class="modal-header py-3">
                         <h5 class="modal-title" id="exampleModalLabelDefault">Import Data</h5>

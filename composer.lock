@@ -5982,6 +5982,7 @@
                 "check",
                 "validate"
             ],
+
             "support": {
                 "issues": "https://github.com/webmozarts/assert/issues",
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"

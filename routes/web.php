@@ -37,7 +37,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('data-arsip', DokumenController::class);
     Route::resource('dokumen-masuk', DokumenMasukController::class);
-    Route::post('data-arsip/import_excel', [DokumenController::class, 'import_excel']);
+    Route::post('data-arsip/import-excel', [DokumenController::class, 'import_excel']);
+    Route::get('data-arsip/export-excel/{ext?}', [DokumenController::class, 'export_excel']);
+    Route::get('detail-data-arsip/export-excel/{ext?}', [DetailDokumenController::class, 'export_excel']);
     Route::post('data-arsip/verifikasi_dokumen', [DokumenController::class, 'verification_document']);
     Route::resource('detail-data-arsip', DetailDokumenController::class);
     Route::get('get-berkas-arsip/{id?}', [DokumenController::class, 'getBerkasArsip']);
