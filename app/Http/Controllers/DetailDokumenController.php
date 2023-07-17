@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\DetailDokumen;
 use Illuminate\Http\Request;
+use App\Exports\DetailDokumenExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DetailDokumenController extends Controller
 {
@@ -86,5 +88,10 @@ class DetailDokumenController extends Controller
     {
         DetailDokumen::destroy($detail_data_arsip->id);
         return redirect()->route('data-arsip.index')->with('message', 'Data arsip berhasil dihapus');
+    }
+
+    public function export_excel($ext)
+    {
+        return Excel::download(new DetailDokumenExport, 'daftar-isi-arsip.'.$ext);
     }
 }
