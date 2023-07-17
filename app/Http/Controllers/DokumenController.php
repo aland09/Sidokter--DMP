@@ -231,6 +231,23 @@ class DokumenController extends Controller
             
         }
 
+        foreach ($sp2d_monitoring as $value) {
+            $no_sp2d = $value->no_sp2d_full;
+            $dokumen = Dokumen::where('no_sp2d', $no_sp2d)->first();
+
+            // FOR NOW GET DATA FROM SPP BASED
+            $arsipData['dokumen_id'] = $dokumen->id ?? NULL;
+            $arsipData['kode_klasifikasi'] = 'UD.02.02';
+            $arsipData['uraian'] = $value->uraian;
+            $arsipData['tanggal_surat'] = $value->tgl_spp;
+            $arsipData['no_surat'] = $value->no_spp;
+            $arsipData['unit_pengolah'] = $value->nama_opd;
+            $arsipData['kurun_waktu'] = $value->tahun;
+            $arsipData['tkt_perk'] = 'Asli';
+            
+            DetailDokumen::create($arsipData);
+        }
+
         return redirect()->route('data-arsip.index')->with('message', $success.' Data arsip berhasil di import.');
         
     }
