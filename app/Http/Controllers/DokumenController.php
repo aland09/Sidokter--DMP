@@ -135,6 +135,14 @@ class DokumenController extends Controller
 
         Dokumen::where('id', $data_arsip->id)->update($data);
 
+
+        $dataDetail['keterangan'] = $request['keterangan'];
+        $dataDetail['pejabat_penandatangan'] = $request['pejabat_penandatangan'];
+        $dataDetail['unit_pengolah'] = $request['unit_pengolah'];
+
+
+        DetailDokumen::where('dokumen_id', $data_arsip->id)->update($dataDetail);
+
         return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diperbaharui');
     }
 
@@ -191,19 +199,6 @@ class DokumenController extends Controller
             $kurun_waktu = $value->tahun;
             $skpd = $value->nama_wp;
 
-            $unit_pengolah = '';
-            if($value->jenis === 1) {
-                $unit_pengolah = 'SBPK-JP';
-            } else if($value->jenis === 2) {
-                $unit_pengolah = 'SBPK-JU';
-            } else if($value->jenis === 3) {
-                $unit_pengolah = 'SBPK-JB';
-            } else if($value->jenis === 4) {
-                $unit_pengolah = 'SBPK-JS';
-            } else if($value->jenis === 5) {
-                $unit_pengolah = 'SBPK-JT';
-            }
-
             $dokumens = Dokumen::where('no_sp2d', $no_sp2d)->first();
             if ($dokumens === null) {
                 $data['no_sp2d'] =  $no_sp2d;
@@ -212,15 +207,11 @@ class DokumenController extends Controller
                 $data['tanggal_validasi'] =  $value->tgl_sp2d;
                 $data['jumlah_satuan_item'] =  1;
                 $data['keterangan'] =  '';
-                $data['no_spm'] =  $no_spm;
-                $data['no_surat'] =  '';
                 $data['nominal'] =  $nominal;
                 $data['skpd'] =  $skpd;
-                $data['unit_pengolah'] =  $unit_pengolah;
                 $data['kurun_waktu'] =  $kurun_waktu;
                 $data['jumlah_satuan_berkas'] =  1;
                 $data['tkt_perkemb'] = 'Tembusan';
-                $data['no_box'] = '';
                 $data['status'] = 'Menunggu Verifikasi';
                 $dokumen_id = Dokumen::create($data)->id;
 
@@ -230,9 +221,6 @@ class DokumenController extends Controller
                 $dataSpp['tanggal_surat'] = $value->tgl_spp;
                 $dataSpp['jumlah_satuan'] = 1;
                 $dataSpp['no_surat'] = $value->no_spp;
-                $dataSpp['no_spp'] = $value->no_spp;
-                $dataSpp['no_spm'] = NULL;
-                $dataSpp['unit_pengolah'] = $value->nama_opd;
                 $dataSpp['kurun_waktu'] = $value->tahun;
                 $dataSpp['tkt_perk'] = 'Asli';
                 DetailDokumen::create($dataSpp);
@@ -243,9 +231,6 @@ class DokumenController extends Controller
                 $dataSpm['tanggal_surat'] = $value->tgl_spm;
                 $dataSpm['jumlah_satuan'] = 1;
                 $dataSpm['no_surat'] = $value->no_spm;
-                $dataSpm['no_spp'] = NULL;
-                $dataSpm['no_spm'] =$value->no_spm;
-                $dataSpm['unit_pengolah'] = $value->nama_opd;
                 $dataSpm['kurun_waktu'] = $value->tahun;
                 $dataSpm['tkt_perk'] = 'Asli';
                 DetailDokumen::create($dataSpm);

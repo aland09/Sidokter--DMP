@@ -280,11 +280,8 @@
                                             Jumlah Satuan Item</th>
                                         <th class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
                                             Keterangan</th>
-                                        <th class="text-muted text-small text-uppercase">No. SPM</th>
                                         <th style="width: 300px !important" class="text-muted text-small text-uppercase">
                                             No. SP2D</th>
-                                        <th style="width: 300px !important" class="text-muted text-small text-uppercase">
-                                            No. SPP</th>
                                         <th class="text-muted text-small text-uppercase">Nominal</th>
                                         <th class="text-muted text-small text-uppercase">SKPD</th>
                                         <th class="text-muted text-small text-uppercase">Pejabat Penandatangan</th>
@@ -319,14 +316,8 @@
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $item->keterangan }}
                                             </td>
-                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->no_spm }}
-                                            </td>
                                             <td style="height: 42px !important;" class="py-2 bg-primary text-white">
                                                 {{ $item->no_sp2d }}
-                                            </td>
-                                            <td style="height: 42px !important;" class="py-2 bg-primary text-white">
-                                                {{ $item->no_surat }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 Rp.<span class="text-primary">__</span>{{ number_format($item->nominal,0,",",".") }},-
@@ -392,7 +383,7 @@
                                             <th class="text-muted text-small text-uppercase">Unit Pengolah</th>
                                             <th class="text-muted text-small text-uppercase">Kurun Waktu</th>
                                             <th class="text-muted text-small text-uppercase">No. Box</th>
-                                            <th colspan="5" class="text-muted text-small text-uppercase">Tingkat Perkembangan</th>
+                                            <th colspan="4" class="text-muted text-small text-uppercase">Tingkat Perkembangan</th>
                                             <th width="10%" class="empty">&nbsp;</th>
                                         </tr>
 
@@ -433,10 +424,10 @@
                                                 <td style="height: 42px !important" class="py-2">
                                                     {{ $subitem->no_box }}
                                                 </td>
-                                                <td colspan="5" style="height: 42px !important" class="py-2">
+                                                <td colspan="4" style="height: 42px !important" class="py-2">
                                                     {{ $subitem->tkt_perk }}
                                                 </td>
-                                                <td colspan="5" style="height: 42px !important" class="py-2">
+                                                <td style="height: 42px !important" class="py-2">
                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                         <a href="#"
                                                             class="btn btn-icon btn-icon-only btn-sm btn-outline-info"
@@ -531,7 +522,7 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Kode Klasifikasi</label>
                             <input type="text" class="form-control" name="kode_klasifikasi"
-                                id="child_kode_klasifikasi" required />
+                                id="child_kode_klasifikasi" required disabled />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -542,18 +533,18 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Tanggal Surat</label>
                             <input type="text" class="form-control datepicker" name="tanggal_surat"
-                                id="child_tanggal_surat" required />
+                                id="child_tanggal_surat" required disabled />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Jumlah Satuan</label>
                             <input type="text" class="form-control" name="jumlah_satuan" id="child_jumlah_satuan"
-                                required />
+                                required disabled />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Keterangan</label>
-                            <select name="keterangan" id="child_keterangan" class="form-select" required>
+                            <select name="keterangan" id="child_keterangan" class="form-select" disabled required>
                                 <option value="Tekstual">Tekstual</option>
                                 <option value="Digital">Digital</option>
                             </select>
@@ -562,7 +553,7 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Jenis Naskah Dinas</label>
                             <input type="text" class="form-control" name="jenis_naskah_dinas"
-                                id="child_jenis_naskah_dinas" required />
+                                id="child_jenis_naskah_dinas" disabled required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -574,7 +565,7 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Pejabat Penandatangan</label>
                             <input type="text" class="form-control" name="pejabat_penandatangan"
-                                id="child_pejabat_penandatangan" required />
+                                id="child_pejabat_penandatangan" disabled required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -591,7 +582,7 @@
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No. Box</label>
-                            <input type="text" class="form-control" name="no_box" id="child_no_box" required />
+                            <input type="text" class="form-control" name="no_box" id="child_no_box" disabled required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -653,7 +644,7 @@
                             <label class="form-label text-primary fw-bold">Kode
                                 Klasifikasi</label>
                             <input type="text" class="form-control" name="kode_klasifikasi"
-                                id="parent_kode_klasifikasi" required />
+                                id="parent_kode_klasifikasi" required disabled />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -666,7 +657,7 @@
                             <label class="form-label text-primary fw-bold">Tanggal
                                 Validasi</label>
                             <input type="text" class="form-control datepicker" name="tanggal_validasi"
-                                id="parent_tanggal_validasi" required />
+                                id="parent_tanggal_validasi" required disabled />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -685,21 +676,9 @@
                         </div>
 
                         <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">No. SPM</label>
-                            <input type="text" class="form-control" name="no_spm" id="parent_no_spm" required
-                                disabled />
-                        </div>
-
-                        <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No.
                                 SP2D</label>
                             <input type="text" class="form-control" name="no_sp2d" id="parent_no_sp2d" required
-                                disabled />
-                        </div>
-                        <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">No.
-                                SPP</label>
-                            <input type="text" class="form-control" name="no_surat" id="parent_no_spp" required
                                 disabled />
                         </div>
 
@@ -759,7 +738,7 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No.
                                 Box</label>
-                            <input type="text" class="form-control" name="no_box" id="parent_no_box" required />
+                            <input type="text" class="form-control" name="no_box" id="parent_no_box" disabled required />
                         </div>
                         <div id="box">
 
