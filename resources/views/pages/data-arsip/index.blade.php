@@ -330,7 +330,7 @@
                                                 {{ $item->no_surat }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->nominal }}
+                                                Rp.<span class="text-primary">__</span>{{ number_format($item->nominal,0,",",".") }},-
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $item->skpd }}
