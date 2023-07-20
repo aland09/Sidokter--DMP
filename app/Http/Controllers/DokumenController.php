@@ -135,6 +135,14 @@ class DokumenController extends Controller
 
         Dokumen::where('id', $data_arsip->id)->update($data);
 
+
+        $dataDetail['keterangan'] = $request['keterangan'];
+        $dataDetail['pejabat_penandatangan'] = $request['pejabat_penandatangan'];
+        $dataDetail['unit_pengolah'] = $request['unit_pengolah'];
+
+
+        DetailDokumen::where('dokumen_id', $data_arsip->id)->update($dataDetail);
+
         return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diperbaharui');
     }
 
@@ -180,39 +188,17 @@ class DokumenController extends Controller
 
     public function import_monitoring() {
         $success = 0;
-        $sp2d_monitoring = DB::connection('oraclelink')->select('SELECT * FROM NEWSIPKD.VW_MONITORING_SP2D_AKUN_JENIS@NEWSIPKD WHERE ROWNUM <= 100');
+        $sp2d_monitoring = DB::connection('oraclelink')->select('SELECT * FROM newsipkd.VW_MONITORING_SP2D_JAKPUS@newsipkd WHERE ROWNUM <= 100');
 
         foreach ($sp2d_monitoring as $value) {
             $uraian = $value->uraian;
             $no_spm = $value->no_spm;
             $no_sp2d = $value->no_sp2d_full;
+            $no_spp = $value->no_spp;
             $nominal = $value->nilai_sp2d;
             $kurun_waktu = $value->tahun;
             $skpd = $value->nama_wp;
 
-            $unit_pengolah = '';
-            if($value->jenis === 1) {
-                $unit_pengolah = 'SBPK-JP';
-            } else if($value->jenis === 2) {
-                $unit_pengolah = 'SBPK-JU';
-            } else if($value->jenis === 3) {
-                $unit_pengolah = 'SBPK-JB';
-            } else if($value->jenis === 4) {
-                $unit_pengolah = 'SBPK-JS';
-            } else if($value->jenis === 5) {
-                $unit_pengolah = 'SBPK-JT';
-            }
-
-            // $dokumens = Dokumen::where(
-            //     [
-            //         ['uraian', '=', $uraian],
-            //         ['no_spm', '=', $no_spm],
-            //         ['no_sp2d', '=', $no_sp2d],
-            //         ['nominal', '=', $nominal],
-            //         ['kurun_waktu', '=', $kurun_waktu],
-            //         ['skpd', '=', $skpd],
-            //     ]
-            // )->first();
             $dokumens = Dokumen::where('no_sp2d', $no_sp2d)->first();
             if ($dokumens === null) {
                 $data['no_sp2d'] =  $no_sp2d;
@@ -221,37 +207,37 @@ class DokumenController extends Controller
                 $data['tanggal_validasi'] =  $value->tgl_sp2d;
                 $data['jumlah_satuan_item'] =  1;
                 $data['keterangan'] =  '';
-                $data['no_spm'] =  $no_spm;
-                $data['no_surat'] =  '';
                 $data['nominal'] =  $nominal;
                 $data['skpd'] =  $skpd;
-                $data['unit_pengolah'] =  $unit_pengolah;
                 $data['kurun_waktu'] =  $kurun_waktu;
                 $data['jumlah_satuan_berkas'] =  1;
                 $data['tkt_perkemb'] = 'Tembusan';
-                $data['no_box'] = '';
                 $data['status'] = 'Menunggu Verifikasi';
-                Dokumen::create($data);
+                $dokumen_id = Dokumen::create($data)->id;
+
+                $dataSpp['dokumen_id'] = $dokumen_id;
+                $dataSpp['kode_klasifikasi'] = 'UD.02.02';
+                $dataSpp['uraian'] = $value->uraian;
+                $dataSpp['tanggal_surat'] = $value->tgl_spp;
+                $dataSpp['jumlah_satuan'] = 1;
+                $dataSpp['no_surat'] = $value->no_spp;
+                $dataSpp['kurun_waktu'] = $value->tahun;
+                $dataSpp['tkt_perk'] = 'Asli';
+                DetailDokumen::create($dataSpp);
+
+                $dataSpm['dokumen_id'] = $dokumen_id;
+                $dataSpm['kode_klasifikasi'] = 'UD.02.02';
+                $dataSpm['uraian'] = $value->uraian;
+                $dataSpm['tanggal_surat'] = $value->tgl_spm;
+                $dataSpm['jumlah_satuan'] = 1;
+                $dataSpm['no_surat'] = $value->no_spm;
+                $dataSpm['kurun_waktu'] = $value->tahun;
+                $dataSpm['tkt_perk'] = 'Asli';
+                DetailDokumen::create($dataSpm);
+                
                 $success = $success + 1;
             }
             
-        }
-
-        foreach ($sp2d_monitoring as $value) {
-            $no_sp2d = $value->no_sp2d_full;
-            $dokumen = Dokumen::where('no_sp2d', $no_sp2d)->first();
-
-            // FOR NOW GET DATA FROM SPP BASED
-            $arsipData['dokumen_id'] = $dokumen->id ?? NULL;
-            $arsipData['kode_klasifikasi'] = 'UD.02.02';
-            $arsipData['uraian'] = $value->uraian;
-            $arsipData['tanggal_surat'] = $value->tgl_spp;
-            $arsipData['no_surat'] = $value->no_spp;
-            $arsipData['unit_pengolah'] = $value->nama_opd;
-            $arsipData['kurun_waktu'] = $value->tahun;
-            $arsipData['tkt_perk'] = 'Asli';
-            
-            DetailDokumen::create($arsipData);
         }
 
         return redirect()->route('data-arsip.index')->with('message', $success.' Data arsip berhasil di import.');
