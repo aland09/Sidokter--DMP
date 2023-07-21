@@ -223,7 +223,7 @@ class DokumenController extends Controller
                 $dataSpp['kode_klasifikasi'] = 'UD.02.02';
                 $dataSpp['uraian'] = $value->uraian;
                 $dataSpp['tanggal_surat'] = $value->tgl_spp;
-                $dataSpp['pejabat_penandatangan'] = 'PA/KPA';
+                $dataSpp['pejabat_penandatangan'] = 'Bendahara/PPTK';
                 $dataSpp['jumlah_satuan'] = 1;
                 $dataSpp['no_surat'] = $value->no_spp;
                 $dataSpp['kurun_waktu'] = $value->tahun;
@@ -234,7 +234,7 @@ class DokumenController extends Controller
                 $dataSpm['kode_klasifikasi'] = 'UD.02.02';
                 $dataSpm['uraian'] = $value->uraian;
                 $dataSpm['tanggal_surat'] = $value->tgl_spm;
-                $dataSpm['pejabat_penandatangan'] = 'Bendahara/PPTK';
+                $dataSpm['pejabat_penandatangan'] = 'PA/KPA';
                 $dataSpm['jumlah_satuan'] = 1;
                 $dataSpm['no_surat'] = $value->no_spm;
                 $dataSpm['kurun_waktu'] = $value->tahun;
