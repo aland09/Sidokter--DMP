@@ -26,7 +26,10 @@ class DokumenController extends Controller
     {
         $itemsPerPage = request('items') ?? 10;
 
-        $dokumen = Dokumen::with(['detailDokumen'])
+        $dokumen = Dokumen::with([
+                        'detailDokumen' => function($query) {
+                            $query->orderBy('id', 'ASC');
+                    }])
                     ->latest()
                     ->filter(request(['search']))
                     ->where('status', '=', 'Menunggu Verifikasi')
@@ -137,7 +140,6 @@ class DokumenController extends Controller
 
 
         $dataDetail['keterangan'] = $request['keterangan'];
-        $dataDetail['pejabat_penandatangan'] = $request['pejabat_penandatangan'];
         $dataDetail['unit_pengolah'] = $request['unit_pengolah'];
 
 
@@ -197,7 +199,8 @@ class DokumenController extends Controller
             $no_spp = $value->no_spp;
             $nominal = $value->nilai_sp2d;
             $kurun_waktu = $value->tahun;
-            $skpd = $value->nama_wp;
+            $nwp = $value->nama_wp;
+            $skpd = $value->nama_opd;
 
             $dokumens = Dokumen::where('no_sp2d', $no_sp2d)->first();
             if ($dokumens === null) {
@@ -209,6 +212,7 @@ class DokumenController extends Controller
                 $data['keterangan'] =  '';
                 $data['nominal'] =  $nominal;
                 $data['skpd'] =  $skpd;
+                $data['nwp'] =  $nwp;
                 $data['kurun_waktu'] =  $kurun_waktu;
                 $data['jumlah_satuan_berkas'] =  1;
                 $data['tkt_perkemb'] = 'Tembusan';
@@ -219,6 +223,7 @@ class DokumenController extends Controller
                 $dataSpp['kode_klasifikasi'] = 'UD.02.02';
                 $dataSpp['uraian'] = $value->uraian;
                 $dataSpp['tanggal_surat'] = $value->tgl_spp;
+                $dataSpp['pejabat_penandatangan'] = 'Bendahara/PPTK';
                 $dataSpp['jumlah_satuan'] = 1;
                 $dataSpp['no_surat'] = $value->no_spp;
                 $dataSpp['kurun_waktu'] = $value->tahun;
@@ -229,6 +234,7 @@ class DokumenController extends Controller
                 $dataSpm['kode_klasifikasi'] = 'UD.02.02';
                 $dataSpm['uraian'] = $value->uraian;
                 $dataSpm['tanggal_surat'] = $value->tgl_spm;
+                $dataSpm['pejabat_penandatangan'] = 'PA/KPA';
                 $dataSpm['jumlah_satuan'] = 1;
                 $dataSpm['no_surat'] = $value->no_spm;
                 $dataSpm['kurun_waktu'] = $value->tahun;
