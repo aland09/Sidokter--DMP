@@ -461,7 +461,7 @@
                                                             <i data-acorn-icon="edit"></i>
                                                         </button>
 
-                                                        <form id="delete_{{ $item->id }}_{{ $subitem->id }}"
+                                                        <!--<form id="delete_{{ $item->id }}_{{ $subitem->id }}"
                                                             action="/detail-data-arsip/{{ $subitem->id }}"
                                                             method="POST" class="d-inline">
                                                             @method('delete')
@@ -471,7 +471,7 @@
                                                                 data-id="delete_{{ $item->id }}_{{ $subitem->id }}"
                                                                 data-bs-toggle="modal" data-bs-target="#modalHapus"><i
                                                                     data-acorn-icon="bin"></i></button>
-                                                        </form>
+                                                        </form>-->
                                                     </div>
                                                 </td>
                                         </tr>
@@ -548,13 +548,13 @@
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Uraian</label>
-                            <textarea class="form-control" name="uraian" id="child_uraian" disabled required></textarea>
+                            <textarea class="form-control" name="uraian" id="child_uraian" required></textarea>
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Tanggal Surat</label>
                             <input type="text" class="form-control datepicker" name="tanggal_surat"
-                                id="child_tanggal_surat" required disabled />
+                                id="child_tanggal_surat" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -580,7 +580,7 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No. Surat</label>
                             <input type="text" class="form-control" name="no_surat" id="child_no_surat" required
-                                disabled />
+                                />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
