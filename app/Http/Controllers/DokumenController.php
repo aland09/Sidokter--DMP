@@ -190,7 +190,8 @@ class DokumenController extends Controller
 
     public function import_monitoring() {
         $success = 0;
-        $sp2d_monitoring = DB::connection('oraclelink')->select('SELECT * FROM newsipkd.VW_MONITORING_SP2D_JAKPUS@newsipkd WHERE ROWNUM <= 100');
+        //$sp2d_monitoring = DB::connection('oraclelink')->select('SELECT * FROM newsipkd.VW_MONITORING_SP2D_JAKPUS@newsipkd WHERE ROWNUM <= 100');
+        $sp2d_monitoring = DB::connection('oraclelink')->select('SELECT * FROM newsipkd.VW_MONITORING_SP2D_JAKPUS@newsipkd');
 
         foreach ($sp2d_monitoring as $value) {
             $uraian = $value->uraian;
