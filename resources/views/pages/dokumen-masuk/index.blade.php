@@ -29,8 +29,42 @@
             $('.check-child').prop("checked", false);
             if ($(this).is(":checked")) {
                 $('.no-box-check_' + id).prop("checked", true);
+                $('#btn-barcode').prop('disabled', false);
+                year = $(this).val();
+                $('#kurun_waktu').val(year);
+                $('#dokumen_id').val(id);
             } else {
+                $('#kurun_waktu').val('');
+                $('#dokumen_id').val('');
                 $('.no-box-check_' + id).prop("checked", false);
+                $('#btn-barcode').prop('disabled', true);
+            }
+        });
+
+        $('#btn-barcode').click(function() {
+            $('#modalFormBarcode').modal('show');
+            const year = $('#kurun_waktu').val();
+            if (year) {
+                $.ajax({
+                    url: '/get-no-box/' + year,
+                    type: "GET",
+                    data: {
+                        "_token": "{{ csrf_token() }}"
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if (data) {
+                            $('#no_box_display').html(data);
+                            $('#no_box').val(data);
+                        } else {
+                            $('#no_box_display').html("Gagal Membuat Barcode");
+                            $('#no_box').val('');
+                        }
+                    }
+                });
+            } else {
+                $('#no_box_display').html("Gagal Membuat Barcode");
+                $('#no_box').val('');
             }
         });
     </script>
@@ -49,6 +83,17 @@
                             @include('_layout.breadcrumb', ['breadcrumbs' => $breadcrumbs])
                         </div>
                         <!-- Title End -->
+                        <!-- Top Buttons Start -->
+                        <div class="col-12 col-md-5 d-flex align-items-start justify-content-end gap-3">
+                            <button type="button"
+                                class="btn btn-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0"
+                                id="btn-barcode" disabled>
+                                <i data-acorn-icon="plus"></i>
+                                <span>Buat Barcode No. Box</span>
+                            </button>
+                            <!-- Add New Button End -->
+                        </div>
+                        <!-- Top Buttons End -->
                     </div>
                 </div>
                 <!-- Title and Top Buttons End -->
@@ -130,7 +175,6 @@
                                         <th class="text-muted text-small text-uppercase">Tanggal Validasi</th>
                                         <th class="text-muted text-small text-uppercase">Jumlah Satuan Item</th>
                                         <th class="text-muted text-small text-uppercase">Keterangan</th>
-                                        <th class="text-muted text-small text-uppercase">No. SPM</th>
                                         <th style="width: 300px !important" class="text-muted text-small text-uppercase">
                                             No. SP2D</th>
                                         <th class="text-muted text-small text-uppercase">Nominal</th>
@@ -154,6 +198,7 @@
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 <div class="mb-1 ms-3"><input type="checkbox"
                                                         class="form-check-input no-box-check"
+                                                        value="{{ $item->kurun_waktu }}"
                                                         id="check-parent_{{ $item->id }}"
                                                         data-id="{{ $item->id }}">
                                                 </div>
@@ -172,9 +217,6 @@
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $item->keterangan }}
-                                            </td>
-                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->no_spm }}
                                             </td>
                                             <td style="height: 42px !important;" class="py-2 bg-primary text-white">
                                                 {{ $item->no_sp2d }}
@@ -310,6 +352,33 @@
                 </div>
                 <!-- Content End -->
             </div>
+        </div>
+    </div>
+
+    <!-- Modal Import -->
+    <div class="modal fade" id="modalFormBarcode" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="POST" action="/data-arsip-no-box" enctype="multipart/form-data">
+                <div class="modal-content">
+                    <div class="modal-header py-3">
+                        <h5 class="modal-title" id="exampleModalLabelDefault">Buat Barcode No. Box</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex flex-column align-items-center justify-content-center text-center py-3">
+                        {{ csrf_field() }}
+                        <div class="my-3">{!! DNS2D::getBarcodeHTML($no_box_tmp, 'QRCODE') !!}</div>
+                        <div class="form-label text-primary fw-bold" id="no_box_display">Mohon Tunggu...</div>
+                        <input type="hidden" name="id" id="dokumen_id">
+                        <input type="hidden" id="kurun_waktu">
+
+                    </div>
+                    <div class="modal-footer pt-3 pb-3">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 

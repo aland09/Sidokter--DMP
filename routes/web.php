@@ -44,4 +44,5 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('detail-data-arsip', DetailDokumenController::class);
     Route::get('get-berkas-arsip/{id?}', [DokumenController::class, 'getBerkasArsip']);
     Route::get('import-monitoring', [DokumenController::class, 'import_monitoring']);
+    Route::get('get-no-box/{year?}', [DokumenMasukController::class, 'get_no_box']);
 });
