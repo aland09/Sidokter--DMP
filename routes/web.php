@@ -9,6 +9,7 @@ use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\DokumenMasukController;
 use App\Http\Controllers\DetailDokumenController;
 use App\Http\Controllers\JenisBelanjaController;
+use App\Http\Controllers\RegulasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     Route::resource('jenis-belanja', JenisBelanjaController::class);
+    Route::resource('regulasi', RegulasiController::class);
     Route::resource('data-arsip', DokumenController::class);
     Route::resource('dokumen-masuk', DokumenMasukController::class);
     Route::post('data-arsip/import_excel', [DokumenController::class, 'import_excel']);

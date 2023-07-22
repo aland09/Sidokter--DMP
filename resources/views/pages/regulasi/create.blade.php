@@ -2,7 +2,7 @@
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
     $title = 'Tambah Data';
     $description = 'Halaman Tambah Data Jenis Belanja';
-    $breadcrumbs = ['/' => 'Beranda', '/jenis-belanja' => 'Daftar Belanja', '/jenis-belanja/create' => 'Tambah Data'];
+    $breadcrumbs = ['/' => 'Beranda', '/regulasi' => 'Daftar Regulasi', '/regulasi/create' => 'Tambah Data'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 
@@ -50,25 +50,25 @@
                         {{ $description }}
                     </p>
                     <!-- tooltip-label-end inputs should be wrapped in form-group class -->
-                    <form id="form" class="tooltip-label-end" novalidate action="/jenis-belanja" method="POST">
+                    <form id="form" class="tooltip-label-end" novalidate action="/regulasi" method="POST">
                         @csrf
                         <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Nama Jenis Belanja</label>
+                            <label class="form-label text-primary fw-bold">Nama Regulasi</label>
                             <input type="text" class="form-control" name="name" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Status</label>
-                            <input type="text" class="form-control" name="status" required />
+                            <label class="form-label text-primary fw-bold">Deskripsi</label>
+                            <textarea type="text" class="form-control" name="deskripsi" required ></textarea>
                         </div>
 
                         <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Retensi</label>
-                            <input type="number" class="form-control" name="retensi" required />
+                            <label class="form-label text-primary fw-bold">Upload File Regulasi</label>
+                            <input type="file" class="form-control" name="file_regulasi" required />
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
-                            <a href="{{ route('jenis-belanja.index') }}" class="btn btn-outline-primary me-md-2">Batal</a>
+                            <a href="{{ route('regulasi.index') }}" class="btn btn-outline-primary me-md-2">Batal</a>
                             <button type="button" id="confirmBtn" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#modalDialog">Simpan</button>
                         </div>

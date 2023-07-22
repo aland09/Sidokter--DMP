@@ -1,8 +1,8 @@
 @php
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
-    $title = 'Tambah Data';
-    $description = 'Halaman Tambah Data Jenis Belanja';
-    $breadcrumbs = ['/' => 'Beranda', '/jenis-belanja' => 'Daftar Belanja', '/jenis-belanja/create' => 'Tambah Data'];
+    $title = 'Edit Data';
+    $description = 'Halaman Edit Roles';
+    $breadcrumbs = ['/' => 'Beranda', '/roles' => 'Daftar Roles',  '/roles/'.$roles->id.'/edit' => 'Edit Data'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 
@@ -24,7 +24,6 @@
         });
     </script>
 @endsection
-
 
 @section('content')
     <div class="container">
@@ -50,25 +49,24 @@
                         {{ $description }}
                     </p>
                     <!-- tooltip-label-end inputs should be wrapped in form-group class -->
-                    <form id="form" class="tooltip-label-end" novalidate action="/jenis-belanja" method="POST">
+                    <form id="form" class="tooltip-label-end" novalidate action="/roles/{{ $roles->id }}"
+                        method="POST">
+                        @method('put')
                         @csrf
                         <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Nama Jenis Belanja</label>
-                            <input type="text" class="form-control" name="name" required />
+                            <label class="form-label text-primary fw-bold">Role</label>
+                            <input type="text" class="form-control" name="name" value="{{ $roles->name }}"
+                                required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Status</label>
-                            <input type="text" class="form-control" name="status" required />
-                        </div>
-
-                        <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Retensi</label>
-                            <input type="number" class="form-control" name="retensi" required />
+                            <label class="form-label text-primary fw-bold">Guard</label>
+                            <input type="text" class="form-control" name="guard_name" value="{{ $roles->guard_name }}"
+                                required />
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
-                            <a href="{{ route('jenis-belanja.index') }}" class="btn btn-outline-primary me-md-2">Batal</a>
+                            <a href="{{ route('roles.index') }}" class="btn btn-outline-primary me-md-2">Batal</a>
                             <button type="button" id="confirmBtn" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#modalDialog">Simpan</button>
                         </div>
@@ -78,7 +76,6 @@
         </section>
         <!-- Content End -->
     </div>
-
 
     <!-- Modal -->
     <div class="modal fade" id="modalDialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -95,5 +92,5 @@
             </div>
         </div>
     </div>
-
+    
 @endsection
