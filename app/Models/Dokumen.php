@@ -22,6 +22,7 @@ class Dokumen extends Model
         'no_surat',
         'nominal',
         'skpd',
+        'nwp',
         'pejabat_penandatangan',
         'unit_pengolah',
         'kurun_waktu',
@@ -39,7 +40,16 @@ class Dokumen extends Model
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['search'] ?? false, function ($query, $search) {
-            return $query->where('no_sp2d', 'like', '%' .  $search . '%');
+            return $query->where('no_sp2d', 'like', '%' .  $search . '%')
+            ->orWhere('skpd', 'like', '%' .  $search . '%')
+            ->orWhere('nwp', 'like', '%' .  $search . '%')
+            ->orWhere('kode_klasifikasi', 'like', '%' .  $search . '%')
+            ->orWhere('uraian', 'like', '%' .  $search . '%')
+            ->orWhere('keterangan', 'like', '%' .  $search . '%')
+            ->orWhere('pejabat_penandatangan', 'like', '%' .  $search . '%')
+            ->orWhere('unit_pengolah', 'like', '%' .  $search . '%')
+            ->orWhere('tkt_perkemb', 'like', '%' .  $search . '%')
+            ->orWhere('kurun_waktu', 'like', '%' .  $search . '%');
         });
     }
 }

@@ -103,6 +103,7 @@
             $(".modal-body #parent_no_spp").val(item['no_surat']);
             $(".modal-body #parent_nominal").val(item['nominal']);
             $(".modal-body #parent_skpd").val(item['skpd']);
+            $(".modal-body #parent_nwp").val(item['nwp']);
             $(".modal-body #parent_pejabat_penandatangan").val(item['pejabat_penandatangan']);
             $(".modal-body #parent_unit_pengolah").val(item['unit_pengolah']);
             $(".modal-body #parent_kurun_waktu").val(item['kurun_waktu']);
@@ -114,12 +115,24 @@
 
         $(document).on('click', '.btn-add-parent', function() {
             const id = $(this).data('id');
-            $(".modal-body #parent_dokumen_id").val(id);
+            const subitem = $(this).data('subitem');
+            console.log('subitem', subitem);
+            $(".modal-body #parent_add_kode_klasifikasi").val(subitem['kode_klasifikasi']);
+            $(".modal-body #parent_add_tanggal_surat").val(subitem['tanggal_surat']);
+            $(".modal-body #parent_add_jumlah_satuan").val(subitem['jumlah_satuan']);
+            $(".modal-body #parent_add_keterangan").val(subitem['keterangan']);
+            $(".modal-body #parent_add_jenis_naskah_dinas").val(subitem['jenis_naskah_dinas']);
+            $(".modal-body #parent_add_pejabat_penandatangan").val('PA/KPA');
+            $(".modal-body #parent_add_unit_pengolah").val(subitem['unit_pengolah']);
+            $(".modal-body #parent_add_kurun_waktu").val(subitem['kurun_waktu']);
+            $(".modal-body #parent_add_no_box").val(subitem['no_box']);
+            $(".modal-body #parent_add_tkt_perk").val(subitem['tkt_perk']);
+            $(".modal-body #parent_add_dokumen_id").val(id);
             $('#modalSideAddParent').modal('show');
         });
 
-         $('#addSection').click(function() {
-            
+        $('#addSection').click(function() {
+
             let section = `<div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Uraian</label>
                             <input type="text" class="form-control" name="uraian"
@@ -158,6 +171,10 @@
     @endif
 
     <div class="container">
+        @foreach ($test ?? [] as $tr)
+            {{ $tr }}
+        @endforeach
+
         <div class="row">
             <div class="col">
                 <!-- Title and Top Buttons Start -->
@@ -172,11 +189,16 @@
                         <!-- Top Buttons Start -->
                         <div class="col-12 col-md-5 d-flex align-items-start justify-content-end gap-3">
                             <!-- Add New Button Start -->
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#modalImport"
-                                class="btn btn-outline-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0">
-                                <i data-acorn-icon="cloud-upload"></i>
+                            <button class="btn btn-outline-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0"
+                                data-bs-toggle="dropdown" type="button" data-bs-offset="0,3">
+                                <i data-acorn-icon="cloud-download"></i>
                                 <span>Import Data</span>
                             </button>
+                            <div class="dropdown-menu shadow dropdown-menu-end">
+                                <button class="dropdown-item" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#modalImport">Import Excel</button>
+                                <a href="/import-monitoring" class="dropdown-item">Tarik Data Monitoring</a>
+                            </div>
 
                             <a href="{{ route('data-arsip.create') }}"
                                 class="btn btn-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0">
@@ -226,8 +248,10 @@
                                         </span>
                                     </button>
                                     <div class="dropdown-menu shadow dropdown-menu-end">
-                                        <a target="_blank" href="data-arsip/export-excel/xlsx" class="dropdown-item export-excel">Export Daftar Arsip</a>
-                                        <a target="_blank" href="detail-data-arsip/export-excel/xlsx" class="dropdown-item export-excel">Export Daftar Isi Berkas</a>
+                                        <a target="_blank" href="data-arsip/export-excel/xlsx"
+                                            class="dropdown-item export-excel">Export Daftar Arsip</a>
+                                        <a target="_blank" href="detail-data-arsip/export-excel/xlsx"
+                                            class="dropdown-item export-excel">Export Daftar Isi Berkas</a>
                                     </div>
                                 </div>
                                 <!-- Export Dropdown End -->
@@ -271,13 +295,11 @@
                                             Jumlah Satuan Item</th>
                                         <th class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
                                             Keterangan</th>
-                                        <th class="text-muted text-small text-uppercase">No. SPM</th>
                                         <th style="width: 300px !important" class="text-muted text-small text-uppercase">
                                             No. SP2D</th>
-                                        <th style="width: 300px !important" class="text-muted text-small text-uppercase">
-                                            No. SPP</th>
                                         <th class="text-muted text-small text-uppercase">Nominal</th>
-                                        <th class="text-muted text-small text-uppercase">SKPD</th>
+                                        <th class="text-muted text-small text-uppercase">SKPD/Unit SKPD</th>
+                                        <th class="text-muted text-small text-uppercase">NWP</th>
                                         <th class="text-muted text-small text-uppercase">Pejabat Penandatangan</th>
                                         <th class="text-muted text-small text-uppercase">Unit Pengolah</th>
                                         <th class="text-muted text-small text-uppercase">Kurun Waktu</th>
@@ -290,7 +312,6 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($dokumen ?? [] as $item)
-                                        
                                         <tr>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $loop->index + 1 }}.
@@ -300,7 +321,7 @@
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $item->uraian }}
-                                                
+
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $item->tanggal_validasi }}
@@ -311,20 +332,18 @@
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $item->keterangan }}
                                             </td>
-                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->no_spm }}
-                                            </td>
                                             <td style="height: 42px !important;" class="py-2 bg-primary text-white">
                                                 {{ $item->no_sp2d }}
                                             </td>
-                                            <td style="height: 42px !important;" class="py-2 bg-primary text-white">
-                                                {{ $item->no_surat }}
-                                            </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->nominal }}
+                                                Rp.<span
+                                                    class="text-primary">__</span>{{ number_format($item->nominal, 0, ',', '.') }},-
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $item->skpd }}
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->nwp }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $item->pejabat_penandatangan }}
@@ -349,12 +368,12 @@
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                    <button type="button" data-item="{{ $item}}"
+                                                    <button type="button" data-item="{{ $item }}"
                                                         class="btn btn-icon btn-icon-only btn-sm btn-warning btn-edit-parent">
                                                         <i data-acorn-icon="edit"></i>
                                                     </button>
 
-                                                    <button type="button" data-id="{{ $item->id }}"
+                                                    <button type="button" data-id="{{ $item->id}}" data-subitem="{{ $item->detailDokumen[0] ?? NULL }}"
                                                         class="btn btn-icon btn-icon-only btn-sm btn-info btn-add-parent">
                                                         <i data-acorn-icon="plus"></i>
                                                     </button>
@@ -384,11 +403,12 @@
                                             <th class="text-muted text-small text-uppercase">Unit Pengolah</th>
                                             <th class="text-muted text-small text-uppercase">Kurun Waktu</th>
                                             <th class="text-muted text-small text-uppercase">No. Box</th>
-                                            <th colspan="5" class="text-muted text-small text-uppercase">Tingkat Perkembangan</th>
+                                            <th colspan="5" class="text-muted text-small text-uppercase">Tingkat
+                                                Perkembangan</th>
                                             <th width="10%" class="empty">&nbsp;</th>
                                         </tr>
-                                        
-                                            <tr>
+
+                                        <tr>
                                             @foreach ($item->detailDokumen ?? [] as $subitem)
                                                 <td style="height: 42px !important" class="empty py-2">
                                                     {{ $loop->index + 1 }}.</td>
@@ -428,7 +448,7 @@
                                                 <td colspan="5" style="height: 42px !important" class="py-2">
                                                     {{ $subitem->tkt_perk }}
                                                 </td>
-                                                <td colspan="5" style="height: 42px !important" class="py-2">
+                                                <td style="height: 42px !important" class="py-2">
                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                         <a href="#"
                                                             class="btn btn-icon btn-icon-only btn-sm btn-outline-info"
@@ -441,7 +461,7 @@
                                                             <i data-acorn-icon="edit"></i>
                                                         </button>
 
-                                                        <form id="delete_{{ $item->id }}_{{ $subitem->id }}"
+                                                        <!--<form id="delete_{{ $item->id }}_{{ $subitem->id }}"
                                                             action="/detail-data-arsip/{{ $subitem->id }}"
                                                             method="POST" class="d-inline">
                                                             @method('delete')
@@ -451,33 +471,31 @@
                                                                 data-id="delete_{{ $item->id }}_{{ $subitem->id }}"
                                                                 data-bs-toggle="modal" data-bs-target="#modalHapus"><i
                                                                     data-acorn-icon="bin"></i></button>
-                                                        </form>
+                                                        </form>-->
                                                     </div>
                                                 </td>
-                                            </tr>
-                                        
-                                        
-                                        @endforeach
+                                        </tr>
                                     @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- Table End -->
-
-                        <div class="d-flex flex-row justify-content-center mt-5">
-                            {{ $dokumen->links() }}
-                        </div>
-                    @else
-                        <div class="d-flex align-items-center justify-content-center mt-5" style="height: 60vh">
-                            <div class="alert alert-warning w-75 text-center" role="alert">
-                                Data Tidak Ditemukan
-                            </div>
-                        </div>
-                    @endif
+                    @endforeach
+                    </tbody>
+                    </table>
                 </div>
-                <!-- Content End -->
+                <!-- Table End -->
+
+                <div class="d-flex flex-row justify-content-center mt-5">
+                    {{ $dokumen->links() }}
+                </div>
+            @else
+                <div class="d-flex align-items-center justify-content-center mt-5" style="height: 60vh">
+                    <div class="alert alert-warning w-75 text-center" role="alert">
+                        Data Tidak Ditemukan
+                    </div>
+                </div>
+                @endif
             </div>
+            <!-- Content End -->
         </div>
+    </div>
     </div>
 
     <!-- Modal Import -->
@@ -525,12 +543,12 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Kode Klasifikasi</label>
                             <input type="text" class="form-control" name="kode_klasifikasi"
-                                id="child_kode_klasifikasi" required />
+                                id="child_kode_klasifikasi" required disabled />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Uraian</label>
-                            <textarea class="form-control" name="uraian" id="child_uraian" disabled required></textarea>
+                            <textarea class="form-control" name="uraian" id="child_uraian" required></textarea>
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -542,12 +560,12 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Jumlah Satuan</label>
                             <input type="text" class="form-control" name="jumlah_satuan" id="child_jumlah_satuan"
-                                required />
+                                required disabled />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Keterangan</label>
-                            <select name="keterangan" id="child_keterangan" class="form-select" required>
+                            <select name="keterangan" id="child_keterangan" class="form-select" disabled required>
                                 <option value="Tekstual">Tekstual</option>
                                 <option value="Digital">Digital</option>
                             </select>
@@ -556,19 +574,19 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Jenis Naskah Dinas</label>
                             <input type="text" class="form-control" name="jenis_naskah_dinas"
-                                id="child_jenis_naskah_dinas" required />
+                                id="child_jenis_naskah_dinas" disabled required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No. Surat</label>
                             <input type="text" class="form-control" name="no_surat" id="child_no_surat" required
-                                disabled />
+                                />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Pejabat Penandatangan</label>
                             <input type="text" class="form-control" name="pejabat_penandatangan"
-                                id="child_pejabat_penandatangan" required />
+                                id="child_pejabat_penandatangan" disabled required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -585,7 +603,8 @@
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No. Box</label>
-                            <input type="text" class="form-control" name="no_box" id="child_no_box" required />
+                            <input type="text" class="form-control" name="no_box" id="child_no_box" disabled
+                                required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -636,7 +655,7 @@
             enctype="multipart/form-data">
             @method('put')
             @csrf
-            <div class="modal-dialog" >
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header pt-4 pb-3">
                         <h5 class="modal-title" id="staticBackdropLabel">Edit Data</h5>
@@ -647,7 +666,7 @@
                             <label class="form-label text-primary fw-bold">Kode
                                 Klasifikasi</label>
                             <input type="text" class="form-control" name="kode_klasifikasi"
-                                id="parent_kode_klasifikasi" required />
+                                id="parent_kode_klasifikasi" required disabled />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -660,7 +679,7 @@
                             <label class="form-label text-primary fw-bold">Tanggal
                                 Validasi</label>
                             <input type="text" class="form-control datepicker" name="tanggal_validasi"
-                                id="parent_tanggal_validasi" required />
+                                id="parent_tanggal_validasi" required disabled />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -679,21 +698,9 @@
                         </div>
 
                         <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">No. SPM</label>
-                            <input type="text" class="form-control" name="no_spm" id="parent_no_spm" required
-                                disabled />
-                        </div>
-
-                        <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No.
                                 SP2D</label>
                             <input type="text" class="form-control" name="no_sp2d" id="parent_no_sp2d" required
-                                disabled />
-                        </div>
-                        <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">No.
-                                SPP</label>
-                            <input type="text" class="form-control" name="no_surat" id="parent_no_spp" required
                                 disabled />
                         </div>
 
@@ -710,10 +717,19 @@
                         </div>
 
                         <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">NWP</label>
+                            <input type="text" class="form-control" name="nwp" id="parent_nwp" required
+                                disabled />
+                        </div>
+
+                        <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Pejabat
                                 Penandatangan</label>
-                            <input type="text" class="form-control" name="pejabat_penandatangan"
-                                id="parent_pejabat_penandatangan" required />
+                            <select name="pejabat_penandatangan" id="parent_pejabat_penandatangan" class="form-select" required>
+                                <option value="Kuasa BUD">Kuasa BUD</option>
+                                <option value="Plt. Kuasa BUD">Plt. Kuasa BUD</option>
+                                <option value="Plh. Kuasa BUD">Plh. Kuasa BUD</option>
+                            </select>
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -753,7 +769,8 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No.
                                 Box</label>
-                            <input type="text" class="form-control" name="no_box" id="parent_no_box" required />
+                            <input type="text" class="form-control" name="no_box" id="parent_no_box" disabled
+                                required />
                         </div>
                         <div id="box">
 
@@ -762,7 +779,7 @@
                         <div class="col text-end">
                             <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
                                 Kegiatan</button>
-        
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -794,7 +811,7 @@
         </div>
     </div>
 
-    <!-- Modal Side Edit Parent -->
+    <!-- Modal Side Add Parent -->
     <div class="modal modal-right fade" id="modalSideAddParent" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <form id="form_add_parent" action="/detail-data-arsip" class="tooltip-label-end edit-form" novalidate
@@ -807,34 +824,34 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" id="parent_dokumen_id" name="dokumen_id">
+                        <input type="hidden" id="parent_add_dokumen_id" name="dokumen_id">
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Kode
                                 Klasifikasi</label>
-                            <input type="text" class="form-control" name="kode_klasifikasi" required />
+                            <input type="text" class="form-control" id="parent_add_kode_klasifikasi" name="kode_klasifikasi" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Uraian</label>
-                            <textarea class="form-control" name="uraian" rows="6" required></textarea>
+                            <textarea class="form-control" id="parent_add_uraian" name="uraian" rows="6" required></textarea>
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Tanggal
                                 Surat</label>
-                            <input type="text" class="form-control datepicker" name="tanggal_surat" required />
+                            <input type="text" class="form-control datepicker" id="parent_add_tanggal_surat" name="tanggal_surat" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Jumlah
                                 Satuan</label>
-                            <input type="text" class="form-control" name="jumlah_satuan" required />
+                            <input type="text" class="form-control" id="parent_add_jumlah_satuan" name="jumlah_satuan" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Keterangan</label>
-                            <select name="keterangan" class="form-select" required>
+                            <select id="parent_add_keterangan" name="keterangan" class="form-select" required>
                                 <option value="Tekstual">Tekstual</option>
                                 <option value="Digital">Digital</option>
                             </select>
@@ -843,42 +860,44 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Jenis Naskah
                                 Dinas</label>
-                            <input type="text" class="form-control" name="jenis_naskah_dinas" required />
+                            <input type="text" class="form-control" id="parent_add_jenis_naskah_dinas" name="jenis_naskah_dinas" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No.
                                 Surat</label>
-                            <input type="text" class="form-control" name="no_surat" required />
+                            <input type="text" class="form-control" id="parent_add_no_surat" name="no_surat" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Pejabat
                                 Penandatangan</label>
-                            <input type="text" class="form-control" name="pejabat_penandatangan" required />
+                            <select id="parent_add_pejabat_penandatangan" name="pejabat_penandatangan" class="form-select" required>
+                                <option selected value="PA/KPA">PA/KPA</option>
+                            </select>
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Unit
                                 Pengolah</label>
-                            <input type="text" class="form-control" name="unit_pengolah" required />
+                            <input type="text" class="form-control" id="parent_add_unit_pengolah" name="unit_pengolah" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Kurun
                                 Waktu</label>
-                            <input type="number" class="form-control" name="kurun_waktu" required />
+                            <input type="number" class="form-control" id="parent_add_kurun_waktu" name="kurun_waktu" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No.
                                 Box</label>
-                            <input type="text" class="form-control" name="no_box" required />
+                            <input type="text" class="form-control" id="parent_add_no_box" name="no_box" disabled required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Tingkat Perkembangan</label>
-                            <select name="tkt_perk" class="form-select" required>
+                            <select id="parent_add_tkt_perk" name="tkt_perk" class="form-select" required>
                                 <option value="Asli">Asli</option>
                                 <option value="Tembusan">Tembusan</option>
                             </select>
@@ -957,6 +976,5 @@
             </form>
         </div>
     </div>
-    
 
 @endsection

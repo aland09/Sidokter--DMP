@@ -47,4 +47,5 @@ Route::middleware(['auth'])->group(function () {
     Route::post('data-arsip/verifikasi_dokumen', [DokumenController::class, 'verification_document']);
     Route::resource('detail-data-arsip', DetailDokumenController::class);
     Route::get('get-berkas-arsip/{id?}', [DokumenController::class, 'getBerkasArsip']);
+    Route::get('import-monitoring', [DokumenController::class, 'import_monitoring']);
 });

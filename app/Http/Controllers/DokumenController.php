@@ -11,6 +11,7 @@ use App\Imports\DokumenSpmImport;
 use App\Imports\DokumenSppImport;
 use App\Exports\DokumenExport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 
@@ -25,7 +26,10 @@ class DokumenController extends Controller
     {
         $itemsPerPage = request('items') ?? 10;
 
-        $dokumen = Dokumen::with(['detailDokumen'])
+        $dokumen = Dokumen::with([
+                        'detailDokumen' => function($query) {
+                            $query->orderBy('id', 'ASC');
+                    }])
                     ->latest()
                     ->filter(request(['search']))
                     ->where('status', '=', 'Menunggu Verifikasi')
@@ -134,6 +138,13 @@ class DokumenController extends Controller
 
         Dokumen::where('id', $data_arsip->id)->update($data);
 
+
+        $dataDetail['keterangan'] = $request['keterangan'];
+        $dataDetail['unit_pengolah'] = $request['unit_pengolah'];
+
+
+        DetailDokumen::where('dokumen_id', $data_arsip->id)->update($dataDetail);
+
         return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diperbaharui');
     }
 
@@ -176,6 +187,82 @@ class DokumenController extends Controller
         return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diimport');
 
 	}
+
+    public function import_monitoring() {
+        $success = 0;
+        $sp2d_monitoring = DB::connection('oraclelink')->select('SELECT * FROM newsipkd.VW_MONITORING_SP2D_JAKPUS@newsipkd WHERE ROWNUM <= 100');
+        //$sp2d_monitoring = DB::connection('oraclelink')->select('SELECT * FROM newsipkd.VW_MONITORING_SP2D_JAKPUS@newsipkd');
+
+        foreach ($sp2d_monitoring as $value) {
+            $uraian = $value->uraian;
+            $no_spm = $value->no_spm;
+            $no_sp2d = $value->no_sp2d_full;
+            $no_spp = $value->no_spp;
+            $nominal = $value->nilai_sp2d;
+            $kurun_waktu = $value->tahun;
+            $nwp = $value->nama_wp;
+            $skpd = $value->nama_opd;
+
+            $dokumens = Dokumen::where('no_sp2d', $no_sp2d)->first();
+            if ($dokumens === null) {
+                $data['no_sp2d'] =  $no_sp2d;
+                $data['kode_klasifikasi'] = 'UD.02.02';
+                $data['uraian'] =  $uraian;
+                $data['tanggal_validasi'] =  $value->tgl_sp2d;
+                $data['jumlah_satuan_item'] =  1;
+                $data['keterangan'] =  '';
+                $data['nominal'] =  $nominal;
+                $data['skpd'] =  $skpd;
+                $data['nwp'] =  $nwp;
+                $data['kurun_waktu'] =  $kurun_waktu;
+                $data['jumlah_satuan_berkas'] =  1;
+                $data['tkt_perkemb'] = 'Tembusan';
+                $data['status'] = 'Menunggu Verifikasi';
+                $dokumen_id = Dokumen::create($data)->id;
+
+                $dataSpp['dokumen_id'] = $dokumen_id;
+                $dataSpp['kode_klasifikasi'] = 'UD.02.02';
+                $dataSpp['uraian'] = $value->uraian;
+                $dataSpp['tanggal_surat'] = $value->tgl_spp;
+                $dataSpp['pejabat_penandatangan'] = 'Bendahara/PPTK';
+                $dataSpp['jumlah_satuan'] = 1;
+                $dataSpp['no_surat'] = $value->no_spp;
+                $dataSpp['kurun_waktu'] = $value->tahun;
+                $dataSpp['tkt_perk'] = 'Asli';
+                DetailDokumen::create($dataSpp);
+
+                $dataSpm['dokumen_id'] = $dokumen_id;
+                $dataSpm['kode_klasifikasi'] = 'UD.02.02';
+                $dataSpm['uraian'] = $value->uraian;
+                $dataSpm['tanggal_surat'] = $value->tgl_spm;
+                $dataSpm['pejabat_penandatangan'] = 'PA/KPA';
+                $dataSpm['jumlah_satuan'] = 1;
+                $dataSpm['no_surat'] = $value->no_spm;
+                $dataSpm['kurun_waktu'] = $value->tahun;
+                $dataSpm['tkt_perk'] = 'Asli';
+                DetailDokumen::create($dataSpm);
+
+                
+
+                $dataSptjm['dokumen_id'] = $dokumen_id;
+                $dataSptjm['kode_klasifikasi'] = 'UD.02.02';
+                $dataSptjm['uraian'] = '';
+                $dataSptjm['tanggal_surat'] = '';
+                $dataSptjm['pejabat_penandatangan'] = 'PA/KPA';
+                $dataSptjm['jumlah_satuan'] = 1;
+                $dataSptjm['no_surat'] = '';
+                $dataSptjm['kurun_waktu'] = $value->tahun;
+                $dataSptjm['tkt_perk'] = 'Asli';
+                DetailDokumen::create($dataSptjm);
+                
+                $success = $success + 1;
+            }
+            
+        }
+
+        return redirect()->route('data-arsip.index')->with('message', $success.' Data arsip berhasil di import.');
+        
+    }
 
     // Get Arsip Budle
     public function getBerkasArsip($id) {
