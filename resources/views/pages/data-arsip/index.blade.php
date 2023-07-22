@@ -80,7 +80,7 @@
 
             const file_dokumen = subitem['file_dokumen'];
             if (file_dokumen) {
-                $('#file_dokumen_append').html(`<a href="${file_dokumen}"
+                $('#file_dokumen_append').html(`<a href="storage/${file_dokumen}"
                             target="_blank"
                             class="btn btn-outline-primary mb-3">Lihat File</a>
                 `);
@@ -976,6 +976,5 @@
             </form>
         </div>
     </div>
-
 
 @endsection
