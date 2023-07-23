@@ -47,5 +47,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('data-arsip/verifikasi_dokumen', [DokumenController::class, 'verification_document']);
     Route::resource('detail-data-arsip', DetailDokumenController::class);
     Route::get('get-berkas-arsip/{id?}', [DokumenController::class, 'getBerkasArsip']);
-    Route::post('import-monitoring', [DokumenController::class, 'import_monitoring']);
+    Route::get('import-monitoring', [DokumenController::class, 'import_monitoring']);
+    Route::get('get-no-box/{year?}', [DokumenMasukController::class, 'get_no_box']);
+    Route::post('data-arsip-no-box', [DokumenMasukController::class, 'update_no_box']);
+
 });
