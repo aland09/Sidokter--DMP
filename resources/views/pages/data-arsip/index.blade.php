@@ -163,6 +163,18 @@
         </div>
     @endif
 
+    @if (session()->has('error'))
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 5">
+            <div class="toast bg-danger fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header py-2">
+                    <strong class="me-auto text-white">Informasi</strong>
+                    <button type="button" class="btn-close text-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body text-white"> {{ session()->get('error') }}</div>
+            </div>
+        </div>
+    @endif
+
     {{-- notifikasi form validasi --}}
     @if ($errors->has('file'))
         <span class="invalid-feedback" role="alert">
@@ -197,9 +209,9 @@
                             <div class="dropdown-menu shadow dropdown-menu-end">
                                 <button class="dropdown-item" type="button" data-bs-toggle="modal"
                                     data-bs-target="#modalImport">Import Excel</button>
-                                <a href="/import-monitoring" class="dropdown-item">Tarik Data Monitoring</a>
+                                <button class="dropdown-item" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#modalTarikData">Tarik Data Monitoring</button>
                             </div>
-
                             <a href="{{ route('data-arsip.create') }}"
                                 class="btn btn-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0">
                                 <i data-acorn-icon="plus"></i>
@@ -373,7 +385,8 @@
                                                         <i data-acorn-icon="edit"></i>
                                                     </button>
 
-                                                    <button type="button" data-id="{{ $item->id}}" data-subitem="{{ $item->detailDokumen[0] ?? NULL }}"
+                                                    <button type="button" data-id="{{ $item->id }}"
+                                                        data-subitem="{{ $item->detailDokumen[0] ?? null }}"
                                                         class="btn btn-icon btn-icon-only btn-sm btn-info btn-add-parent">
                                                         <i data-acorn-icon="plus"></i>
                                                     </button>
@@ -513,6 +526,47 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">File Import</label>
                             <input class="form-control" type="file" name="file" required="required" />
+                        </div>
+                    </div>
+                    <div class="modal-footer pt-0 pb-4" style="border-top: none !important">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Import</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Tarik Data -->
+    <div class="modal fade" id="modalTarikData" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="POST" action="/import-monitoring" enctype="multipart/form-data">
+                <div class="modal-content">
+                    <div class="modal-header py-3">
+                        <h5 class="modal-title" id="exampleModalLabelDefault">Tarik Data Monitoring</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body py-3">
+                        {{ csrf_field() }}
+                        <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">Tahun</label>
+                            <select name="tahun" class="form-select" required>
+                                <option value="">Pilih Tahun</option>
+                                @foreach ($yearsOptions ?? [] as $item)
+                                    <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">Bulan</label>
+                            <select name="bulan" class="form-select" required>
+                                <option value="">Pilih Bulan</option>
+                                @foreach ($monthsOptions ?? [] as $item)
+                                    <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer pt-0 pb-4" style="border-top: none !important">
@@ -725,7 +779,8 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Pejabat
                                 Penandatangan</label>
-                            <select name="pejabat_penandatangan" id="parent_pejabat_penandatangan" class="form-select" required>
+                            <select name="pejabat_penandatangan" id="parent_pejabat_penandatangan" class="form-select"
+                                required>
                                 <option value="Kuasa BUD">Kuasa BUD</option>
                                 <option value="Plt. Kuasa BUD">Plt. Kuasa BUD</option>
                                 <option value="Plh. Kuasa BUD">Plh. Kuasa BUD</option>
@@ -829,7 +884,8 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Kode
                                 Klasifikasi</label>
-                            <input type="text" class="form-control" id="parent_add_kode_klasifikasi" name="kode_klasifikasi" required />
+                            <input type="text" class="form-control" id="parent_add_kode_klasifikasi"
+                                name="kode_klasifikasi" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -840,13 +896,15 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Tanggal
                                 Surat</label>
-                            <input type="text" class="form-control datepicker" id="parent_add_tanggal_surat" name="tanggal_surat" required />
+                            <input type="text" class="form-control datepicker" id="parent_add_tanggal_surat"
+                                name="tanggal_surat" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Jumlah
                                 Satuan</label>
-                            <input type="text" class="form-control" id="parent_add_jumlah_satuan" name="jumlah_satuan" required />
+                            <input type="text" class="form-control" id="parent_add_jumlah_satuan"
+                                name="jumlah_satuan" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -860,19 +918,22 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Jenis Naskah
                                 Dinas</label>
-                            <input type="text" class="form-control" id="parent_add_jenis_naskah_dinas" name="jenis_naskah_dinas" required />
+                            <input type="text" class="form-control" id="parent_add_jenis_naskah_dinas"
+                                name="jenis_naskah_dinas" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No.
                                 Surat</label>
-                            <input type="text" class="form-control" id="parent_add_no_surat" name="no_surat" required />
+                            <input type="text" class="form-control" id="parent_add_no_surat" name="no_surat"
+                                required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Pejabat
                                 Penandatangan</label>
-                            <select id="parent_add_pejabat_penandatangan" name="pejabat_penandatangan" class="form-select" required>
+                            <select id="parent_add_pejabat_penandatangan" name="pejabat_penandatangan"
+                                class="form-select" required>
                                 <option selected value="PA/KPA">PA/KPA</option>
                             </select>
                         </div>
@@ -880,19 +941,22 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Unit
                                 Pengolah</label>
-                            <input type="text" class="form-control" id="parent_add_unit_pengolah" name="unit_pengolah" required />
+                            <input type="text" class="form-control" id="parent_add_unit_pengolah"
+                                name="unit_pengolah" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Kurun
                                 Waktu</label>
-                            <input type="number" class="form-control" id="parent_add_kurun_waktu" name="kurun_waktu" required />
+                            <input type="number" class="form-control" id="parent_add_kurun_waktu" name="kurun_waktu"
+                                required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No.
                                 Box</label>
-                            <input type="text" class="form-control" id="parent_add_no_box" name="no_box" disabled required />
+                            <input type="text" class="form-control" id="parent_add_no_box" name="no_box" disabled
+                                required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
