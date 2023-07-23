@@ -57,19 +57,31 @@
                             $('#no_box_display').html(data);
                             $('#no_box').val(data);
                         } else {
-                            $('#no_box_display').html("Gagal Membuat Barcode");
+                            $('#no_box_display').html("Gagal Membuat QR Code");
                             $('#no_box').val('');
                         }
                     }
                 });
             } else {
-                $('#no_box_display').html("Gagal Membuat Barcode");
+                $('#no_box_display').html("Gagal Membuat QR Code");
                 $('#no_box').val('');
             }
         });
     </script>
 @endsection
 @section('content')
+
+    @if (session()->has('message'))
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 5">
+            <div class="toast bg-success fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header py-2">
+                    <strong class="me-auto text-white">Informasi</strong>
+                    <button type="button" class="btn-close text-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body text-white"> {{ session()->get('message') }}</div>
+            </div>
+        </div>
+    @endif
 
     <div class="container">
         <div class="row">
@@ -89,7 +101,7 @@
                                 class="btn btn-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0"
                                 id="btn-barcode" disabled>
                                 <i data-acorn-icon="plus"></i>
-                                <span>Buat Barcode No. Box</span>
+                                <span>Buat QR Code No. Box</span>
                             </button>
                             <!-- Add New Button End -->
                         </div>
@@ -200,7 +212,8 @@
                                                         class="form-check-input no-box-check"
                                                         value="{{ $item->kurun_waktu }}"
                                                         id="check-parent_{{ $item->id }}"
-                                                        data-id="{{ $item->id }}">
+                                                        data-id="{{ $item->id }}"
+                                                        {{ $item->no_box !== null ? ' disabled' : '' }}>
                                                 </div>
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
@@ -250,6 +263,19 @@
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+
+                                                    {{-- @if ($item->no_box)
+                                                        <div class="bg-white p-1 rounded-sm" style="height: 30px">
+                                                            {!! '<img class="mb-3" src="data:image/png;base64,' .
+                                                                DNS2D::getBarcodePNG($item->no_box, 'QRCODE', 1, 1) .
+                                                                '" alt="' .
+                                                                $item->no_box .
+                                                                '"   />' !!}
+                                                        </div>
+                                                    @endif --}}
+
+
+
                                                     <a href="#"
                                                         class="btn btn-icon btn-icon-only btn-sm btn-outline-info"
                                                         type="button">
@@ -362,15 +388,19 @@
             <form method="POST" action="/data-arsip-no-box" enctype="multipart/form-data">
                 <div class="modal-content">
                     <div class="modal-header py-3">
-                        <h5 class="modal-title" id="exampleModalLabelDefault">Buat Barcode No. Box</h5>
+                        <h5 class="modal-title" id="exampleModalLabelDefault">Buat QR Code No. Box</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body d-flex flex-column align-items-center justify-content-center text-center py-3">
                         {{ csrf_field() }}
-                        <div class="my-3">{!! DNS2D::getBarcodeHTML($no_box_tmp, 'QRCODE') !!}</div>
+                        {!! '<img class="mb-3" src="data:image/png;base64,' .
+                            DNS2D::getBarcodePNG($no_box_tmp, 'QRCODE', 12, 12) .
+                            '" alt="' .
+                            $no_box_tmp .
+                            '"   />' !!}
                         <div class="form-label text-primary fw-bold" id="no_box_display">Mohon Tunggu...</div>
                         <input type="hidden" name="id" id="dokumen_id">
-                        <input type="hidden" id="kurun_waktu">
+                        <input type="hidden" name="kurun_waktu" id="kurun_waktu">
 
                     </div>
                     <div class="modal-footer pt-3 pb-3">

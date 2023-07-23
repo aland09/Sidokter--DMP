@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Dokumen;
+use App\Models\DetailDokumen;
 
 class DokumenMasukController extends Controller
 {
@@ -22,6 +23,7 @@ class DokumenMasukController extends Controller
                     ->latest()
                     ->filter(request(['search']))
                     ->where('status', '=', 'Terverifikasi')
+                    ->orderBy('no_box', 'ASC')
                     ->paginate($itemsPerPage)
                     ->withQueryString();
 
@@ -33,7 +35,7 @@ class DokumenMasukController extends Controller
     }
 
     public function generate_no_box($year) {
-        $counter = Dokumen::whereNull('no_box')->where('kurun_waktu', '=', $year)->count();
+        $counter = Dokumen::whereNotNull('no_box')->where('kurun_waktu', '=', $year)->count();
         $short_year = substr($year,2);
         $current_number = sprintf("%05d", $counter+1);
         $no_box = $current_number."/".$year."/P.".$short_year."/SBPKDJP";
@@ -42,5 +44,15 @@ class DokumenMasukController extends Controller
 
     public function get_no_box($year) {
         return response()->json($this->generate_no_box($year));
+    }
+
+    public function update_no_box(Request $request) {
+        $id = $request['id'];
+        $kurun_waktu = $request['kurun_waktu'];
+        $no_box = $this->generate_no_box($kurun_waktu);
+        $data['no_box'] = $no_box;
+        Dokumen::where('id', $id)->update($data);
+        DetailDokumen::where('dokumen_id', $id)->update($data);
+        return redirect()->route('dokumen-masuk.index')->with('message','No. Box telah berhasil diperbaharui');
     }
 }
