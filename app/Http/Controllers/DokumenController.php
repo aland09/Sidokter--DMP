@@ -193,6 +193,7 @@ class DokumenController extends Controller
     public function import_monitoring(Request $request) {
         $success = 0;
 
+
         $tahun = $request['tahun']; 
         $bulan = $request['bulan']; 
         $hari  = cal_days_in_month(CAL_GREGORIAN,$bulan,$tahun);
@@ -258,6 +259,7 @@ class DokumenController extends Controller
                     
                     $success = $success + 1;
                 }
+
                 
             }
             return redirect()->route('data-arsip.index')->with('message', number_format($success,0,",",".").' Data arsip berhasil di import.');
