@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Dokumen;
 use App\Models\DetailDokumen;
 use App\Imports\DokumenImport;
@@ -25,20 +26,21 @@ class DokumenController extends Controller
     public function index()
     {
         $itemsPerPage = request('items') ?? 10;
-
         $dokumen = Dokumen::with([
                         'detailDokumen' => function($query) {
                             $query->orderBy('id', 'ASC');
                     }])
-                    ->latest()
                     ->filter(request(['search']))
                     ->where('status', '=', 'Menunggu Verifikasi')
+                    ->orderBy('tanggal_validasi', 'DESC')
                     ->paginate($itemsPerPage)
                     ->withQueryString();
 
         return view("pages/data-arsip/index", [
-            "title" => "Data Arsip",
-            "dokumen" => $dokumen
+            "title"         => "Data Arsip",
+            "monthsOptions" => $this->getMonths(),
+            "yearsOptions"  => $this->getYears(),
+            "dokumen"       => $dokumen
         ]);
     }
 
@@ -188,79 +190,82 @@ class DokumenController extends Controller
 
 	}
 
-    public function import_monitoring() {
+    public function import_monitoring(Request $request) {
         $success = 0;
-        $sp2d_monitoring = DB::connection('oraclelink')->select('SELECT * FROM newsipkd.VW_MONITORING_SP2D_JAKPUS@newsipkd WHERE ROWNUM <= 100');
-        //$sp2d_monitoring = DB::connection('oraclelink')->select('SELECT * FROM newsipkd.VW_MONITORING_SP2D_JAKPUS@newsipkd');
 
-        foreach ($sp2d_monitoring as $value) {
-            $uraian = $value->uraian;
-            $no_spm = $value->no_spm;
-            $no_sp2d = $value->no_sp2d_full;
-            $no_spp = $value->no_spp;
-            $nominal = $value->nilai_sp2d;
-            $kurun_waktu = $value->tahun;
-            $nwp = $value->nama_wp;
-            $skpd = $value->nama_opd;
 
-            $dokumens = Dokumen::where('no_sp2d', $no_sp2d)->first();
-            if ($dokumens === null) {
-                $data['no_sp2d'] =  $no_sp2d;
-                $data['kode_klasifikasi'] = 'UD.02.02';
-                $data['uraian'] =  $uraian;
-                $data['tanggal_validasi'] =  $value->tgl_sp2d;
-                $data['jumlah_satuan_item'] =  1;
-                $data['keterangan'] =  '';
-                $data['nominal'] =  $nominal;
-                $data['skpd'] =  $skpd;
-                $data['nwp'] =  $nwp;
-                $data['kurun_waktu'] =  $kurun_waktu;
-                $data['jumlah_satuan_berkas'] =  1;
-                $data['tkt_perkemb'] = 'Tembusan';
-                $data['status'] = 'Menunggu Verifikasi';
-                $dokumen_id = Dokumen::create($data)->id;
+        $tahun = $request['tahun']; 
+        $bulan = $request['bulan']; 
+        $hari  = cal_days_in_month(CAL_GREGORIAN,$bulan,$tahun);
+        $start = '1.'.$bulan.'.'.$tahun;
+        $end   = $hari.'.'.$bulan.'.'.$tahun;
 
-                $dataSpp['dokumen_id'] = $dokumen_id;
-                $dataSpp['kode_klasifikasi'] = 'UD.02.02';
-                $dataSpp['uraian'] = $value->uraian;
-                $dataSpp['tanggal_surat'] = $value->tgl_spp;
-                $dataSpp['pejabat_penandatangan'] = 'Bendahara/PPTK';
-                $dataSpp['jumlah_satuan'] = 1;
-                $dataSpp['no_surat'] = $value->no_spp;
-                $dataSpp['kurun_waktu'] = $value->tahun;
-                $dataSpp['tkt_perk'] = 'Asli';
-                DetailDokumen::create($dataSpp);
+        $sp2d_monitoring = DB::connection('oraclelink')->select("
+            SELECT * FROM newsipkd.VW_MONITORING_SP2D_JAKPUS@newsipkd
+            WHERE tgl_sp2d >= to_date('".$start."', 'DD.MM.YYYY') and 
+                tgl_sp2d <= to_date('".$end."', 'DD.MM.YYYY')");
 
-                $dataSpm['dokumen_id'] = $dokumen_id;
-                $dataSpm['kode_klasifikasi'] = 'UD.02.02';
-                $dataSpm['uraian'] = $value->uraian;
-                $dataSpm['tanggal_surat'] = $value->tgl_spm;
-                $dataSpm['pejabat_penandatangan'] = 'PA/KPA';
-                $dataSpm['jumlah_satuan'] = 1;
-                $dataSpm['no_surat'] = $value->no_spm;
-                $dataSpm['kurun_waktu'] = $value->tahun;
-                $dataSpm['tkt_perk'] = 'Asli';
-                DetailDokumen::create($dataSpm);
+        
+
+        if($sp2d_monitoring) {
+            foreach ($sp2d_monitoring as $value) {
+                $uraian = $value->uraian;
+                $no_spm = $value->no_spm;
+                $no_sp2d = $value->no_sp2d_full;
+                $no_spp = $value->no_spp;
+                $nominal = $value->nilai_sp2d;
+                $kurun_waktu = $value->tahun;
+                $nwp = $value->nama_wp;
+                $skpd = $value->nama_opd;
+
+                $dokumens = Dokumen::where('no_sp2d', $no_sp2d)->first();
+                if ($dokumens === null) {
+                    $data['no_sp2d'] =  $no_sp2d;
+                    $data['kode_klasifikasi'] = 'UD.02.02';
+                    $data['uraian'] =  $uraian;
+                    $data['tanggal_validasi'] =  $value->tgl_sp2d;
+                    $data['jumlah_satuan_item'] =  1;
+                    $data['keterangan'] =  '';
+                    $data['nominal'] =  $nominal;
+                    $data['skpd'] =  $skpd;
+                    $data['nwp'] =  $nwp;
+                    $data['kurun_waktu'] =  $kurun_waktu;
+                    $data['jumlah_satuan_berkas'] =  1;
+                    $data['tkt_perkemb'] = 'Tembusan';
+                    $data['status'] = 'Menunggu Verifikasi';
+                    $dokumen_id = Dokumen::create($data)->id;
+
+                    $dataSpp['dokumen_id'] = $dokumen_id;
+                    $dataSpp['kode_klasifikasi'] = 'UD.02.02';
+                    $dataSpp['uraian'] = $value->uraian;
+                    $dataSpp['tanggal_surat'] = $value->tgl_spp;
+                    $dataSpp['pejabat_penandatangan'] = 'Bendahara/PPTK';
+                    $dataSpp['jumlah_satuan'] = 1;
+                    $dataSpp['no_surat'] = $value->no_spp;
+                    $dataSpp['kurun_waktu'] = $value->tahun;
+                    $dataSpp['tkt_perk'] = 'Asli';
+                    DetailDokumen::create($dataSpp);
+
+                    $dataSpm['dokumen_id'] = $dokumen_id;
+                    $dataSpm['kode_klasifikasi'] = 'UD.02.02';
+                    $dataSpm['uraian'] = $value->uraian;
+                    $dataSpm['tanggal_surat'] = $value->tgl_spm;
+                    $dataSpm['pejabat_penandatangan'] = 'PA/KPA';
+                    $dataSpm['jumlah_satuan'] = 1;
+                    $dataSpm['no_surat'] = $value->no_spm;
+                    $dataSpm['kurun_waktu'] = $value->tahun;
+                    $dataSpm['tkt_perk'] = 'Asli';
+                    DetailDokumen::create($dataSpm);
+                    
+                    $success = $success + 1;
+                }
 
                 
-
-                $dataSptjm['dokumen_id'] = $dokumen_id;
-                $dataSptjm['kode_klasifikasi'] = 'UD.02.02';
-                $dataSptjm['uraian'] = '';
-                $dataSptjm['tanggal_surat'] = '';
-                $dataSptjm['pejabat_penandatangan'] = 'PA/KPA';
-                $dataSptjm['jumlah_satuan'] = 1;
-                $dataSptjm['no_surat'] = '';
-                $dataSptjm['kurun_waktu'] = $value->tahun;
-                $dataSptjm['tkt_perk'] = 'Asli';
-                DetailDokumen::create($dataSptjm);
-                
-                $success = $success + 1;
             }
-            
+            return redirect()->route('data-arsip.index')->with('message', number_format($success,0,",",".").' Data arsip berhasil di import.');
+        } else {
+            return redirect()->route('data-arsip.index')->with('error', 'Tidak ada data yang dapat ditarik pada periode tersebut');
         }
-
-        return redirect()->route('data-arsip.index')->with('message', $success.' Data arsip berhasil di import.');
         
     }
 
@@ -335,5 +340,34 @@ class DokumenController extends Controller
         });
 
         return response()->json($filtered);
+    }
+
+    public function getMonths()
+    {
+        $months = [];
+        for ($i = 1; $i <= 12; $i++) {
+            //indonesian month names using carbon
+            $months[] = [
+                'id'   => $i,
+                'name' => Carbon::createFromFormat('!m', $i)->locale('id_ID')->isoFormat('MMMM'),
+            ];
+        }
+
+        return $months;
+    }
+
+    public function getYears()
+    {
+        $currentYear = Carbon::now()->format('Y');
+        $years       = [];
+        for ($i = 0; $i <= 10; $i++) {
+            //indonesian month names using carbon
+            $years[] = [
+                'id'   => $currentYear - $i,
+                'name' => $currentYear - $i,
+            ];
+        }
+
+        return $years;
     }
 }
