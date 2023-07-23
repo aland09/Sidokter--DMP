@@ -25,8 +25,8 @@
     <script>
         $('.no-box-check').change(function() {
             const id = $(this).data('id');
-            $('.no-box-check:not(#check-parent_' + id + ')').prop("checked", false);
-            $('.check-child').prop("checked", false);
+            // $('.no-box-check:not(#check-parent_' + id + ')').prop("checked", false);
+            // $('.check-child').prop("checked", false);
             if ($(this).is(":checked")) {
                 $('.no-box-check_' + id).prop("checked", true);
                 $('#btn-barcode').prop('disabled', false);
