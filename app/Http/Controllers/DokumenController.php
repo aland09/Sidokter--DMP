@@ -256,6 +256,17 @@ class DokumenController extends Controller
                     $dataSpm['kurun_waktu'] = $value->tahun;
                     $dataSpm['tkt_perk'] = 'Asli';
                     DetailDokumen::create($dataSpm);
+
+                    $dataSptjm['dokumen_id'] = $dokumen_id;
+                    $dataSptjm['kode_klasifikasi'] = 'UD.02.02';
+                    $dataSptjm['uraian'] = '';
+                    $dataSptjm['tanggal_surat'] = '';
+                    $dataSptjm['pejabat_penandatangan'] = 'PA/KPA';
+                    $dataSptjm['jumlah_satuan'] = 1;
+                    $dataSptjm['no_surat'] = '';
+                    $dataSptjm['kurun_waktu'] = $value->tahun;
+                    $dataSptjm['tkt_perk'] = 'Asli';
+                    DetailDokumen::create($dataSptjm);
                     
                     $success = $success + 1;
                 }
