@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Regulasi;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreRegulasiRequest;
 use App\Http\Requests\UpdateRegulasiRequest;
+use Illuminate\Support\Facades\Storage;
 
 class RegulasiController extends Controller
 {
@@ -37,24 +39,27 @@ class RegulasiController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreRegulasiRequest  $request
+     * @param  Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreRegulasiRequest $request)
     {
         $data = $request->except(['_token']);
 
-        if ($request->hasFile('file_regulasi')){
-            $filenameWithExt = $request->file('file_regulasi')->getClientOriginalName();
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            $extension = $request->file('file_regulasi')->getClientOriginalExtension();
-            $filenameSimpan = $filename.'_'.time().'.'.$extension;
-            $path = $request->file('file_regulasi')->storeAs('public/dokumen_regulasi', $filenameSimpan);
-            $data['file_regulasi'] = $path;
-        }
+        // if ($request->hasFile('file_regulasi')){
+        $filenameWithExt = $request->file('file_regulasi')->getClientOriginalName();
+        $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+        $extension = $request->file('file_regulasi')->getClientOriginalExtension();
+        $filenameSimpan = $filename.'_'.time().'.'.$extension;
+        $path = $request->file('file_regulasi')->storeAs('public/dokumen_regulasi', $filenameSimpan);
+        //     $data['file_regulasi'] = $path;
+        // }
+
+        $data['file_regulasi'] = 'dokumen_regulasi/' . $filenameSimpan;
+        // dd($data);
 
         Regulasi::create($data);
-        return redirect()->route('regulasi.index')->with('message','Dataa Regulasi Berhasil Dibuat');
+        return redirect()->route('regulasi.index')->with('message','Data Regulasi Berhasil Dibuat');
     }
 
     /**
