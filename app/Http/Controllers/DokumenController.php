@@ -260,7 +260,7 @@ class DokumenController extends Controller
                     $dataSptjm['dokumen_id'] = $dokumen_id;
                     $dataSptjm['kode_klasifikasi'] = 'UD.02.02';
                     $dataSptjm['uraian'] = '';
-                    $dataSptjm['tanggal_surat'] = '';
+                    $dataSptjm['tanggal_surat'] = NULL;
                     $dataSptjm['pejabat_penandatangan'] = 'PA/KPA';
                     $dataSptjm['jumlah_satuan'] = 1;
                     $dataSptjm['no_surat'] = '';
