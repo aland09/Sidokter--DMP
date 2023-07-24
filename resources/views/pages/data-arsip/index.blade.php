@@ -831,11 +831,11 @@
 
                         </div>
 
-                        <div class="col text-end">
+                        <!--<div class="col text-end">
                             <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
                                 Kegiatan</button>
 
-                        </div>
+                        </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>

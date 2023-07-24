@@ -50,7 +50,7 @@
                         {{ $description }}
                     </p>
                     <!-- tooltip-label-end inputs should be wrapped in form-group class -->
-                    <form id="form" class="tooltip-label-end" novalidate action="/regulasi" method="POST">
+                    <form id="form" class="tooltip-label-end" novalidate action="/regulasi" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Nama Regulasi</label>
