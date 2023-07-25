@@ -8,6 +8,8 @@
 @section('css')
     <link rel="stylesheet" href="/css/vendor/datatables.min.css" />
     <link rel="stylesheet" href="/css/vendor/bootstrap-datepicker3.standalone.min.css" />
+    <link rel="stylesheet" href="/css/vendor/select2.min.css" />
+    <link rel="stylesheet" href="/css/vendor/select2-bootstrap4.min.css" />
 @endsection
 @section('js_vendor')
     <script src="/js/vendor/bootstrap-submenu.js"></script>
@@ -17,11 +19,13 @@
     <script src="/js/vendor/jquery.validate/jquery.validate.min.js"></script>
     <script src="/js/vendor/datepicker/bootstrap-datepicker.min.js"></script>
     <script src="/js/vendor/datepicker/locales/bootstrap-datepicker.es.min.js"></script>
+    <script src="/js/vendor/select2.full.min.js"></script>
 @endsection
 @section('js_page')
     <script src="/js/base/pagination.js"></script>
     <script src="/js/forms/validation.js"></script>
     <script src="/js/forms/controls.datepicker.js"></script>
+    <script src="/js/forms/controls.select2.js"></script>
     <script>
         const submitBtnEditChild = document.getElementById('submitBtnEditChild');
         $(submitBtnEditChild).click(function() {
@@ -272,8 +276,9 @@
                                     data-datatable="#datatableRowsServerSide" data-childSelector="span">
                                     <button class="btn p-0 shadow" type="button" data-bs-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false" data-bs-offset="0,3">
-                                        <span class="btn btn-foreground-alternate dropdown-toggle" data-bs-toggle="tooltip"
-                                            data-bs-placement="top" data-bs-delay="0" title="Jumlah Data Per Halaman">
+                                        <span class="btn btn-foreground-alternate dropdown-toggle"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-delay="0"
+                                            title="Jumlah Data Per Halaman">
                                             10 Data
                                         </span>
                                     </button>
@@ -310,6 +315,8 @@
                                         <th style="width: 300px !important" class="text-muted text-small text-uppercase">
                                             No. SP2D</th>
                                         <th class="text-muted text-small text-uppercase">Nominal</th>
+                                        <th class="text-muted text-small text-uppercase">Kode Akun Jenis</th>
+                                        <th class="text-muted text-small text-uppercase">Nama Akun Jenis</th>
                                         <th class="text-muted text-small text-uppercase">SKPD/Unit SKPD</th>
                                         <th class="text-muted text-small text-uppercase">NWP</th>
                                         <th class="text-muted text-small text-uppercase">Pejabat Penandatangan</th>
@@ -350,6 +357,12 @@
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 Rp.<span
                                                     class="text-primary">__</span>{{ number_format($item->nominal, 0, ',', '.') }},-
+                                            </td>
+                                            <td style="height: 42px !important;" class="py-2 bg-primary text-white">
+                                                {{ $item->akunJenis->kode_akun }}
+                                            </td>
+                                            <td style="height: 42px !important;" class="py-2 bg-primary text-white">
+                                                {{ $item->akunJenis->nama_akun }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $item->skpd }}
@@ -416,7 +429,7 @@
                                             <th class="text-muted text-small text-uppercase">Unit Pengolah</th>
                                             <th class="text-muted text-small text-uppercase">Kurun Waktu</th>
                                             <th class="text-muted text-small text-uppercase">No. Box</th>
-                                            <th colspan="5" class="text-muted text-small text-uppercase">Tingkat
+                                            <th colspan="7" class="text-muted text-small text-uppercase">Tingkat
                                                 Perkembangan</th>
                                             <th width="10%" class="empty">&nbsp;</th>
                                         </tr>
@@ -458,7 +471,7 @@
                                                 <td style="height: 42px !important" class="py-2">
                                                     {{ $subitem->no_box }}
                                                 </td>
-                                                <td colspan="5" style="height: 42px !important" class="py-2">
+                                                <td colspan="7" style="height: 42px !important" class="py-2">
                                                     {{ $subitem->tkt_perk }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
@@ -475,16 +488,16 @@
                                                         </button>
 
                                                         <!--<form id="delete_{{ $item->id }}_{{ $subitem->id }}"
-                                                            action="/detail-data-arsip/{{ $subitem->id }}"
-                                                            method="POST" class="d-inline">
-                                                            @method('delete')
-                                                            @csrf
-                                                            <button type="button"
-                                                                class="btn btn-icon btn-icon-only btn-sm btn-outline-danger modal-hapus"
-                                                                data-id="delete_{{ $item->id }}_{{ $subitem->id }}"
-                                                                data-bs-toggle="modal" data-bs-target="#modalHapus"><i
-                                                                    data-acorn-icon="bin"></i></button>
-                                                        </form>-->
+                                                                action="/detail-data-arsip/{{ $subitem->id }}"
+                                                                method="POST" class="d-inline">
+                                                                @method('delete')
+                                                                @csrf
+                                                                <button type="button"
+                                                                    class="btn btn-icon btn-icon-only btn-sm btn-outline-danger modal-hapus"
+                                                                    data-id="delete_{{ $item->id }}_{{ $subitem->id }}"
+                                                                    data-bs-toggle="modal" data-bs-target="#modalHapus"><i
+                                                                        data-acorn-icon="bin"></i></button>
+                                                            </form>-->
                                                     </div>
                                                 </td>
                                         </tr>
@@ -551,7 +564,7 @@
                         {{ csrf_field() }}
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Tahun</label>
-                            <select name="tahun" class="form-select" required>
+                            <select name="tahun" class="form-select select2" required>
                                 <option value="">Pilih Tahun</option>
                                 @foreach ($yearsOptions ?? [] as $item)
                                     <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
@@ -561,13 +574,25 @@
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Bulan</label>
-                            <select name="bulan" class="form-select" required>
+                            <select name="bulan" class="form-select select2" required>
                                 <option value="">Pilih Bulan</option>
                                 @foreach ($monthsOptions ?? [] as $item)
                                     <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
                                 @endforeach
                             </select>
                         </div>
+
+                        <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">Akun Jenis</label>
+                            <select multiple="multiple" name="akun_jenis[]" class="form-select select2"
+                                placeholder="Pilih Akun Jenis">
+                                @foreach ($akunJenisOptions ?? [] as $item)
+                                    <option value="{{ $item['kode_akun'] }}">{{ $item['kode_akun'] }} -
+                                        {{ $item['nama_akun'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                     </div>
                     <div class="modal-footer pt-0 pb-4" style="border-top: none !important">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
@@ -633,8 +658,7 @@
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No. Surat</label>
-                            <input type="text" class="form-control" name="no_surat" id="child_no_surat" required
-                                />
+                            <input type="text" class="form-control" name="no_surat" id="child_no_surat" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -832,10 +856,10 @@
                         </div>
 
                         <!--<div class="col text-end">
-                            <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                Kegiatan</button>
+                                <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                    Kegiatan</button>
 
-                        </div>-->
+                            </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>

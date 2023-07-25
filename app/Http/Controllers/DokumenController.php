@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Dokumen;
 use App\Models\DetailDokumen;
+use App\Models\AkunJenis;
 use App\Imports\DokumenImport;
 use App\Imports\DetailDokumenImport;
 use App\Imports\DokumenSp2dImport;
@@ -25,11 +26,17 @@ class DokumenController extends Controller
      */
     public function index()
     {
+        $akunJenisOptions = AkunJenis::select('kode_akun','nama_akun')->get();
+
         $itemsPerPage = request('items') ?? 10;
         $dokumen = Dokumen::with([
                         'detailDokumen' => function($query) {
                             $query->orderBy('id', 'ASC');
-                    }])
+                        },
+                        'akunJenis' => function($query) {
+                            $query->select('id', 'kode_akun','nama_akun');
+                        },
+                    ])
                     ->filter(request(['search']))
                     ->where('status', '=', 'Menunggu Verifikasi')
                     ->orderBy('tanggal_validasi', 'DESC')
@@ -37,10 +44,11 @@ class DokumenController extends Controller
                     ->withQueryString();
 
         return view("pages/data-arsip/index", [
-            "title"         => "Data Arsip",
-            "monthsOptions" => $this->getMonths(),
-            "yearsOptions"  => $this->getYears(),
-            "dokumen"       => $dokumen
+            "title"             => "Data Arsip",
+            "monthsOptions"     => $this->getMonths(),
+            "yearsOptions"      => $this->getYears(),
+            "akunJenisOptions"  => $akunJenisOptions,
+            "dokumen"           => $dokumen
         ]);
     }
 
@@ -194,17 +202,33 @@ class DokumenController extends Controller
         $success = 0;
 
 
-        $tahun = $request['tahun']; 
-        $bulan = $request['bulan']; 
-        $hari  = cal_days_in_month(CAL_GREGORIAN,$bulan,$tahun);
-        $start = '1.'.$bulan.'.'.$tahun;
-        $end   = $hari.'.'.$bulan.'.'.$tahun;
+        $tahun      = $request['tahun']; 
+        $bulan      = $request['bulan']; 
+        $akun_jenis = $request['akun_jenis']; 
+        $hari       = cal_days_in_month(CAL_GREGORIAN,$bulan,$tahun);
+        $start      = '1.'.$bulan.'.'.$tahun;
+        $end        = $hari.'.'.$bulan.'.'.$tahun;
+        
+        $query_akun = "";
+
+        if($akun_jenis > 0) {
+          
+
+           foreach ($akun_jenis as $key => $element) {
+                if ($key === array_key_first($akun_jenis)) {
+                    $query_akun .= " AND kode_akun_jenis = '".$element."'";
+                } else {
+                    $query_akun .= " OR kode_akun_jenis = '".$element."'";
+                }
+            }
+        }
 
         $sp2d_monitoring = DB::connection('oraclelink')->select("
-            SELECT * FROM newsipkd.VW_MONITORING_SP2D_JAKPUS@newsipkd
-            WHERE tgl_sp2d >= to_date('".$start."', 'DD.MM.YYYY') and 
-                tgl_sp2d <= to_date('".$end."', 'DD.MM.YYYY')");
+            SELECT * FROM newsipkd.VW_MONITORING_SP2D_AKUN_JENIS@newsipkd
+            WHERE tgl_sp2d >= to_date('".$start."', 'DD.MM.YYYY') and
+                tgl_sp2d <= to_date('".$end."', 'DD.MM.YYYY')".$query_akun);
 
+    
         
 
         if($sp2d_monitoring) {
@@ -217,10 +241,13 @@ class DokumenController extends Controller
                 $kurun_waktu = $value->tahun;
                 $nwp = $value->nama_wp;
                 $skpd = $value->nama_opd;
+                $kode_akun_jenis = $value->kode_akun_jenis;
+                $akun_jenis_id = AkunJenis::select('id')->where('kode_akun','=',$kode_akun_jenis)->first()->id;
 
                 $dokumens = Dokumen::where('no_sp2d', $no_sp2d)->first();
                 if ($dokumens === null) {
                     $data['no_sp2d'] =  $no_sp2d;
+                    $data['akun_jenis_id'] =  $akun_jenis_id;
                     $data['kode_klasifikasi'] = 'UD.02.02';
                     $data['uraian'] =  $uraian;
                     $data['tanggal_validasi'] =  $value->tgl_sp2d;
