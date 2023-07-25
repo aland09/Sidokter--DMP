@@ -32,7 +32,11 @@ class DokumenController extends Controller
         $dokumen = Dokumen::with([
                         'detailDokumen' => function($query) {
                             $query->orderBy('id', 'ASC');
-                    }])
+                        },
+                        'akunJenis' => function($query) {
+                            $query->select('id', 'kode_akun','nama_akun');
+                        },
+                    ])
                     ->filter(request(['search']))
                     ->where('status', '=', 'Menunggu Verifikasi')
                     ->orderBy('tanggal_validasi', 'DESC')
@@ -221,9 +225,10 @@ class DokumenController extends Controller
 
         $sp2d_monitoring = DB::connection('oraclelink')->select("
             SELECT * FROM newsipkd.VW_MONITORING_SP2D_AKUN_JENIS@newsipkd
-            WHERE tgl_sp2d >= to_date('".$start."', 'DD.MM.YYYY') and 
+            WHERE tgl_sp2d >= to_date('".$start."', 'DD.MM.YYYY') and
                 tgl_sp2d <= to_date('".$end."', 'DD.MM.YYYY')".$query_akun);
 
+    
         
 
         if($sp2d_monitoring) {
@@ -236,10 +241,13 @@ class DokumenController extends Controller
                 $kurun_waktu = $value->tahun;
                 $nwp = $value->nama_wp;
                 $skpd = $value->nama_opd;
+                $kode_akun_jenis = $value->kode_akun_jenis;
+                $akun_jenis_id = AkunJenis::select('id')->where('kode_akun','=',$kode_akun_jenis)->first()->id;
 
                 $dokumens = Dokumen::where('no_sp2d', $no_sp2d)->first();
                 if ($dokumens === null) {
                     $data['no_sp2d'] =  $no_sp2d;
+                    $data['akun_jenis_id'] =  $akun_jenis_id;
                     $data['kode_klasifikasi'] = 'UD.02.02';
                     $data['uraian'] =  $uraian;
                     $data['tanggal_validasi'] =  $value->tgl_sp2d;

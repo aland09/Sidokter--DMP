@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\DetailDokumen;
+use App\Models\AkunJenis;
 
 class Dokumen extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'akun_jenis_id',
         'no_sp2d',
         'kode_klasifikasi',
         'uraian',
@@ -34,6 +36,10 @@ class Dokumen extends Model
 
     public function detailDokumen(){
     	return $this->hasMany(DetailDokumen::class);
+    }
+
+    public function akunJenis(){
+    	return $this->belongsTo(AkunJenis::class, 'akun_jenis_id');
     }
 
 
