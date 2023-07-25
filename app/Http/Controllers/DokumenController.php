@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Dokumen;
 use App\Models\DetailDokumen;
+use App\Models\AkunJenis;
 use App\Imports\DokumenImport;
 use App\Imports\DetailDokumenImport;
 use App\Imports\DokumenSp2dImport;
@@ -25,6 +26,8 @@ class DokumenController extends Controller
      */
     public function index()
     {
+        $akunJenisOptions = AkunJenis::select('kode_akun','nama_akun')->get();
+
         $itemsPerPage = request('items') ?? 10;
         $dokumen = Dokumen::with([
                         'detailDokumen' => function($query) {
@@ -37,10 +40,11 @@ class DokumenController extends Controller
                     ->withQueryString();
 
         return view("pages/data-arsip/index", [
-            "title"         => "Data Arsip",
-            "monthsOptions" => $this->getMonths(),
-            "yearsOptions"  => $this->getYears(),
-            "dokumen"       => $dokumen
+            "title"             => "Data Arsip",
+            "monthsOptions"     => $this->getMonths(),
+            "yearsOptions"      => $this->getYears(),
+            "akunJenisOptions"  => $akunJenisOptions,
+            "dokumen"           => $dokumen
         ]);
     }
 
@@ -194,16 +198,31 @@ class DokumenController extends Controller
         $success = 0;
 
 
-        $tahun = $request['tahun']; 
-        $bulan = $request['bulan']; 
-        $hari  = cal_days_in_month(CAL_GREGORIAN,$bulan,$tahun);
-        $start = '1.'.$bulan.'.'.$tahun;
-        $end   = $hari.'.'.$bulan.'.'.$tahun;
+        $tahun      = $request['tahun']; 
+        $bulan      = $request['bulan']; 
+        $akun_jenis = $request['akun_jenis']; 
+        $hari       = cal_days_in_month(CAL_GREGORIAN,$bulan,$tahun);
+        $start      = '1.'.$bulan.'.'.$tahun;
+        $end        = $hari.'.'.$bulan.'.'.$tahun;
+        
+        $query_akun = "";
+
+        if($akun_jenis > 0) {
+          
+
+           foreach ($akun_jenis as $key => $element) {
+                if ($key === array_key_first($akun_jenis)) {
+                    $query_akun .= " AND kode_akun_jenis = '".$element."'";
+                } else {
+                    $query_akun .= " OR kode_akun_jenis = '".$element."'";
+                }
+            }
+        }
 
         $sp2d_monitoring = DB::connection('oraclelink')->select("
-            SELECT * FROM newsipkd.VW_MONITORING_SP2D_JAKPUS@newsipkd
+            SELECT * FROM newsipkd.VW_MONITORING_SP2D_AKUN_JENIS@newsipkd
             WHERE tgl_sp2d >= to_date('".$start."', 'DD.MM.YYYY') and 
-                tgl_sp2d <= to_date('".$end."', 'DD.MM.YYYY')");
+                tgl_sp2d <= to_date('".$end."', 'DD.MM.YYYY')".$query_akun);
 
         
 

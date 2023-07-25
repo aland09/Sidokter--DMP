@@ -8,6 +8,8 @@
 @section('css')
     <link rel="stylesheet" href="/css/vendor/datatables.min.css" />
     <link rel="stylesheet" href="/css/vendor/bootstrap-datepicker3.standalone.min.css" />
+    <link rel="stylesheet" href="/css/vendor/select2.min.css"/>
+    <link rel="stylesheet" href="/css/vendor/select2-bootstrap4.min.css"/>
 @endsection
 @section('js_vendor')
     <script src="/js/vendor/bootstrap-submenu.js"></script>
@@ -17,11 +19,13 @@
     <script src="/js/vendor/jquery.validate/jquery.validate.min.js"></script>
     <script src="/js/vendor/datepicker/bootstrap-datepicker.min.js"></script>
     <script src="/js/vendor/datepicker/locales/bootstrap-datepicker.es.min.js"></script>
+    <script src="/js/vendor/select2.full.min.js"></script>
 @endsection
 @section('js_page')
     <script src="/js/base/pagination.js"></script>
     <script src="/js/forms/validation.js"></script>
     <script src="/js/forms/controls.datepicker.js"></script>
+    <script src="/js/forms/controls.select2.js"></script>
     <script>
         const submitBtnEditChild = document.getElementById('submitBtnEditChild');
         $(submitBtnEditChild).click(function() {
@@ -551,7 +555,7 @@
                         {{ csrf_field() }}
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Tahun</label>
-                            <select name="tahun" class="form-select" required>
+                            <select name="tahun" class="form-select select2" required>
                                 <option value="">Pilih Tahun</option>
                                 @foreach ($yearsOptions ?? [] as $item)
                                     <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
@@ -561,13 +565,23 @@
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Bulan</label>
-                            <select name="bulan" class="form-select" required>
+                            <select name="bulan" class="form-select select2" required>
                                 <option value="">Pilih Bulan</option>
                                 @foreach ($monthsOptions ?? [] as $item)
                                     <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
                                 @endforeach
                             </select>
                         </div>
+
+                        <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">Akun Jenis</label>
+                            <select multiple="multiple" name="akun_jenis[]" class="form-select select2"  placeholder="Pilih Akun Jenis">
+                                @foreach ($akunJenisOptions ?? [] as $item)
+                                    <option value="{{ $item['kode_akun'] }}">{{ $item['kode_akun'] }} - {{ $item['nama_akun'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                     </div>
                     <div class="modal-footer pt-0 pb-4" style="border-top: none !important">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>

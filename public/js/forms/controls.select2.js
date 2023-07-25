@@ -15,6 +15,7 @@ class Select2Controls {
       return;
     }
 
+    this._initDefault();
     this._initSelect2Basic();
     this._initSelect2Multiple();
     this._initTags();
@@ -25,6 +26,11 @@ class Select2Controls {
     this._initTopLabel();
     this._initFilled();
     this._initFloatingLabel();
+  }
+
+  // Default select2
+  _initDefault() {
+    jQuery('.select2').select2();
   }
 
   // Basic single select2
