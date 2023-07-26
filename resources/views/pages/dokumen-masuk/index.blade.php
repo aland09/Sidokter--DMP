@@ -23,6 +23,7 @@
     <script src="/js/forms/validation.js"></script>
     <script src="/js/forms/controls.datepicker.js"></script>
     <script>
+        var ids = [];
         $('.no-box-check').change(function() {
             const id = $(this).data('id');
             // $('.no-box-check:not(#check-parent_' + id + ')').prop("checked", false);
@@ -33,12 +34,20 @@
                 year = $(this).val();
                 $('#kurun_waktu').val(year);
                 $('#dokumen_id').val(id);
+                ids.push(id);
             } else {
                 $('#kurun_waktu').val('');
                 $('#dokumen_id').val('');
                 $('.no-box-check_' + id).prop("checked", false);
                 $('#btn-barcode').prop('disabled', true);
+                const index = ids.indexOf(id);
+                if (index > -1) { // only splice array when item is found
+                    ids.splice(index, 1); // 2nd parameter means remove one item only
+                }
             }
+
+            $('#dokumen_id').val(ids);
+            console.log('ids', ids);
         });
 
         $('#btn-barcode').click(function() {
@@ -399,7 +408,7 @@
                             $no_box_tmp .
                             '"   />' !!}
                         <div class="form-label text-primary fw-bold" id="no_box_display">Mohon Tunggu...</div>
-                        <input type="hidden" name="id" id="dokumen_id">
+                        <input type="hidden" name="id[]" id="dokumen_id">
                         <input type="hidden" name="kurun_waktu" id="kurun_waktu">
 
                     </div>
