@@ -956,10 +956,12 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Pejabat
                                 Penandatangan</label>
-                            <select id="parent_add_pejabat_penandatangan" name="pejabat_penandatangan"
+                            <!-- <select id="parent_add_pejabat_penandatangan" name="pejabat_penandatangan"
                                 class="form-select" required>
                                 <option selected value="PA/KPA">PA/KPA</option>
-                            </select>
+                            </select> -->
+                            <input type="text" class="form-control" id="parent_add_pejabat_penandatangan" name="pejabat_penandatangan"
+                                required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
