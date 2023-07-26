@@ -55,7 +55,8 @@ class Dokumen extends Model
             ->orWhere('pejabat_penandatangan', 'like', '%' .  $search . '%')
             ->orWhere('unit_pengolah', 'like', '%' .  $search . '%')
             ->orWhere('tkt_perkemb', 'like', '%' .  $search . '%')
-            ->orWhere('kurun_waktu', 'like', '%' .  $search . '%');
+            ->orWhere('kurun_waktu', 'like', '%' .  $search . '%')
+            ->orWhere('no_box', 'like', '%' .  $search . '%');
         });
     }
 }
