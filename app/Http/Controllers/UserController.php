@@ -62,7 +62,7 @@ class UserController extends Controller
 
         $user->assignRole($request['roles']);
 
-        return redirect()->route('users.index')->with('message','User berhasil ditambahkan.');
+        return redirect()->route('users.index')->with('message','Pengguna berhasil ditambahkan.');
     }
 
     /**
@@ -113,7 +113,7 @@ class UserController extends Controller
         $updatedUser->roles()->detach();
         $updatedUser->assignRole($request['roles']);
 
-        return redirect()->route('users.index')->with('message','User berhasil diperbaharui');
+        return redirect()->route('users.index')->with('message','Pengguna berhasil diperbaharui');
     }
 
     /**
@@ -125,6 +125,6 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         User::destroy($user->id);
-        return redirect()->route('users.index')->with('message','User berhasil dihapus');
+        return redirect()->route('users.index')->with('message','Pengguna berhasil dihapus');
     }
 }
