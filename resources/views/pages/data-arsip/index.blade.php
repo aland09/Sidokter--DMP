@@ -67,6 +67,25 @@
         $(document).on('click', '.btn-edit-child', function() {
             const item = $(this).data('item');
             const subitem = $(this).data('subitem');
+            const index = $(this).data('index');
+            var disable = true;
+
+           
+
+            if (index > 3) {
+                disable = false;
+            }
+            // TRIGER PROP INPUT
+            $(".modal-body #child_kode_klasifikasi").prop("disabled", disable);
+            $(".modal-body #child_jumlah_satuan").prop("disabled", disable);
+            $(".modal-body #child_keterangan").prop("disabled", disable);
+            $(".modal-body #child_jenis_naskah_dinas").prop("disabled", disable);
+            $(".modal-body #child_pejabat_penandatangan").prop("disabled", disable);
+            $(".modal-body #child_unit_pengolah").prop("disabled", disable);
+            $(".modal-body #child_kurun_waktu").prop("disabled", disable);
+            $(".modal-body #child_no_box").prop("disabled", disable);
+
+            // UUPDATE VALUE INPUT
             $('#form_edit_child').attr('action', '/detail-data-arsip/' + subitem['id']);
             $(".modal-body #child_dokumen_id").val(subitem['dokumen_id']);
             $(".modal-body #child_kode_klasifikasi").val(subitem['kode_klasifikasi']);
@@ -483,21 +502,22 @@
                                                         </a>
                                                         <button type="button" data-item="{{ $item }}"
                                                             data-subitem="{{ $subitem }}"
+                                                            data-index="{{ $loop->index + 1 }}"
                                                             class="btn btn-icon btn-icon-only btn-sm btn-outline-warning btn-edit-child">
                                                             <i data-acorn-icon="edit"></i>
                                                         </button>
 
                                                         <!--<form id="delete_{{ $item->id }}_{{ $subitem->id }}"
-                                                                action="/detail-data-arsip/{{ $subitem->id }}"
-                                                                method="POST" class="d-inline">
-                                                                @method('delete')
-                                                                @csrf
-                                                                <button type="button"
-                                                                    class="btn btn-icon btn-icon-only btn-sm btn-outline-danger modal-hapus"
-                                                                    data-id="delete_{{ $item->id }}_{{ $subitem->id }}"
-                                                                    data-bs-toggle="modal" data-bs-target="#modalHapus"><i
-                                                                        data-acorn-icon="bin"></i></button>
-                                                            </form>-->
+                                                                    action="/detail-data-arsip/{{ $subitem->id }}"
+                                                                    method="POST" class="d-inline">
+                                                                    @method('delete')
+                                                                    @csrf
+                                                                    <button type="button"
+                                                                        class="btn btn-icon btn-icon-only btn-sm btn-outline-danger modal-hapus"
+                                                                        data-id="delete_{{ $item->id }}_{{ $subitem->id }}"
+                                                                        data-bs-toggle="modal" data-bs-target="#modalHapus"><i
+                                                                            data-acorn-icon="bin"></i></button>
+                                                                </form>-->
                                                     </div>
                                                 </td>
                                         </tr>
@@ -856,10 +876,10 @@
                         </div>
 
                         <!--<div class="col text-end">
-                                <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                    Kegiatan</button>
+                                    <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                        Kegiatan</button>
 
-                            </div>-->
+                                </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
@@ -956,10 +976,12 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Pejabat
                                 Penandatangan</label>
-                            <select id="parent_add_pejabat_penandatangan" name="pejabat_penandatangan"
-                                class="form-select" required>
-                                <option selected value="PA/KPA">PA/KPA</option>
-                            </select>
+                            <!-- <select id="parent_add_pejabat_penandatangan" name="pejabat_penandatangan"
+                                    class="form-select" required>
+                                    <option selected value="PA/KPA">PA/KPA</option>
+                                </select> -->
+                            <input type="text" class="form-control" id="parent_add_pejabat_penandatangan"
+                                name="pejabat_penandatangan" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">

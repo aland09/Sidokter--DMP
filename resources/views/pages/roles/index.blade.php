@@ -1,8 +1,8 @@
 @php
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
-    $title = 'Daftar Roles';
-    $description = 'Halaman Daftar Roles';
-    $breadcrumbs = ['/' => 'Beranda', '/roles' => 'Daftar Roles'];
+    $title = 'Daftar Peran';
+    $description = 'Halaman Daftar Peran';
+    $breadcrumbs = ['/' => 'Beranda', '/roles' => 'Daftar Peran'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 @section('css')
@@ -135,8 +135,7 @@
                                 <thead>
                                     <tr>
                                         <th class="text-muted text-small text-uppercase">No.</th>
-                                        <th width="45%" class="text-muted text-small text-uppercase">Role</th>
-                                        <th width="45%" class="text-muted text-small text-uppercase">Guard</th>
+                                        <th width="90%" class="text-muted text-small text-uppercase">Nama</th>
                                         <th width="10%" class="empty">&nbsp;</th>
                                     </tr>
                                 </thead>
@@ -145,7 +144,6 @@
                                         <tr>
                                             <td style="height: 42px !important" class="py-2">{{ $loop->index + 1 }}.</td>
                                             <td style="height: 42px !important" class="py-2">{{ $item->name }}</td>
-                                            <td style="height: 42px !important" class="py-2">{{ $item->guard_name }}</td>
                                             <td style="height: 42px !important" class="py-2">
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                     <a href="{{ route('roles.edit', $item->id) }}"

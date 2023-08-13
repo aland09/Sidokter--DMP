@@ -1,8 +1,8 @@
 @php
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
-    $title = 'Daftar User';
-    $description = 'Halaman Daftar User';
-    $breadcrumbs = ['/' => 'Beranda', '/users' => 'Daftar User'];
+    $title = 'Daftar Pengguna';
+    $description = 'Halaman Daftar Pengguna';
+    $breadcrumbs = ['/' => 'Beranda', '/users' => 'Daftar Pengguna'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 @section('css')
@@ -137,7 +137,7 @@
                                         <th class="text-muted text-small text-uppercase">No.</th>
                                         <th width="40%" class="text-muted text-small text-uppercase">Nama</th>
                                         <th width="25%" class="text-muted text-small text-uppercase">Email</th>
-                                        <th width="25%" class="text-muted text-small text-uppercase">Role</th>
+                                        <th width="25%" class="text-muted text-small text-uppercase">Peran</th>
                                         <th width="10%" class="empty">&nbsp;</th>
                                     </tr>
                                 </thead>

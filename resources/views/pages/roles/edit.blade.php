@@ -1,8 +1,8 @@
 @php
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
     $title = 'Edit Data';
-    $description = 'Halaman Edit Roles';
-    $breadcrumbs = ['/' => 'Beranda', '/roles' => 'Daftar Roles',  '/roles/'.$roles->id.'/edit' => 'Edit Data'];
+    $description = 'Halaman Edit Peran';
+    $breadcrumbs = ['/' => 'Beranda', '/roles' => 'Daftar Peran', '/roles/' . $roles->id . '/edit' => 'Edit Data'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 
@@ -17,10 +17,25 @@
 @section('js_page')
     <script src="/js/forms/validation.js"></script>
     <script>
-        const submitBtn = document.getElementById('submitBtn');
-        $(submitBtn).click(function() {
-            $('#modalDialog').modal('hide');
-            $('#form').submit();
+        $(document).ready(function() {
+            const submitBtn = document.getElementById('submitBtn');
+            $(submitBtn).click(function() {
+                $('#modalDialog').modal('hide');
+                $('#form').submit();
+            });
+
+            $('[name="all_permission"]').on('click', function() {
+
+                if ($(this).is(':checked')) {
+                    $.each($('.permission'), function() {
+                        $(this).prop('checked', true);
+                    });
+                } else {
+                    $.each($('.permission'), function() {
+                        $(this).prop('checked', false);
+                    });
+                }
+            });
         });
     </script>
 @endsection
@@ -53,16 +68,41 @@
                         method="POST">
                         @method('put')
                         @csrf
-                        <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Role</label>
+                        <div class="mb-3 position-relative form-group mb-5">
+                            <label class="form-label text-primary fw-bold">Nama</label>
                             <input type="text" class="form-control" name="name" value="{{ $roles->name }}"
                                 required />
                         </div>
 
-                        <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Guard</label>
-                            <input type="text" class="form-control" name="guard_name" value="{{ $roles->guard_name }}"
-                                required />
+                        <div class="d-flex flex-row justify-content-between form-label text-primary fw-bold">
+                            <span>Tetapkan Hak Akses</span>
+                            <div>
+                                <span class="me-2">Semua Akses</span>
+                                <input name="all_permission" type="checkbox" class="form-check-input" />
+                            </div>
+                        </div>
+                        <div class="row row-cols-1 g-2">
+                            @foreach ($permissionsList as $permission)
+                                <div class="col">
+                                    <div class="card border rounded shadow-none">
+                                        <div class="card-body pt-3 pb-3">
+                                            <label class="form-check custom-icon mb-0 checked-opacity-100">
+                                                <input type="checkbox" class="form-check-input permission"
+                                                    name="permission[{{ $permission->name }}]"
+                                                    value="{{ $permission->name }}"
+                                                    {{ in_array($permission->name, $rolePermissions) ? 'checked' : '' }} />
+                                                <span class="form-check-label">
+                                                    <span class="content opacity-50">
+                                                        <span class="heading mb-1 lh-1-25">{{ $permission->name }}</span>
+                                                        <span class="d-block text-small text-muted">Guard:
+                                                            {{ $permission->guard_name }}</span>
+                                                    </span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
@@ -92,5 +132,4 @@
             </div>
         </div>
     </div>
-    
 @endsection
