@@ -157,6 +157,32 @@ class DokumenController extends Controller
         return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diperbaharui');
     }
 
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Dokumen $data_arsip)
+    {
+        $dokumen = Dokumen::with([
+                    'detailDokumen' => function($query) {
+                        $query->orderBy('id', 'ASC');
+                    },
+                    'akunJenis' => function($query) {
+                        $query->select('id', 'kode_akun','nama_akun');
+                    },
+                ])
+                ->where('id', $data_arsip->id)
+                ->first();
+
+        return view("pages/data-arsip/show", [
+            "title"             => "Detail Data Arsip",
+            "dokumen"           => $dokumen
+        ]);
+    }
+
     public function verification_document(Request $request) 
     {
         $id         = $request['id'];

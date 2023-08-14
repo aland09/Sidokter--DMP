@@ -413,6 +413,13 @@
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+
+                                                    <a href="{{ route('data-arsip.show', $item->id) }}"
+                                                        class="btn btn-icon btn-icon-only btn-sm btn-outline-secondary"
+                                                        type="button">
+                                                        <i data-acorn-icon="info-circle"></i>
+                                                    </a>
+
                                                     <button type="button" data-item="{{ $item }}"
                                                         class="btn btn-icon btn-icon-only btn-sm btn-warning btn-edit-parent">
                                                         <i data-acorn-icon="edit"></i>
@@ -496,11 +503,6 @@
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                        <a href="#"
-                                                            class="btn btn-icon btn-icon-only btn-sm btn-outline-info"
-                                                            type="button">
-                                                            <i data-acorn-icon="eye"></i>
-                                                        </a>
                                                         <button type="button" data-item="{{ $item }}"
                                                             data-subitem="{{ $subitem }}"
                                                             data-index="{{ $loop->index + 1 }}"
