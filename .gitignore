@@ -4,8 +4,8 @@
 /public/file_dokumen
 /storage/*.key
 /vendor
-.env
-.env.backup
+#.env
+#.env.backup
 .phpunit.result.cache
 docker-compose.override.yml
 Homestead.json
