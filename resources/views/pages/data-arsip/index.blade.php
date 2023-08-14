@@ -70,7 +70,7 @@
             const index = $(this).data('index');
             var disable = true;
 
-           
+
 
             if (index > 3) {
                 disable = false;
@@ -355,60 +355,61 @@
                                                 {{ $loop->index + 1 }}.
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->kode_klasifikasi }}
+                                                {{ $item->kode_klasifikasi ? $item->kode_klasifikasi : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->uraian }}
+                                                {{ $item->uraian ? $item->uraian : '-' }}
 
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->tanggal_validasi }}
+                                                {{ $item->tanggal_validasi ? $item->tanggal_validasi : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->jumlah_satuan_item }}
+                                                {{ $item->jumlah_satuan_item ? $item->jumlah_satuan_item : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->keterangan }}
+                                                {{ $item->keterangan ? $item->keterangan : '-' }}
                                             </td>
                                             <td style="height: 42px !important;" class="py-2 bg-primary text-white">
-                                                {{ $item->no_sp2d }}
+                                                {{ $item->no_sp2d ? $item->no_sp2d : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 Rp.<span
                                                     class="text-primary">__</span>{{ number_format($item->nominal, 0, ',', '.') }},-
                                             </td>
                                             <td style="height: 42px !important;" class="py-2 bg-primary text-white">
-                                                {{ $item->akunJenis->kode_akun }}
+                                                {{ $item->akunJenis ? $item->akunJenis->kode_akun : '-' }}
                                             </td>
                                             <td style="height: 42px !important;" class="py-2 bg-primary text-white">
-                                                {{ $item->akunJenis->nama_akun }}
+                                                {{ $item->akunJenis ? $item->akunJenis->nama_akun : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->skpd }}
+                                                {{ $item->skpd ? $item->skpd : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->nwp }}
+                                                {{ $item->nwp ? $item->nwp : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->pejabat_penandatangan }}
+                                                {{ $item->pejabat_penandatangan ? $item->pejabat_penandatangan : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->unit_pengolah }}
+                                                {{ $item->unit_pengolah ? $item->unit_pengolah : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->kurun_waktu }}
+                                                {{ $item->kurun_waktu ? $item->kurun_waktu : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->jumlah_satuan_berkas }} Berkas
+                                                {{ $item->jumlah_satuan_berkas ? $item->jumlah_satuan_berkas : '-' }}
+                                                Berkas
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->tkt_perkemb }}
+                                                {{ $item->tkt_perkemb ? $item->tkt_perkemb : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->no_box }}
+                                                {{ $item->no_box ? $item->no_box : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->status }}
+                                                {{ $item->status ? $item->status : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -458,40 +459,40 @@
                                                 <td style="height: 42px !important" class="empty py-2">
                                                     {{ $loop->index + 1 }}.</td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->kode_klasifikasi }}
+                                                    {{ $subitem->kode_klasifikasi ? $subitem->kode_klasifikasi : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->uraian }}
+                                                    {{ $subitem->uraian ? $subitem->uraian : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->tanggal_surat }}
+                                                    {{ $subitem->tanggal_surat ? $subitem->tanggal_surat : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->jumlah_satuan }}
+                                                    {{ $subitem->jumlah_satuan ? $subitem->jumlah_satuan : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->keterangan }}
+                                                    {{ $subitem->keterangan ? $subitem->keterangan : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->jenis_naskah_dinas }}
+                                                    {{ $subitem->jenis_naskah_dinas ? $subitem->jenis_naskah_dinas : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important;" class="py-2">
-                                                    {{ $subitem->no_surat }}
+                                                    {{ $subitem->no_surat ? $subitem->no_surat : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->pejabat_penandatangan }}
+                                                    {{ $subitem->pejabat_penandatangan ? $subitem->pejabat_penandatangan : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->unit_pengolah }}
+                                                    {{ $subitem->unit_pengolah ? $subitem->unit_pengolah : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->kurun_waktu }}
+                                                    {{ $subitem->kurun_waktu ? $subitem->kurun_waktu : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->no_box }}
+                                                    {{ $subitem->no_box ? $subitem->no_box : '-' }}
                                                 </td>
                                                 <td colspan="7" style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->tkt_perk }}
+                                                    {{ $subitem->tkt_perk ? $subitem->tkt_perk : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -507,17 +508,19 @@
                                                             <i data-acorn-icon="edit"></i>
                                                         </button>
 
-                                                        <!--<form id="delete_{{ $item->id }}_{{ $subitem->id }}"
-                                                                    action="/detail-data-arsip/{{ $subitem->id }}"
-                                                                    method="POST" class="d-inline">
-                                                                    @method('delete')
-                                                                    @csrf
-                                                                    <button type="button"
-                                                                        class="btn btn-icon btn-icon-only btn-sm btn-outline-danger modal-hapus"
-                                                                        data-id="delete_{{ $item->id }}_{{ $subitem->id }}"
-                                                                        data-bs-toggle="modal" data-bs-target="#modalHapus"><i
-                                                                            data-acorn-icon="bin"></i></button>
-                                                                </form>-->
+
+                                                        {{-- <form id="delete_{{ $item->id }}_{{ $subitem->id }}"
+                                                            action="/detail-data-arsip/{{ $subitem->id }}"
+                                                            method="POST" class="d-inline">
+                                                            @method('delete')
+                                                            @csrf
+                                                            <button type="button"
+                                                                class="btn btn-icon btn-icon-only btn-sm btn-outline-danger modal-hapus"
+                                                                data-id="delete_{{ $item->id }}_{{ $subitem->id }}"
+                                                                data-bs-toggle="modal" data-bs-target="#modalHapus"><i
+                                                                    data-acorn-icon="bin"></i></button>
+                                                        </form> --}}
+
                                                     </div>
                                                 </td>
                                         </tr>
@@ -876,10 +879,10 @@
                         </div>
 
                         <!--<div class="col text-end">
-                                    <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                        Kegiatan</button>
+                                            <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                                Kegiatan</button>
 
-                                </div>-->
+                                        </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
@@ -977,9 +980,9 @@
                             <label class="form-label text-primary fw-bold">Pejabat
                                 Penandatangan</label>
                             <!-- <select id="parent_add_pejabat_penandatangan" name="pejabat_penandatangan"
-                                    class="form-select" required>
-                                    <option selected value="PA/KPA">PA/KPA</option>
-                                </select> -->
+                                            class="form-select" required>
+                                            <option selected value="PA/KPA">PA/KPA</option>
+                                        </select> -->
                             <input type="text" class="form-control" id="parent_add_pejabat_penandatangan"
                                 name="pejabat_penandatangan" required />
                         </div>
