@@ -7,6 +7,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\DokumenMasukController;
+use App\Http\Controllers\DokumenKeluarController;
 use App\Http\Controllers\DetailDokumenController;
 use App\Http\Controllers\JenisBelanjaController;
 use App\Http\Controllers\RegulasiController;
@@ -41,6 +42,7 @@ Route::group(['middleware' => ['auth', 'permission']], function () {
     Route::resource('regulasi', RegulasiController::class);
     Route::resource('data-arsip', DokumenController::class);
     Route::resource('dokumen-masuk', DokumenMasukController::class);
+    Route::resource('dokumen-keluar', DokumenKeluarController::class);
     Route::post('data-arsip/import-excel', [DokumenController::class, 'import_excel'])->name('data-arsip.import-excel');
     Route::get('data-arsip/export-excel/{ext?}', [DokumenController::class, 'export_excel'])->name('data-arsip.export-excel');
     Route::get('detail-data-arsip/export-excel/{ext?}', [DetailDokumenController::class, 'export_excel'])->name('detail-data-arsip.export-excel');
