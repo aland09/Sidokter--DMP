@@ -39,6 +39,7 @@ class DokumenController extends Controller
                     ])
                     ->filter(request(['search']))
                     ->orderBy('tanggal_validasi', 'DESC')
+                    ->where('status', '=', 'Menunggu Verifikasi')
                     ->paginate($itemsPerPage)
                     ->withQueryString();
 
@@ -214,10 +215,10 @@ class DokumenController extends Controller
 		$file->move('file_dokumen',$nama_file);
 
 		Excel::import(new DokumenImport, public_path('/file_dokumen/'.$nama_file));
-	    Excel::import(new DetailDokumenImport, public_path('/file_dokumen/'.$nama_file));
-        // Excel::import(new DokumenSp2dImport, public_path('/file_dokumen/'.$nama_file));
-        // Excel::import(new DokumenSpmImport, public_path('/file_dokumen/'.$nama_file));
-        // Excel::import(new DokumenSppImport, public_path('/file_dokumen/'.$nama_file));
+	    // Excel::import(new DetailDokumenImport, public_path('/file_dokumen/'.$nama_file));
+        Excel::import(new DokumenSp2dImport, public_path('/file_dokumen/'.$nama_file));
+        Excel::import(new DokumenSpmImport, public_path('/file_dokumen/'.$nama_file));
+        Excel::import(new DokumenSppImport, public_path('/file_dokumen/'.$nama_file));
 
         return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diimport');
 
