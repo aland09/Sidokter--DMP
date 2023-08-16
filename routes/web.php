@@ -5,6 +5,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\DokumenMasukController;
 use App\Http\Controllers\DokumenKeluarController;
@@ -35,7 +36,8 @@ Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::group(['middleware' => ['auth', 'permission']], function () {
     // Dashboard
-    Route::view('dashboard', 'dashboards/default')->name('dashboard');
+    Route::resource('dashboard', HomeController::class);
+    Route::resource('roles', RoleController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     Route::resource('jenis-belanja', JenisBelanjaController::class);
