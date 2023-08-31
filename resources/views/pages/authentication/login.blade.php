@@ -62,7 +62,7 @@
                     @csrf
                     <div class="mb-3 filled form-group tooltip-end-top">
                         <i data-acorn-icon="email"></i>
-                        <input class="form-control" placeholder="Email" name="email" />
+                        <input class="form-control" placeholder="Nama Pengguna" name="username" />
                     </div>
                     <div class="mb-3 filled form-group tooltip-end-top">
                         <i data-acorn-icon="lock-off"></i>
