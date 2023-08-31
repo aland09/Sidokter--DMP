@@ -39,6 +39,7 @@ class DokumenController extends Controller
                     ])
                     ->filter(request(['search']))
                     ->orderBy('tanggal_validasi', 'DESC')
+                    ->where('status', '=', 'Menunggu Verifikasi')
                     ->paginate($itemsPerPage)
                     ->withQueryString();
 
@@ -157,6 +158,32 @@ class DokumenController extends Controller
         return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diperbaharui');
     }
 
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Dokumen $data_arsip)
+    {
+        $dokumen = Dokumen::with([
+                    'detailDokumen' => function($query) {
+                        $query->orderBy('id', 'ASC');
+                    },
+                    'akunJenis' => function($query) {
+                        $query->select('id', 'kode_akun','nama_akun');
+                    },
+                ])
+                ->where('id', $data_arsip->id)
+                ->first();
+
+        return view("pages/data-arsip/show", [
+            "title"             => "Detail Data Arsip",
+            "dokumen"           => $dokumen
+        ]);
+    }
+
     public function verification_document(Request $request) 
     {
         $id         = $request['id'];
@@ -188,10 +215,10 @@ class DokumenController extends Controller
 		$file->move('file_dokumen',$nama_file);
 
 		Excel::import(new DokumenImport, public_path('/file_dokumen/'.$nama_file));
-	    Excel::import(new DetailDokumenImport, public_path('/file_dokumen/'.$nama_file));
-        // Excel::import(new DokumenSp2dImport, public_path('/file_dokumen/'.$nama_file));
-        // Excel::import(new DokumenSpmImport, public_path('/file_dokumen/'.$nama_file));
-        // Excel::import(new DokumenSppImport, public_path('/file_dokumen/'.$nama_file));
+	    // Excel::import(new DetailDokumenImport, public_path('/file_dokumen/'.$nama_file));
+        Excel::import(new DokumenSp2dImport, public_path('/file_dokumen/'.$nama_file));
+        Excel::import(new DokumenSpmImport, public_path('/file_dokumen/'.$nama_file));
+        Excel::import(new DokumenSppImport, public_path('/file_dokumen/'.$nama_file));
 
         return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diimport');
 

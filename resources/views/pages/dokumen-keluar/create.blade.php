@@ -1,8 +1,8 @@
 @php
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
     $title = 'Tambah Data';
-    $description = 'Halaman Tambah Data Pengguna';
-    $breadcrumbs = ['/' => 'Beranda', '/users' => 'Daftar Pengguna', '/users/create' => 'Tambah Data'];
+    $description = 'Halaman Tambah Data Dokumen Keluar';
+    $breadcrumbs = ['/' => 'Beranda', '/dokumen-keluar' => 'Daftar Dokumen Keluar', '/dokumen-keluar/create' => 'Tambah Data'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 
@@ -15,11 +15,14 @@
     <script src="/js/cs/scrollspy.js"></script>
     <script src="/js/vendor/jquery.validate/jquery.validate.min.js"></script>
     <script src="/js/vendor/select2.full.min.js"></script>
+    <script src="/js/vendor/datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="/js/vendor/datepicker/locales/bootstrap-datepicker.es.min.js"></script>
 @endsection
 
 @section('js_page')
     <script src="/js/forms/validation.js"></script>
     <script src="/js/forms/controls.select2.js"></script>
+    <script src="/js/forms/controls.datepicker.js"></script>
     <script>
         const submitBtn = document.getElementById('submitBtn');
         $(submitBtn).click(function() {
@@ -54,39 +57,40 @@
                         {{ $description }}
                     </p>
                     <!-- tooltip-label-end inputs should be wrapped in form-group class -->
-                    <form id="form" class="tooltip-label-end" novalidate action="/users" method="POST">
+                    <form id="form" class="tooltip-label-end" novalidate action="/dokumen-keluar" method="POST">
                         @csrf
                         <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Nama</label>
-                            <input type="text" class="form-control" name="name" required />
-                        </div>
-
-                        <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Email</label>
-                            <input type="email" class="form-control" name="email" required />
-                        </div>
-
-                        <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Password</label>
-                            <input type="password" class="form-control" name="password" required />
-                        </div>
-
-                        <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Peran</label>
-                            <select name="roles" class="form-select select2" required>
-                                <option value="">Pilih Peran</option>
-                                @foreach ($rolesList ?? [] as $item)
-                                    <option value="{{ $item->name }}">{{ $item->name }}</option>
+                            <label class="form-label text-primary fw-bold">Berkas</label>
+                            <select name="dokumen_id" class="form-select select2" required>
+                                <option value="">Pilih Berkas</option>
+                                @foreach ($listDokumen ?? [] as $item)
+                                    <option value="{{ $item->id }}">{{ $item->no_sp2d }}</option>
                                 @endforeach
                             </select>
                         </div>
 
+                        <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">Nama Peminjam</label>
+                            <input type="text" class="form-control" name="nama_peminjam" required />
+                        </div>
 
+                        <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">Tanggal</label>
+                            <input type="text" class="form-control datepicker" name="tanggal_peminjaman" required />
+                        </div>
 
+                        <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">Instansi</label>
+                            <input type="text" class="form-control" name="instansi" required />
+                        </div>
 
+                        <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">Tujuan</label>
+                            <textarea class="form-control" name="tujuan" rows="5" required></textarea>
+                        </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
-                            <a href="{{ route('users.index') }}" class="btn btn-outline-primary me-md-2">Batal</a>
+                            <a href="{{ route('dokumen-keluar.index') }}" class="btn btn-outline-primary me-md-2">Batal</a>
                             <button type="button" id="confirmBtn" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#modalDialog">Simpan</button>
                         </div>
