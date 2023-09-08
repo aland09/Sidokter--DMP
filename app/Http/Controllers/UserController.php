@@ -7,6 +7,7 @@ use App\Models\Dokumen;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -55,6 +56,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data['name'] = $request['name'];
+        $data['username'] = $request['username'];
         $data['email'] = $request['email'];
         $data['password'] = Hash::make($request['password']);
         
@@ -104,6 +106,7 @@ class UserController extends Controller
     {
 
         $data['name'] = $request['name'];
+        $data['username'] = $request['username'];
         $data['email'] = $request['email'];
         $data['password'] = Hash::make($request['password']);
 
