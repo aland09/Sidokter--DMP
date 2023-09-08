@@ -44,6 +44,7 @@ Route::group(['middleware' => ['auth', 'permission']], function () {
     Route::resource('regulasi', RegulasiController::class);
     Route::resource('data-arsip', DokumenController::class);
     Route::resource('dokumen-masuk', DokumenMasukController::class);
+    Route::get('detail-box/{no_box?}', [DokumenMasukController::class, 'detail_box'])->name('detail-box');
     Route::resource('dokumen-keluar', DokumenKeluarController::class);
     Route::post('data-arsip/import-excel', [DokumenController::class, 'import_excel'])->name('data-arsip.import-excel');
     Route::get('data-arsip/export-excel/{ext?}', [DokumenController::class, 'export_excel'])->name('data-arsip.export-excel');

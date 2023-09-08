@@ -189,7 +189,7 @@
                             <table class="data-table hover dataTable no-footer">
                                 <thead>
                                     <tr>
-                                        <th class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
+                                        <th colspan="2" class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
                                             No.</th>
                                         <th class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
                                             Kode Klasifikasi</th>
@@ -305,10 +305,10 @@
 
 
 
-                                                    <a href="#"
-                                                        class="btn btn-icon btn-icon-only btn-sm btn-outline-info"
+                                                    <a href="{{ route('dokumen-masuk.show', $item->id) }}"
+                                                        class="btn btn-icon btn-icon-only btn-sm btn-outline-secondary"
                                                         type="button">
-                                                        <i data-acorn-icon="eye"></i>
+                                                        <i data-acorn-icon="info-circle"></i>
                                                     </a>
                                                 </div>
                                             </td>

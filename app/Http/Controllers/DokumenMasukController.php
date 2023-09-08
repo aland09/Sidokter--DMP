@@ -61,4 +61,53 @@ class DokumenMasukController extends Controller
 
         return redirect()->route('dokumen-masuk.index')->with('message','No. Box telah berhasil diperbaharui');
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Dokumen $dokumen_masuk)
+    {
+        $dokumen = Dokumen::with([
+                    'detailDokumen' => function($query) {
+                        $query->orderBy('id', 'ASC');
+                    },
+                    'akunJenis' => function($query) {
+                        $query->select('id', 'kode_akun','nama_akun');
+                    },
+                ])
+                ->where('id', $dokumen_masuk->id)
+                ->first();
+
+        return view("pages/dokumen-masuk/show", [
+            "title"             => "Detail Data Dokumen Masuk",
+            "dokumen"           => $dokumen
+        ]);
+    }
+
+    public function detail_box($no_box)
+    {
+        $no_box_convert = str_replace("_","/",$no_box);
+        $berkas_dokumen = Dokumen::with([
+                    'detailDokumen' => function($query) {
+                        $query->orderBy('id', 'ASC');
+                    },
+                    'akunJenis' => function($query) {
+                        $query->select('id', 'kode_akun','nama_akun');
+                    },
+                ])
+                ->where('no_box', $no_box_convert)
+                ->get();
+
+
+
+        return view("pages/dokumen-masuk/detail-box", [
+            "title"             => "Detail Data Dokumen Masuk",
+            "no_box"            => $no_box,
+            "berkas_dokumen"    => $berkas_dokumen
+        ]);
+
+    }
 }
