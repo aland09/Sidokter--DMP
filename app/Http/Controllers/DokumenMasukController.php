@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Dokumen;
 use App\Models\DetailDokumen;
+use Milon\Barcode\DNS1D;
+use Milon\Barcode\DNS2D;
 
 class DokumenMasukController extends Controller
 {
@@ -109,5 +111,34 @@ class DokumenMasukController extends Controller
             "berkas_dokumen"    => $berkas_dokumen
         ]);
 
+    }
+
+    public function generate_barcode(Request $request)
+    {
+        // $barcodeType = $request->input('type'); // Get the barcode type (e.g., 'qrcode', 'code128', 'code39')
+        // $data = $request->input('data'); // Get the data for the barcode
+
+        // if ($barcodeType === 'qrcode') {
+        //     // Generate a QR code
+        //     $barcode = new DNS2D();
+        //     $storagePath = public_path('barcodes'); // Set the public path
+        //     $barcode->setStorPath($storagePath);
+        //     $barcode->getBarcodePNG($data, $barcodeType);
+        // } else {
+        //     // Generate other barcode types like Code128 or Code39
+        //     $barcode = new DNS1D();
+        //     $storagePath = public_path('barcodes'); // Set the public path
+        //     $barcode->setStorPath($storagePath);
+        //     $barcode->getBarcodePNG($data, $barcodeType);
+        // }
+
+        // $barcodeImagePath = public_path('barcodes/' . $barcodeType . '.png');
+
+        // if (file_exists($barcodeImagePath)) {
+        //     return response()->file($barcodeImagePath);
+        // } else {
+        //     return response('Barcode not found', 404);
+        // }
+        return \DNS2D::getBarcodePNGPath('AYAM', 'QRCODE');
     }
 }

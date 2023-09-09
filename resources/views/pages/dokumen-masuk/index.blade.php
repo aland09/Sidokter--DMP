@@ -189,7 +189,8 @@
                             <table class="data-table hover dataTable no-footer">
                                 <thead>
                                     <tr>
-                                        <th colspan="2" class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
+                                        <th colspan="2" class="text-muted text-small text-uppercase"
+                                            style="position: sticky;top: 0">
                                             No.</th>
                                         <th class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
                                             Kode Klasifikasi</th>
@@ -293,15 +294,19 @@
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
 
-                                                    {{-- @if ($item->no_box)
-                                                        <div class="bg-white p-1 rounded-sm" style="height: 30px">
-                                                            {!! '<img class="mb-3" src="data:image/png;base64,' .
-                                                                DNS2D::getBarcodePNG($item->no_box, 'QRCODE', 1, 1) .
-                                                                '" alt="' .
-                                                                $item->no_box .
-                                                                '"   />' !!}
-                                                        </div>
-                                                    @endif --}}
+                                                    @if ($item->no_box)
+                                                        <a download="{{ $item->no_box }}.png"
+                                                            href="data:image/png;base64,{{ DNS2D::getBarcodePNG(url('/detail-box', Str::replace('/', '_', $item->no_box)), 'QRCODE', 200, 200) }}"
+                                                            target="_blank">
+                                                            <div class="bg-white p-1 rounded-sm" style="height: 30px">
+                                                                {!! '<img class="mb-3" src="data:image/png;base64,' .
+                                                                    DNS2D::getBarcodePNG($item->no_box, 'QRCODE', 1, 1) .
+                                                                    '" alt="' .
+                                                                    $item->no_box .
+                                                                    '"   />' !!}
+                                                            </div>
+                                                        </a>
+                                                    @endif
 
 
 
@@ -379,11 +384,11 @@
                                                 </td>
                                                 <td colspan="5" style="height: 42px !important" class="py-2">
                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                        <a href="#"
+                                                        {{-- <a href="#"
                                                             class="btn btn-icon btn-icon-only btn-sm btn-outline-info"
                                                             type="button">
                                                             <i data-acorn-icon="eye"></i>
-                                                        </a>
+                                                        </a> --}}
                                                     </div>
                                                 </td>
                                             </tr>
@@ -423,7 +428,7 @@
                     <div class="modal-body d-flex flex-column align-items-center justify-content-center text-center py-3">
                         {{ csrf_field() }}
                         {!! '<img class="mb-3" src="data:image/png;base64,' .
-                            DNS2D::getBarcodePNG($no_box_tmp, 'QRCODE', 12, 12) .
+                            DNS2D::getBarcodePNG(url('/detail-box', Str::replace('/', '_', $no_box_tmp)), 'QRCODE', 12, 12) .
                             '" alt="' .
                             $no_box_tmp .
                             '"   />' !!}

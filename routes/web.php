@@ -55,5 +55,6 @@ Route::group(['middleware' => ['auth', 'permission']], function () {
     Route::post('import-monitoring', [DokumenController::class, 'import_monitoring'])->name('import-monitoring');
     Route::get('get-no-box/{year?}', [DokumenMasukController::class, 'get_no_box'])->name('get-no-box');
     Route::post('data-arsip-no-box', [DokumenMasukController::class, 'update_no_box'])->name('data-arsip-no-box');
+    Route::get('generate-barcode', [DokumenMasukController::class, 'generate_barcode'])->name('generate-barcode');
 
 });
