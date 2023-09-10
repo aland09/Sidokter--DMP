@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+
 use App\Models\DetailDokumen;
 use App\Models\AkunJenis;
 
 class Dokumen extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'akun_jenis_id',
@@ -33,6 +36,12 @@ class Dokumen extends Model
         'no_box',
         'status',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded('*');
+    }
 
     public function detailDokumen(){
     	return $this->hasMany(DetailDokumen::class);
