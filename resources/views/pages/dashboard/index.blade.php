@@ -44,7 +44,7 @@
         </div>
         <!-- Title and Top Buttons End -->
 
-        
+
 
         <div class="row">
             <div class="col-12">
@@ -87,7 +87,8 @@
                                     <i data-acorn-icon="check-circle" class="text-white"></i>
                                 </div>
                                 <p class="mb-0 lh-1">Data Terverifikasi</p>
-                                <p class="cta-3 mb-0 text-primary">{{ number_format($dokumen_terverifikasi, 0, ',', '.') }}</p>
+                                <p class="cta-3 mb-0 text-primary">{{ number_format($dokumen_terverifikasi, 0, ',', '.') }}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -101,322 +102,47 @@
             <div class="col-lg-12 mb-5 sh-45">
                 <h2 class="small-title">Logs</h2>
                 <div class="card sh-40 h-lg-100-card">
-                    <div class="card-body mb-n2 scroll-out h-100">
-                        <div class="scroll h-100">
-                            <div class="row g-0 mb-2">
-                                <div class="col-auto">
-                                    <div class="sw-3 d-inline-block d-flex justify-content-start align-items-center h-100">
-                                        <div class="sh-3">
-                                            <i data-acorn-icon="circle" class="text-primary align-top"></i>
+
+                    @if ($logs->count() > 0)
+                        <div class="card-body mb-n2 scroll-out h-100">
+                            <div class="scroll h-100">
+                                @foreach ($logs ?? [] as $item)
+                                    <div class="row g-0 mb-2">
+                                        <div class="col-auto">
+                                            <div
+                                                class="sw-3 d-inline-block d-flex justify-content-start align-items-center h-100">
+                                                <div class="sh-3">
+                                                    <i data-acorn-icon="circle" class="text-primary align-top"></i>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body d-flex flex-column pt-0 pb-0 ps-3 pe-4 h-100 justify-content-center">
-                                        <div class="d-flex flex-column">
-                                            <div class="text-alternate mt-n1 lh-1-25">New user registiration</div>
+                                        <div class="col">
+                                            <div
+                                                class="card-body d-flex flex-column pt-0 pb-0 ps-3 pe-4 h-100 justify-content-center">
+                                                <div class="d-flex flex-column">
+                                                    <div class="text-alternate mt-n1 lh-1-25"><strong>{{ $item->causer->name }}</strong> {!! $item->description !!}</div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="d-inline-block d-flex justify-content-end align-items-center h-100">
-                                        <div class="text-muted ms-2 mt-n1 lh-1-25">18 Dec</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-0 mb-2">
-                                <div class="col-auto">
-                                    <div class="sw-3 d-inline-block d-flex justify-content-start align-items-center h-100">
-                                        <div class="sh-3">
-                                            <i data-acorn-icon="circle" class="text-primary align-top"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body d-flex flex-column pt-0 pb-0 ps-3 pe-4 h-100 justify-content-center">
-                                        <div class="d-flex flex-column">
-                                            <div class="text-alternate mt-n1 lh-1-25">3 new product added</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="d-inline-block d-flex justify-content-end align-items-center h-100">
-                                        <div class="text-muted ms-2 mt-n1 lh-1-25">18 Dec</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-0 mb-2">
-                                <div class="col-auto">
-                                    <div class="sw-3 d-inline-block d-flex justify-content-start align-items-center h-100">
-                                        <div class="sh-3">
-                                            <i data-acorn-icon="square" class="text-secondary align-top"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body d-flex flex-column pt-0 pb-0 ps-3 pe-4 h-100 justify-content-center">
-                                        <div class="d-flex flex-column">
-                                            <div class="text-alternate mt-n1 lh-1-25">
-                                                Product out of stock:
-                                                <a href="#" class="alternate-link underline-link">Breadstick</a>
+                                        <div class="col-auto">
+                                            <div class="d-inline-block d-flex justify-content-end align-items-center h-100">
+                                                <div class="text-muted ms-2 mt-n1 lh-1-25">{{ $item->created_at->format('j F Y, h:i:s') }}</div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="d-inline-block d-flex justify-content-end align-items-center h-100">
-                                        <div class="text-muted ms-2 mt-n1 lh-1-25">16 Dec</div>
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
-                            <div class="row g-0 mb-2">
-                                <div class="col-auto">
-                                    <div class="sw-3 d-inline-block d-flex justify-content-start align-items-center h-100">
-                                        <div class="sh-3">
-                                            <i data-acorn-icon="square" class="text-secondary align-top"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body d-flex flex-column pt-0 pb-0 ps-3 pe-4 h-100 justify-content-center">
-                                        <div class="d-flex flex-column">
-                                            <div class="text-alternate mt-n1 lh-1-25">Category page returned an error</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="d-inline-block d-flex justify-content-end align-items-center h-100">
-                                        <div class="text-muted ms-2 mt-n1 lh-1-25">15 Dec</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-0 mb-2">
-                                <div class="col-auto">
-                                    <div class="sw-3 d-inline-block d-flex justify-content-start align-items-center h-100">
-                                        <div class="sh-3">
-                                            <i data-acorn-icon="circle" class="text-primary align-top"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body d-flex flex-column pt-0 pb-0 ps-3 pe-4 h-100 justify-content-center">
-                                        <div class="d-flex flex-column">
-                                            <div class="text-alternate mt-n1 lh-1-25">14 products added</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="d-inline-block d-flex justify-content-end align-items-center h-100">
-                                        <div class="text-muted ms-2 mt-n1 lh-1-25">15 Dec</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-0 mb-2">
-                                <div class="col-auto">
-                                    <div class="sw-3 d-inline-block d-flex justify-content-start align-items-center h-100">
-                                        <div class="sh-3">
-                                            <i data-acorn-icon="hexagon" class="text-tertiary align-top"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body d-flex flex-column pt-0 pb-0 ps-3 pe-4 h-100 justify-content-center">
-                                        <div class="d-flex flex-column">
-                                            <div class="text-alternate mt-n1 lh-1-25">
-                                                New sale:
-                                                <a href="#" class="alternate-link underline-link">Steirer Brot</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="d-inline-block d-flex justify-content-end align-items-center h-100">
-                                        <div class="text-muted ms-2 mt-n1 lh-1-25">15 Dec</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-0 mb-2">
-                                <div class="col-auto">
-                                    <div class="sw-3 d-inline-block d-flex justify-content-start align-items-center h-100">
-                                        <div class="sh-3">
-                                            <i data-acorn-icon="hexagon" class="text-tertiary align-top"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body d-flex flex-column pt-0 pb-0 ps-3 pe-4 h-100 justify-content-center">
-                                        <div class="d-flex flex-column">
-                                            <div class="text-alternate mt-n1 lh-1-25">
-                                                New sale:
-                                                <a href="#" class="alternate-link underline-link">Soda Bread</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="d-inline-block d-flex justify-content-end align-items-center h-100">
-                                        <div class="text-muted ms-2 mt-n1 lh-1-25">15 Dec</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-0 mb-2">
-                                <div class="col-auto">
-                                    <div class="sw-3 d-inline-block d-flex justify-content-start align-items-center h-100">
-                                        <div class="sh-3">
-                                            <i data-acorn-icon="triangle" class="text-warning align-top"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body d-flex flex-column pt-0 pb-0 ps-3 pe-4 h-100 justify-content-center">
-                                        <div class="d-flex flex-column">
-                                            <div class="text-alternate mt-n1 lh-1-25">Recived a support ticket</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="d-inline-block d-flex justify-content-end align-items-center h-100">
-                                        <div class="text-muted ms-2 mt-n1 lh-1-25">14 Dec</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-0 mb-2">
-                                <div class="col-auto">
-                                    <div class="sw-3 d-inline-block d-flex justify-content-start align-items-center h-100">
-                                        <div class="sh-3">
-                                            <i data-acorn-icon="hexagon" class="text-tertiary align-top"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body d-flex flex-column pt-0 pb-0 ps-3 pe-4 h-100 justify-content-center">
-                                        <div class="d-flex flex-column">
-                                            <div class="text-alternate mt-n1 lh-1-25">
-                                                New sale:
-                                                <a href="#" class="alternate-link underline-link">Cholermüs</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="d-inline-block d-flex justify-content-end align-items-center h-100">
-                                        <div class="text-muted ms-2 mt-n1 lh-1-25">13 Dec</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-0 mb-2">
-                                <div class="col-auto">
-                                    <div class="sw-3 d-inline-block d-flex justify-content-start align-items-center h-100">
-                                        <div class="sh-3">
-                                            <i data-acorn-icon="hexagon" class="text-tertiary align-top"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body d-flex flex-column pt-0 pb-0 ps-3 pe-4 h-100 justify-content-center">
-                                        <div class="d-flex flex-column">
-                                            <div class="text-alternate mt-n1 lh-1-25">
-                                                New sale:
-                                                <a href="#" class="alternate-link underline-link">Bazlama</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="d-inline-block d-flex justify-content-end align-items-center h-100">
-                                        <div class="text-muted ms-2 mt-n1 lh-1-25">13 Dec</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-0 mb-2">
-                                <div class="col-auto">
-                                    <div class="sw-3 d-inline-block d-flex justify-content-start align-items-center h-100">
-                                        <div class="sh-3">
-                                            <i data-acorn-icon="triangle" class="text-warning align-top"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body d-flex flex-column pt-0 pb-0 ps-3 pe-4 h-100 justify-content-center">
-                                        <div class="d-flex flex-column">
-                                            <div class="text-alternate mt-n1 lh-1-25">Recived a comment</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="d-inline-block d-flex justify-content-end align-items-center h-100">
-                                        <div class="text-muted ms-2 mt-n1 lh-1-25">13 Dec</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-0 mb-2">
-                                <div class="col-auto">
-                                    <div class="sw-3 d-inline-block d-flex justify-content-start align-items-center h-100">
-                                        <div class="sh-3">
-                                            <i data-acorn-icon="triangle" class="text-warning align-top"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body d-flex flex-column pt-0 pb-0 ps-3 pe-4 h-100 justify-content-center">
-                                        <div class="d-flex flex-column">
-                                            <div class="text-alternate mt-n1 lh-1-25">Recived an email</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="d-inline-block d-flex justify-content-end align-items-center h-100">
-                                        <div class="text-muted ms-2 mt-n1 lh-1-25">13 Dec</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-0 mb-2">
-                                <div class="col-auto">
-                                    <div class="sw-3 d-inline-block d-flex justify-content-start align-items-center h-100">
-                                        <div class="sh-3">
-                                            <i data-acorn-icon="hexagon" class="text-tertiary align-top"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body d-flex flex-column pt-0 pb-0 ps-3 pe-4 h-100 justify-content-center">
-                                        <div class="d-flex flex-column">
-                                            <div class="text-alternate mt-n1 lh-1-25">
-                                                New sale:
-                                                <a href="#" class="alternate-link underline-link">Bazlama</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="d-inline-block d-flex justify-content-end align-items-center h-100">
-                                        <div class="text-muted ms-2 mt-n1 lh-1-25">12 Dec</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-0 mb-2">
-                                <div class="col-auto">
-                                    <div class="sw-3 d-inline-block d-flex justify-content-start align-items-center h-100">
-                                        <div class="sh-3">
-                                            <i data-acorn-icon="triangle" class="text-warning align-top"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body d-flex flex-column pt-0 pb-0 ps-3 pe-4 h-100 justify-content-center">
-                                        <div class="d-flex flex-column">
-                                            <div class="text-alternate mt-n1 lh-1-25">Recived a comment</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="d-inline-block d-flex justify-content-end align-items-center h-100">
-                                        <div class="text-muted ms-2 mt-n1 lh-1-25">12 Dec</div>
-                                    </div>
+                        </div>
+                    @else
+                        <div class="card-body h-100">
+                            <div class="d-flex align-items-center justify-content-center mt-5" style="height: 60vh">
+                                <div class="alert alert-warning w-75 text-center" role="alert">
+                                    Belum Ada Catatan Kegiatan
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
+
                 </div>
             </div>
             <!-- Logs End -->

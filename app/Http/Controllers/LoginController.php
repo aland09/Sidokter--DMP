@@ -25,7 +25,7 @@ class LoginController extends Controller
 
             activity()
                 ->causedBy(Auth::user())
-                ->log('Pengguna '. Auth::user()->name .' Telah Melakukan Login');
+                ->log('<strong>login</strong> pada sistem');
 
             $request->session()->regenerate();
             return redirect()->intended('/dashboard');
@@ -36,6 +36,10 @@ class LoginController extends Controller
  
     public function logout(Request $request)
     {
+        activity()
+            ->causedBy(Auth::user())
+            ->log('<strong>logout</strong> dari sistem');
+
         Auth::logout();
  
         request()->session()->invalidate();

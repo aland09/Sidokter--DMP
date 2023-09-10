@@ -8,6 +8,7 @@ use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 
 class UserController extends Controller
 {
@@ -55,6 +56,8 @@ class UserController extends Controller
     */
     public function store(Request $request)
     {
+        
+
         $data['name'] = $request['name'];
         $data['username'] = $request['username'];
         $data['email'] = $request['email'];
@@ -63,6 +66,11 @@ class UserController extends Controller
         $user = User::create($data);
 
         $user->assignRole($request['roles']);
+
+        activity()
+            ->performedOn($user)
+            ->event('created')
+            ->log('telah melakukan <strong>penambahan data pengguna</strong> pada sistem');
 
         return redirect()->route('users.index')->with('message','Pengguna berhasil ditambahkan.');
     }
@@ -104,6 +112,10 @@ class UserController extends Controller
     */
     public function update(Request $request, User $user)
     {
+        activity()
+            ->performedOn($user)
+            ->event('updated')
+            ->log('telah melakukan <strong>pengeditan data pengguna</strong> pada sistem');
 
         $data['name'] = $request['name'];
         $data['username'] = $request['username'];
@@ -127,6 +139,11 @@ class UserController extends Controller
     */
     public function destroy(User $user)
     {
+        activity()
+            ->performedOn($user)
+            ->event('deleted')
+            ->log('telah melakukan <strong>penghapusan data pengguna</strong> pada sistem');
+
         User::destroy($user->id);
         return redirect()->route('users.index')->with('message','Pengguna berhasil dihapus');
     }
