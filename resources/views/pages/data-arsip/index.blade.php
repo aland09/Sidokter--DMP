@@ -235,11 +235,11 @@
                                 <button class="dropdown-item" type="button" data-bs-toggle="modal"
                                     data-bs-target="#modalTarikData">Tarik Data Monitoring</button>
                             </div>
-                            <a href="{{ route('data-arsip.create') }}"
+                            {{-- <a href="{{ route('data-arsip.create') }}"
                                 class="btn btn-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0">
                                 <i data-acorn-icon="plus"></i>
                                 <span>Tambah Data</span>
-                            </a>
+                            </a> --}}
                             <!-- Add New Button End -->
                         </div>
                         <!-- Top Buttons End -->

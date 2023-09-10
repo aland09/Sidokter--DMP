@@ -214,12 +214,14 @@ class DokumenController extends Controller
 
 		$file->move('file_dokumen',$nama_file);
 
-		Excel::import(new DokumenImport, public_path('/file_dokumen/'.$nama_file));
+        Excel::import(new DokumenImport, public_path('/file_dokumen/'.$nama_file));
 	    // Excel::import(new DetailDokumenImport, public_path('/file_dokumen/'.$nama_file));
         Excel::import(new DokumenSp2dImport, public_path('/file_dokumen/'.$nama_file));
         Excel::import(new DokumenSpmImport, public_path('/file_dokumen/'.$nama_file));
         Excel::import(new DokumenSppImport, public_path('/file_dokumen/'.$nama_file));
 
+       
+        
         return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diimport');
 
 	}
@@ -326,6 +328,15 @@ class DokumenController extends Controller
 
                 
             }
+
+            $dokumenMonitoring = Dokumen::find(1);
+
+            // if($dokumenMonitoring) {
+            //     activity()
+            //     ->performedOn($dokumenMonitoring)
+            //     ->event('created')
+            //     ->log('telah melakukan <strong>tarik data monitoring</strong> pada sistem');
+            // }
             return redirect()->route('data-arsip.index')->with('message', number_format($success,0,",",".").' Data arsip berhasil di import.');
         } else {
             return redirect()->route('data-arsip.index')->with('error', 'Tidak ada data yang dapat ditarik pada periode tersebut');

@@ -64,6 +64,11 @@ class RoleController extends Controller
         $role = Role::create(['name' => $request->get('name')]);
         $role->syncPermissions($request->get('permission'));
 
+        activity()
+            ->performedOn($role)
+            ->event('created')
+            ->log('telah melakukan <strong>penambahan data peran</strong> pada sistem');
+
         return redirect()->route('roles.index')->with('message','Peran pengguna berhasil ditambahkan.');
     }
 
@@ -114,6 +119,11 @@ class RoleController extends Controller
 
         $role->syncPermissions($request->get('permission'));
 
+        activity()
+            ->performedOn($role)
+            ->event('updated')
+            ->log('telah melakukan <strong>pengeditan data peran</strong> pada sistem');
+
         return redirect()->route('roles.index')->with('message','Peran pengguna berhasil diperbaharui');
     }
 
@@ -126,6 +136,12 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         Role::destroy($role->id);
+
+        activity()
+            ->performedOn($role)
+            ->event('deleted')
+            ->log('telah melakukan <strong>penghapusan data peran</strong> pada sistem');
+
         return redirect()->route('roles.index')->with('message','Peran pengguna berhasil dihapus');
     }
 }

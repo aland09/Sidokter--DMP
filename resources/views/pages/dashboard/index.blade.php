@@ -126,7 +126,7 @@
                                         </div>
                                         <div class="col-auto">
                                             <div class="d-inline-block d-flex justify-content-end align-items-center h-100">
-                                                <div class="text-muted ms-2 mt-n1 lh-1-25">{{ $item->created_at->format('j F Y, h:i:s') }}</div>
+                                                <div class="text-muted ms-2 mt-n1 lh-1-25">{{ $item->created_at->format('j F Y, H:i:s') }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -134,8 +134,8 @@
                             </div>
                         </div>
                     @else
-                        <div class="card-body h-100">
-                            <div class="d-flex align-items-center justify-content-center mt-5" style="height: 60vh">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-center mt-5">
                                 <div class="alert alert-warning w-75 text-center" role="alert">
                                     Belum Ada Catatan Kegiatan
                                 </div>

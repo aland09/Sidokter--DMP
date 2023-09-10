@@ -58,7 +58,13 @@ class RegulasiController extends Controller
         $data['file_regulasi'] = 'dokumen_regulasi/' . $filenameSimpan;
         // dd($data);
 
-        Regulasi::create($data);
+        $regulasi = Regulasi::create($data);
+
+        activity()
+            ->performedOn($regulasi)
+            ->event('created')
+            ->log('telah melakukan <strong>penambahan data regulasi</strong> pada sistem');
+
         return redirect()->route('regulasi.index')->with('message','Data Regulasi Berhasil Dibuat');
     }
 
@@ -106,6 +112,11 @@ class RegulasiController extends Controller
 
         Regulasi::where('id', $regulasi->id)->update($data);
 
+        activity()
+            ->performedOn($regulasi)
+            ->event('updated')
+            ->log('telah melakukan <strong>pengeditan data regulasi</strong> pada sistem');
+
         return redirect()->route('regulasi.index')->with('message','Data regulasi berhasil diperbaharui');
     }
 
@@ -118,6 +129,12 @@ class RegulasiController extends Controller
     public function destroy(Regulasi $regulasi)
     {
         Regulasi::destroy($regulasi->id);
+
+        activity()
+            ->performedOn($regulasi)
+            ->event('deleted')
+            ->log('telah melakukan <strong>penghapusan data regulasi</strong> pada sistem');
+
         return redirect()->route('regulasi.index')->with('message', 'Data regulasi berhasil dihapus');
     }
 }

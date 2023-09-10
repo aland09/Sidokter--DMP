@@ -112,11 +112,6 @@ class UserController extends Controller
     */
     public function update(Request $request, User $user)
     {
-        activity()
-            ->performedOn($user)
-            ->event('updated')
-            ->log('telah melakukan <strong>pengeditan data pengguna</strong> pada sistem');
-
         $data['name'] = $request['name'];
         $data['username'] = $request['username'];
         $data['email'] = $request['email'];
@@ -127,6 +122,11 @@ class UserController extends Controller
         $updatedUser = User::where('id', $user->id)->first();
         $updatedUser->roles()->detach();
         $updatedUser->assignRole($request['roles']);
+
+        activity()
+            ->performedOn($user)
+            ->event('updated')
+            ->log('telah melakukan <strong>pengeditan data pengguna</strong> pada sistem');
 
         return redirect()->route('users.index')->with('message','Pengguna berhasil diperbaharui');
     }
@@ -139,12 +139,13 @@ class UserController extends Controller
     */
     public function destroy(User $user)
     {
+        User::destroy($user->id);
+
         activity()
             ->performedOn($user)
             ->event('deleted')
             ->log('telah melakukan <strong>penghapusan data pengguna</strong> pada sistem');
 
-        User::destroy($user->id);
         return redirect()->route('users.index')->with('message','Pengguna berhasil dihapus');
     }
 }
