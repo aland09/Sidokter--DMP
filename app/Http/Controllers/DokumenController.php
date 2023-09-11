@@ -229,35 +229,41 @@ class DokumenController extends Controller
     public function import_monitoring(Request $request) {
         $success = 0;
 
-
-        $tahun      = $request['tahun']; 
-        $bulan      = $request['bulan']; 
+        $method     = $request['method_type']; 
         $akun_jenis = $request['akun_jenis']; 
-        $hari       = cal_days_in_month(CAL_GREGORIAN,$bulan,$tahun);
-        $start      = '1.'.$bulan.'.'.$tahun;
-        $end        = $hari.'.'.$bulan.'.'.$tahun;
-        
+
+        $query_main = "";
         $query_akun = "";
 
         if($akun_jenis > 0) {
-          
-
+           $query_akun .= " AND (";
            foreach ($akun_jenis as $key => $element) {
                 if ($key === array_key_first($akun_jenis)) {
-                    $query_akun .= " AND kode_akun_jenis = '".$element."'";
+                    $query_akun .= "kode_akun_jenis = '".$element."'";
                 } else {
                     $query_akun .= " OR kode_akun_jenis = '".$element."'";
                 }
             }
+
+            $query_akun .= ") ";
         }
 
-        $sp2d_monitoring = DB::connection('oraclelink')->select("
-            SELECT * FROM newsipkd.VW_MONITORING_SP2D_AKUN_JENIS@newsipkd
-            WHERE tgl_sp2d >= to_date('".$start."', 'DD.MM.YYYY') and
-                tgl_sp2d <= to_date('".$end."', 'DD.MM.YYYY')".$query_akun);
+        if($method === 'periode') {
+            $tahun      = $request['tahun']; 
+            $bulan      = $request['bulan']; 
+            $hari       = cal_days_in_month(CAL_GREGORIAN,$bulan,$tahun);
+            $start      = '1.'.$bulan.'.'.$tahun;
+            $end        = $hari.'.'.$bulan.'.'.$tahun;
 
-    
-        
+            $query_main = "SELECT * FROM newsipkd.VW_MONITORING_SP2D_AKUN_JENIS@newsipkd WHERE tgl_sp2d >= to_date('".$start."', 'DD.MM.YYYY') and tgl_sp2d <= to_date('".$end."', 'DD.MM.YYYY')";
+        } else {
+            $tanggal      = $request['tanggal'];
+            $date = Carbon::createFromFormat('Y-m-d', $tanggal)->format('j.n.Y');
+
+            $query_main = "SELECT * FROM newsipkd.VW_MONITORING_SP2D_AKUN_JENIS@newsipkd WHERE TRUNC(tgl_sp2d) = to_date('".$date."', 'DD.MM.YYYY') ";
+        }
+
+        $sp2d_monitoring = DB::connection('oraclelink')->select($query_main."".$query_akun);
 
         if($sp2d_monitoring) {
             foreach ($sp2d_monitoring as $value) {
