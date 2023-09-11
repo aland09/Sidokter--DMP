@@ -301,6 +301,7 @@ class DokumenController extends Controller
                     $dataSpp['uraian'] = $value->uraian;
                     $dataSpp['tanggal_surat'] = $value->tgl_spp;
                     $dataSpp['pejabat_penandatangan'] = 'Bendahara/PPTK';
+                    $dataSpp['unit_pengolah'] = $skpd;
                     $dataSpp['jumlah_satuan'] = 1;
                     $dataSpp['no_surat'] = $value->no_spp;
                     $dataSpp['kurun_waktu'] = $value->tahun;
@@ -312,6 +313,7 @@ class DokumenController extends Controller
                     $dataSpm['uraian'] = $value->uraian;
                     $dataSpm['tanggal_surat'] = $value->tgl_spm;
                     $dataSpm['pejabat_penandatangan'] = 'PA/KPA';
+                    $dataSpm['unit_pengolah'] = $skpd;
                     $dataSpm['jumlah_satuan'] = 1;
                     $dataSpm['no_surat'] = $value->no_spm;
                     $dataSpm['kurun_waktu'] = $value->tahun;
@@ -323,6 +325,7 @@ class DokumenController extends Controller
                     $dataSptjm['uraian'] = '';
                     $dataSptjm['tanggal_surat'] = NULL;
                     $dataSptjm['pejabat_penandatangan'] = 'PA/KPA';
+                    $dataSptjm['unit_pengolah'] = $skpd;
                     $dataSptjm['jumlah_satuan'] = 1;
                     $dataSptjm['no_surat'] = '';
                     $dataSptjm['kurun_waktu'] = $value->tahun;
