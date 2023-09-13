@@ -17,11 +17,16 @@ class LoginController extends Controller
     public function authenticate(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email:dns'],
+            'username' => ['required'],
             'password' => ['required']
         ]);
  
         if (Auth::attempt($credentials)) {
+
+            activity()
+                ->causedBy(Auth::user())
+                ->log('<strong>login</strong> pada sistem');
+
             $request->session()->regenerate();
             return redirect()->intended('/dashboard');
         }
@@ -31,6 +36,10 @@ class LoginController extends Controller
  
     public function logout(Request $request)
     {
+        activity()
+            ->causedBy(Auth::user())
+            ->log('<strong>logout</strong> dari sistem');
+
         Auth::logout();
  
         request()->session()->invalidate();

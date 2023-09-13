@@ -8,6 +8,8 @@
 @section('css')
     <link rel="stylesheet" href="/css/vendor/datatables.min.css" />
     <link rel="stylesheet" href="/css/vendor/bootstrap-datepicker3.standalone.min.css" />
+    <link rel="stylesheet" href="/css/vendor/select2.min.css" />
+    <link rel="stylesheet" href="/css/vendor/select2-bootstrap4.min.css" />
 @endsection
 @section('js_vendor')
     <script src="/js/vendor/bootstrap-submenu.js"></script>
@@ -17,11 +19,13 @@
     <script src="/js/vendor/jquery.validate/jquery.validate.min.js"></script>
     <script src="/js/vendor/datepicker/bootstrap-datepicker.min.js"></script>
     <script src="/js/vendor/datepicker/locales/bootstrap-datepicker.es.min.js"></script>
+    <script src="/js/vendor/select2.full.min.js"></script>
 @endsection
 @section('js_page')
     <script src="/js/base/pagination.js"></script>
     <script src="/js/forms/validation.js"></script>
     <script src="/js/forms/controls.datepicker.js"></script>
+    <script src="/js/forms/controls.select2.js"></script>
     <script>
         const submitBtnEditChild = document.getElementById('submitBtnEditChild');
         $(submitBtnEditChild).click(function() {
@@ -53,6 +57,25 @@
             $(".modal-body #form_verifikasi_status").val(form_verifikasi_status);
         });
 
+        $("input[name='method_type']:radio").click(function() {
+            const val = $(this).val();
+            if (val === 'harian') {
+                $("#harianContainer").addClass("d-block");
+                $("#periodeContainer").addClass("d-none");
+                $("#harianContainer").removeClass("d-none");
+                $('#tahunImport').prop('required',false);
+                $('#bulanImport').prop('required',false);
+                $('#tanggalImport').prop('required',true);
+            } else {
+                $("#periodeContainer").addClass("d-block");
+                $("#harianContainer").addClass("d-none");
+                $("#periodeContainer").removeClass("d-none");
+                $('#tahunImport').prop('required',true);
+                $('#bulanImport').prop('required',true);
+                $('#tanggalImport').prop('required',false);
+            }
+        });
+
         const submitBtnHapus = document.getElementById('submitBtnHapus');
         $(submitBtnHapus).click(function() {
             const formId = '#' + $(".modal-body #form_hapus_id").val();
@@ -63,6 +86,25 @@
         $(document).on('click', '.btn-edit-child', function() {
             const item = $(this).data('item');
             const subitem = $(this).data('subitem');
+            const index = $(this).data('index');
+            var disable = true;
+
+
+
+            if (index > 3) {
+                disable = false;
+            }
+            // TRIGER PROP INPUT
+            $(".modal-body #child_kode_klasifikasi").prop("disabled", disable);
+            $(".modal-body #child_jumlah_satuan").prop("disabled", disable);
+            $(".modal-body #child_keterangan").prop("disabled", disable);
+            $(".modal-body #child_jenis_naskah_dinas").prop("disabled", disable);
+            $(".modal-body #child_pejabat_penandatangan").prop("disabled", disable);
+            $(".modal-body #child_unit_pengolah").prop("disabled", disable);
+            $(".modal-body #child_kurun_waktu").prop("disabled", disable);
+            $(".modal-body #child_no_box").prop("disabled", disable);
+
+            // UUPDATE VALUE INPUT
             $('#form_edit_child').attr('action', '/detail-data-arsip/' + subitem['id']);
             $(".modal-body #child_dokumen_id").val(subitem['dokumen_id']);
             $(".modal-body #child_kode_klasifikasi").val(subitem['kode_klasifikasi']);
@@ -163,6 +205,18 @@
         </div>
     @endif
 
+    @if (session()->has('error'))
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 5">
+            <div class="toast bg-danger fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header py-2">
+                    <strong class="me-auto text-white">Informasi</strong>
+                    <button type="button" class="btn-close text-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body text-white"> {{ session()->get('error') }}</div>
+            </div>
+        </div>
+    @endif
+
     {{-- notifikasi form validasi --}}
     @if ($errors->has('file'))
         <span class="invalid-feedback" role="alert">
@@ -197,14 +251,14 @@
                             <div class="dropdown-menu shadow dropdown-menu-end">
                                 <button class="dropdown-item" type="button" data-bs-toggle="modal"
                                     data-bs-target="#modalImport">Import Excel</button>
-                                <a href="/import-monitoring" class="dropdown-item">Tarik Data Monitoring</a>
+                                <button class="dropdown-item" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#modalTarikData">Tarik Data Monitoring</button>
                             </div>
-
-                            <a href="{{ route('data-arsip.create') }}"
+                            {{-- <a href="{{ route('data-arsip.create') }}"
                                 class="btn btn-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0">
                                 <i data-acorn-icon="plus"></i>
                                 <span>Tambah Data</span>
-                            </a>
+                            </a> --}}
                             <!-- Add New Button End -->
                         </div>
                         <!-- Top Buttons End -->
@@ -260,8 +314,9 @@
                                     data-datatable="#datatableRowsServerSide" data-childSelector="span">
                                     <button class="btn p-0 shadow" type="button" data-bs-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false" data-bs-offset="0,3">
-                                        <span class="btn btn-foreground-alternate dropdown-toggle" data-bs-toggle="tooltip"
-                                            data-bs-placement="top" data-bs-delay="0" title="Jumlah Data Per Halaman">
+                                        <span class="btn btn-foreground-alternate dropdown-toggle"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-delay="0"
+                                            title="Jumlah Data Per Halaman">
                                             10 Data
                                         </span>
                                     </button>
@@ -298,6 +353,8 @@
                                         <th style="width: 300px !important" class="text-muted text-small text-uppercase">
                                             No. SP2D</th>
                                         <th class="text-muted text-small text-uppercase">Nominal</th>
+                                        <th class="text-muted text-small text-uppercase">Kode Akun Jenis</th>
+                                        <th class="text-muted text-small text-uppercase">Nama Akun Jenis</th>
                                         <th class="text-muted text-small text-uppercase">SKPD/Unit SKPD</th>
                                         <th class="text-muted text-small text-uppercase">NWP</th>
                                         <th class="text-muted text-small text-uppercase">Pejabat Penandatangan</th>
@@ -317,63 +374,78 @@
                                                 {{ $loop->index + 1 }}.
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->kode_klasifikasi }}
+                                                {{ $item->kode_klasifikasi ? $item->kode_klasifikasi : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->uraian }}
+                                                {{ $item->uraian ? $item->uraian : '-' }}
 
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->tanggal_validasi }}
+                                                {{ $item->tanggal_validasi ? $item->tanggal_validasi : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->jumlah_satuan_item }}
+                                                {{ $item->jumlah_satuan_item ? $item->jumlah_satuan_item : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->keterangan }}
+                                                {{ $item->keterangan ? $item->keterangan : '-' }}
                                             </td>
                                             <td style="height: 42px !important;" class="py-2 bg-primary text-white">
-                                                {{ $item->no_sp2d }}
+                                                {{ $item->no_sp2d ? $item->no_sp2d : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 Rp.<span
                                                     class="text-primary">__</span>{{ number_format($item->nominal, 0, ',', '.') }},-
                                             </td>
-                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->skpd }}
+                                            <td style="height: 42px !important;" class="py-2 bg-primary text-white">
+                                                {{ $item->akunJenis ? $item->akunJenis->kode_akun : '-' }}
+                                            </td>
+                                            <td style="height: 42px !important;" class="py-2 bg-primary text-white">
+                                                {{ $item->akunJenis ? $item->akunJenis->nama_akun : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->nwp }}
+                                                {{ $item->skpd ? $item->skpd : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->pejabat_penandatangan }}
+                                                {{ $item->nwp ? $item->nwp : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->unit_pengolah }}
+                                                {{ $item->pejabat_penandatangan ? $item->pejabat_penandatangan : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->kurun_waktu }}
+                                                {{ $item->unit_pengolah ? $item->unit_pengolah : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->jumlah_satuan_berkas }} Berkas
+                                                {{ $item->kurun_waktu ? $item->kurun_waktu : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->tkt_perkemb }}
+                                                {{ $item->jumlah_satuan_berkas ? $item->jumlah_satuan_berkas : '-' }}
+                                                Berkas
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->no_box }}
+                                                {{ $item->tkt_perkemb ? $item->tkt_perkemb : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->status }}
+                                                {{ $item->no_box ? $item->no_box : '-' }}
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->status ? $item->status : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+
+                                                    <a href="{{ route('data-arsip.show', $item->id) }}"
+                                                        class="btn btn-icon btn-icon-only btn-sm btn-outline-secondary"
+                                                        type="button">
+                                                        <i data-acorn-icon="info-circle"></i>
+                                                    </a>
+
                                                     <button type="button" data-item="{{ $item }}"
                                                         class="btn btn-icon btn-icon-only btn-sm btn-warning btn-edit-parent">
                                                         <i data-acorn-icon="edit"></i>
                                                     </button>
 
-                                                    <button type="button" data-id="{{ $item->id}}" data-subitem="{{ $item->detailDokumen[0] ?? NULL }}"
+                                                    <button type="button" data-id="{{ $item->id }}"
+                                                        data-subitem="{{ $item->detailDokumen[0] ?? null }}"
                                                         class="btn btn-icon btn-icon-only btn-sm btn-info btn-add-parent">
                                                         <i data-acorn-icon="plus"></i>
                                                     </button>
@@ -403,7 +475,7 @@
                                             <th class="text-muted text-small text-uppercase">Unit Pengolah</th>
                                             <th class="text-muted text-small text-uppercase">Kurun Waktu</th>
                                             <th class="text-muted text-small text-uppercase">No. Box</th>
-                                            <th colspan="5" class="text-muted text-small text-uppercase">Tingkat
+                                            <th colspan="7" class="text-muted text-small text-uppercase">Tingkat
                                                 Perkembangan</th>
                                             <th width="10%" class="empty">&nbsp;</th>
                                         </tr>
@@ -413,55 +485,52 @@
                                                 <td style="height: 42px !important" class="empty py-2">
                                                     {{ $loop->index + 1 }}.</td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->kode_klasifikasi }}
+                                                    {{ $subitem->kode_klasifikasi ? $subitem->kode_klasifikasi : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->uraian }}
+                                                    {{ $subitem->uraian ? $subitem->uraian : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->tanggal_surat }}
+                                                    {{ $subitem->tanggal_surat ? $subitem->tanggal_surat : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->jumlah_satuan }}
+                                                    {{ $subitem->jumlah_satuan ? $subitem->jumlah_satuan : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->keterangan }}
+                                                    {{ $subitem->keterangan ? $subitem->keterangan : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->jenis_naskah_dinas }}
+                                                    {{ $subitem->jenis_naskah_dinas ? $subitem->jenis_naskah_dinas : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important;" class="py-2">
-                                                    {{ $subitem->no_surat }}
+                                                    {{ $subitem->no_surat ? $subitem->no_surat : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->pejabat_penandatangan }}
+                                                    {{ $subitem->pejabat_penandatangan ? $subitem->pejabat_penandatangan : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->unit_pengolah }}
+                                                    {{ $subitem->unit_pengolah ? $subitem->unit_pengolah : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->kurun_waktu }}
+                                                    {{ $subitem->kurun_waktu ? $subitem->kurun_waktu : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->no_box }}
+                                                    {{ $subitem->no_box ? $subitem->no_box : '-' }}
                                                 </td>
-                                                <td colspan="5" style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->tkt_perk }}
+                                                <td colspan="7" style="height: 42px !important" class="py-2">
+                                                    {{ $subitem->tkt_perk ? $subitem->tkt_perk : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                        <a href="#"
-                                                            class="btn btn-icon btn-icon-only btn-sm btn-outline-info"
-                                                            type="button">
-                                                            <i data-acorn-icon="eye"></i>
-                                                        </a>
                                                         <button type="button" data-item="{{ $item }}"
                                                             data-subitem="{{ $subitem }}"
+                                                            data-index="{{ $loop->index + 1 }}"
                                                             class="btn btn-icon btn-icon-only btn-sm btn-outline-warning btn-edit-child">
                                                             <i data-acorn-icon="edit"></i>
                                                         </button>
 
-                                                        <!--<form id="delete_{{ $item->id }}_{{ $subitem->id }}"
+
+                                                        {{-- <form id="delete_{{ $item->id }}_{{ $subitem->id }}"
                                                             action="/detail-data-arsip/{{ $subitem->id }}"
                                                             method="POST" class="d-inline">
                                                             @method('delete')
@@ -471,7 +540,8 @@
                                                                 data-id="delete_{{ $item->id }}_{{ $subitem->id }}"
                                                                 data-bs-toggle="modal" data-bs-target="#modalHapus"><i
                                                                     data-acorn-icon="bin"></i></button>
-                                                        </form>-->
+                                                        </form> --}}
+
                                                     </div>
                                                 </td>
                                         </tr>
@@ -514,6 +584,85 @@
                             <label class="form-label text-primary fw-bold">File Import</label>
                             <input class="form-control" type="file" name="file" required="required" />
                         </div>
+                    </div>
+                    <div class="modal-footer pt-0 pb-4" style="border-top: none !important">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Import</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Tarik Data -->
+    <div class="modal fade" id="modalTarikData" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="POST" action="/import-monitoring" enctype="multipart/form-data">
+                <div class="modal-content">
+                    <div class="modal-header py-3">
+                        <h5 class="modal-title" id="exampleModalLabelDefault">Tarik Data Monitoring</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body py-3">
+                        {{ csrf_field() }}
+
+                        <div class="mb-3">
+                            <div>
+                                <label class="form-label d-block text-primary fw-bold">Metode Tarik Data</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="method_type" id="methodRadio1"
+                                        value="periode" checked />
+                                    <label class="form-check-label" for="methodRadio1">Periode</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="method_type" id="methodRadio2"
+                                        value="harian" />
+                                    <label class="form-check-label" for="methodRadio2">Harian</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="periodeContainer">
+                            <div class="mb-3 position-relative form-group">
+                                <label class="form-label text-primary fw-bold">Tahun</label>
+                                <select name="tahun" id="tahunImport" class="form-select select2" required>
+                                    <option value="">Pilih Tahun</option>
+                                    @foreach ($yearsOptions ?? [] as $item)
+                                        <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-3 position-relative form-group">
+                                <label class="form-label text-primary fw-bold">Bulan</label>
+                                <select name="bulan" id="bulanImport" class="form-select select2" required>
+                                    <option value="">Pilih Bulan</option>
+                                    @foreach ($monthsOptions ?? [] as $item)
+                                        <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="d-none" id="harianContainer">
+                            <div class="mb-3 position-relative form-group">
+                                <label class="form-label text-primary fw-bold">Tanggal Tarik Data</label>
+                                <input type="text" id="tanggalImport" class="form-control datepicker" autocomplete="off" name="tanggal" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">Akun Jenis</label>
+                            <select multiple="multiple" name="akun_jenis[]" class="form-select select2"
+                                placeholder="Pilih Akun Jenis">
+                                @foreach ($akunJenisOptions ?? [] as $item)
+                                    <option value="{{ $item['kode_akun'] }}">{{ $item['kode_akun'] }} -
+                                        {{ $item['nama_akun'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                     </div>
                     <div class="modal-footer pt-0 pb-4" style="border-top: none !important">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
@@ -579,8 +728,7 @@
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No. Surat</label>
-                            <input type="text" class="form-control" name="no_surat" id="child_no_surat" required
-                                />
+                            <input type="text" class="form-control" name="no_surat" id="child_no_surat" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -725,7 +873,8 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Pejabat
                                 Penandatangan</label>
-                            <select name="pejabat_penandatangan" id="parent_pejabat_penandatangan" class="form-select" required>
+                            <select name="pejabat_penandatangan" id="parent_pejabat_penandatangan" class="form-select"
+                                required>
                                 <option value="Kuasa BUD">Kuasa BUD</option>
                                 <option value="Plt. Kuasa BUD">Plt. Kuasa BUD</option>
                                 <option value="Plh. Kuasa BUD">Plh. Kuasa BUD</option>
@@ -776,11 +925,11 @@
 
                         </div>
 
-                        <div class="col text-end">
-                            <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                Kegiatan</button>
+                        <!--<div class="col text-end">
+                                                        <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                                            Kegiatan</button>
 
-                        </div>
+                                                    </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
@@ -829,7 +978,8 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Kode
                                 Klasifikasi</label>
-                            <input type="text" class="form-control" id="parent_add_kode_klasifikasi" name="kode_klasifikasi" required />
+                            <input type="text" class="form-control" id="parent_add_kode_klasifikasi"
+                                name="kode_klasifikasi" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -840,13 +990,15 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Tanggal
                                 Surat</label>
-                            <input type="text" class="form-control datepicker" id="parent_add_tanggal_surat" name="tanggal_surat" required />
+                            <input type="text" class="form-control datepicker" id="parent_add_tanggal_surat"
+                                name="tanggal_surat" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Jumlah
                                 Satuan</label>
-                            <input type="text" class="form-control" id="parent_add_jumlah_satuan" name="jumlah_satuan" required />
+                            <input type="text" class="form-control" id="parent_add_jumlah_satuan"
+                                name="jumlah_satuan" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -860,39 +1012,47 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Jenis Naskah
                                 Dinas</label>
-                            <input type="text" class="form-control" id="parent_add_jenis_naskah_dinas" name="jenis_naskah_dinas" required />
+                            <input type="text" class="form-control" id="parent_add_jenis_naskah_dinas"
+                                name="jenis_naskah_dinas" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No.
                                 Surat</label>
-                            <input type="text" class="form-control" id="parent_add_no_surat" name="no_surat" required />
+                            <input type="text" class="form-control" id="parent_add_no_surat" name="no_surat"
+                                required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Pejabat
                                 Penandatangan</label>
-                            <select id="parent_add_pejabat_penandatangan" name="pejabat_penandatangan" class="form-select" required>
-                                <option selected value="PA/KPA">PA/KPA</option>
-                            </select>
+                            <!-- <select id="parent_add_pejabat_penandatangan" name="pejabat_penandatangan"
+                                                        class="form-select" required>
+                                                        <option selected value="PA/KPA">PA/KPA</option>
+                                                    </select> -->
+                            <input type="text" class="form-control" id="parent_add_pejabat_penandatangan"
+                                name="pejabat_penandatangan" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Unit
                                 Pengolah</label>
-                            <input type="text" class="form-control" id="parent_add_unit_pengolah" name="unit_pengolah" required />
+                            <input type="text" class="form-control" id="parent_add_unit_pengolah"
+                                name="unit_pengolah" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Kurun
                                 Waktu</label>
-                            <input type="number" class="form-control" id="parent_add_kurun_waktu" name="kurun_waktu" required />
+                            <input type="number" class="form-control" id="parent_add_kurun_waktu" name="kurun_waktu"
+                                required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No.
                                 Box</label>
-                            <input type="text" class="form-control" id="parent_add_no_box" name="no_box" disabled required />
+                            <input type="text" class="form-control" id="parent_add_no_box" name="no_box" disabled
+                                required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">

@@ -5,8 +5,10 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\DokumenMasukController;
+use App\Http\Controllers\DokumenKeluarController;
 use App\Http\Controllers\DetailDokumenController;
 use App\Http\Controllers\JenisBelanjaController;
 use App\Http\Controllers\RegulasiController;
@@ -23,29 +25,36 @@ use App\Http\Controllers\RegulasiController;
 */
 
 // index routing via Route feature
-Route::redirect('/', '/login');
+Route::redirect('/', '/login')->name('beranda');;
 
 // Auth
-Route::get('register', [RegisterController::class, 'index']);
-Route::post('register', [RegisterController::class, 'store']);
+// Route::get('register', [RegisterController::class, 'index']);
+// Route::post('register', [RegisterController::class, 'store']);
 Route::get('login', [LoginController::class, 'index'])->name('login')->middleware('guest');
-Route::post('login', [LoginController::class, 'authenticate']);
-Route::get('logout', [LoginController::class, 'logout']);
+Route::post('login', [LoginController::class, 'authenticate'])->name('login.authenticate');
+Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::middleware(['auth'])->group(function () {
+Route::group(['middleware' => ['auth', 'permission']], function () {
     // Dashboard
-    Route::view('dashboard', 'dashboards/default');
+    Route::resource('dashboard', HomeController::class);
+    Route::resource('roles', RoleController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     Route::resource('jenis-belanja', JenisBelanjaController::class);
     Route::resource('regulasi', RegulasiController::class);
     Route::resource('data-arsip', DokumenController::class);
     Route::resource('dokumen-masuk', DokumenMasukController::class);
-    Route::post('data-arsip/import-excel', [DokumenController::class, 'import_excel']);
-    Route::get('data-arsip/export-excel/{ext?}', [DokumenController::class, 'export_excel']);
-    Route::get('detail-data-arsip/export-excel/{ext?}', [DetailDokumenController::class, 'export_excel']);
-    Route::post('data-arsip/verifikasi_dokumen', [DokumenController::class, 'verification_document']);
+    Route::get('detail-box/{no_box?}', [DokumenMasukController::class, 'detail_box'])->name('detail-box');
+    Route::resource('dokumen-keluar', DokumenKeluarController::class);
+    Route::post('data-arsip/import-excel', [DokumenController::class, 'import_excel'])->name('data-arsip.import-excel');
+    Route::get('data-arsip/export-excel/{ext?}', [DokumenController::class, 'export_excel'])->name('data-arsip.export-excel');
+    Route::get('detail-data-arsip/export-excel/{ext?}', [DetailDokumenController::class, 'export_excel'])->name('detail-data-arsip.export-excel');
+    Route::post('data-arsip/verifikasi_dokumen', [DokumenController::class, 'verification_document'])->name('data-arsip.verifikasi_dokumen');
     Route::resource('detail-data-arsip', DetailDokumenController::class);
-    Route::get('get-berkas-arsip/{id?}', [DokumenController::class, 'getBerkasArsip']);
-    Route::get('import-monitoring', [DokumenController::class, 'import_monitoring']);
+    Route::get('get-berkas-arsip/{id?}', [DokumenController::class, 'getBerkasArsip'])->name('get-berkas-arsip');
+    Route::post('import-monitoring', [DokumenController::class, 'import_monitoring'])->name('import-monitoring');
+    Route::get('get-no-box/{year?}', [DokumenMasukController::class, 'get_no_box'])->name('get-no-box');
+    Route::post('data-arsip-no-box', [DokumenMasukController::class, 'update_no_box'])->name('data-arsip-no-box');
+    Route::get('generate-barcode', [DokumenMasukController::class, 'generate_barcode'])->name('generate-barcode');
+
 });

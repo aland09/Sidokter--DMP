@@ -71,7 +71,7 @@ class DokumenExport implements FromCollection, WithHeadings, WithCustomStartCell
             'TANGGAL VALIDASI',
             'JUMLAH SATUAN ITEM',
             'KETERANGAN',
-            'NO. SPM',
+            'JENIS BERKAS',
             'NO.SP2D',
             'NOMINAL',
             'PEJABAT PENANDATANGAN',

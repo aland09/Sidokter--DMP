@@ -1,21 +1,25 @@
 @php
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
     $title = 'Tambah Data';
-    $description = 'Halaman Tambah Data User';
-    $breadcrumbs = ['/' => 'Beranda', '/users' => 'Daftar User', '/users/create' => 'Tambah Data'];
+    $description = 'Halaman Tambah Data Pengguna';
+    $breadcrumbs = ['/' => 'Beranda', '/users' => 'Daftar Pengguna', '/users/create' => 'Tambah Data'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 
 @section('css')
+    <link rel="stylesheet" href="/css/vendor/select2.min.css" />
+    <link rel="stylesheet" href="/css/vendor/select2-bootstrap4.min.css" />
 @endsection
 
 @section('js_vendor')
     <script src="/js/cs/scrollspy.js"></script>
     <script src="/js/vendor/jquery.validate/jquery.validate.min.js"></script>
+    <script src="/js/vendor/select2.full.min.js"></script>
 @endsection
 
 @section('js_page')
     <script src="/js/forms/validation.js"></script>
+    <script src="/js/forms/controls.select2.js"></script>
     <script>
         const submitBtn = document.getElementById('submitBtn');
         $(submitBtn).click(function() {
@@ -58,6 +62,11 @@
                         </div>
 
                         <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">Nama Pengguna</label>
+                            <input type="text" class="form-control" name="username" required />
+                        </div>
+
+                        <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Email</label>
                             <input type="email" class="form-control" name="email" required />
                         </div>
@@ -68,18 +77,18 @@
                         </div>
 
                         <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Role</label>
-                            <select name="roles" class="form-select" required>
-                                <option value="">Pilih Role</option>
+                            <label class="form-label text-primary fw-bold">Peran</label>
+                            <select name="roles" class="form-select select2" required>
+                                <option value="">Pilih Peran</option>
                                 @foreach ($rolesList ?? [] as $item)
                                     <option value="{{ $item->name }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
                         </div>
 
-                        
 
-                        
+
+
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
                             <a href="{{ route('users.index') }}" class="btn btn-outline-primary me-md-2">Batal</a>
@@ -109,5 +118,4 @@
             </div>
         </div>
     </div>
-
 @endsection

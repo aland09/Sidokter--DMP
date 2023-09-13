@@ -23,19 +23,74 @@
     <script src="/js/forms/validation.js"></script>
     <script src="/js/forms/controls.datepicker.js"></script>
     <script>
+        var ids = [];
         $('.no-box-check').change(function() {
             const id = $(this).data('id');
-            $('.no-box-check:not(#check-parent_' + id + ')').prop("checked", false);
-            $('.check-child').prop("checked", false);
+            // $('.no-box-check:not(#check-parent_' + id + ')').prop("checked", false);
+            // $('.check-child').prop("checked", false);
             if ($(this).is(":checked")) {
                 $('.no-box-check_' + id).prop("checked", true);
+                $('#btn-barcode').prop('disabled', false);
+                year = $(this).val();
+                $('#kurun_waktu').val(year);
+                $('#dokumen_id').val(id);
+                ids.push(id);
             } else {
+                $('#kurun_waktu').val('');
+                $('#dokumen_id').val('');
                 $('.no-box-check_' + id).prop("checked", false);
+                $('#btn-barcode').prop('disabled', true);
+                const index = ids.indexOf(id);
+                if (index > -1) { // only splice array when item is found
+                    ids.splice(index, 1); // 2nd parameter means remove one item only
+                }
+            }
+
+            $('#dokumen_id').val(ids);
+            console.log('ids', ids);
+        });
+
+        $('#btn-barcode').click(function() {
+            $('#modalFormBarcode').modal('show');
+            const year = $('#kurun_waktu').val();
+            if (year) {
+                $.ajax({
+                    url: '/get-no-box/' + year,
+                    type: "GET",
+                    data: {
+                        "_token": "{{ csrf_token() }}"
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if (data) {
+                            $('#no_box_display').html(data);
+                            $('#no_box').val(data);
+                        } else {
+                            $('#no_box_display').html("Gagal Membuat QR Code");
+                            $('#no_box').val('');
+                        }
+                    }
+                });
+            } else {
+                $('#no_box_display').html("Gagal Membuat QR Code");
+                $('#no_box').val('');
             }
         });
     </script>
 @endsection
 @section('content')
+
+    @if (session()->has('message'))
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 5">
+            <div class="toast bg-success fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header py-2">
+                    <strong class="me-auto text-white">Informasi</strong>
+                    <button type="button" class="btn-close text-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body text-white"> {{ session()->get('message') }}</div>
+            </div>
+        </div>
+    @endif
 
     <div class="container">
         <div class="row">
@@ -49,6 +104,17 @@
                             @include('_layout.breadcrumb', ['breadcrumbs' => $breadcrumbs])
                         </div>
                         <!-- Title End -->
+                        <!-- Top Buttons Start -->
+                        <div class="col-12 col-md-5 d-flex align-items-start justify-content-end gap-3">
+                            <button type="button"
+                                class="btn btn-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0"
+                                id="btn-barcode" disabled>
+                                <i data-acorn-icon="plus"></i>
+                                <span>Buat QR Code No. Box</span>
+                            </button>
+                            <!-- Add New Button End -->
+                        </div>
+                        <!-- Top Buttons End -->
                     </div>
                 </div>
                 <!-- Title and Top Buttons End -->
@@ -58,7 +124,7 @@
                     <div class="row">
                         <!-- Search Start -->
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xxl-4 mb-3">
-                            <form name="seach-form" id="search-form" action="/data-arsip">
+                            <form name="seach-form" id="search-form" action="/dokumen-masuk">
                                 <div
                                     class="d-inline-block float-md-start me-1 mb-1 search-input-container w-100 shadow bg-foreground">
                                     <input class="form-control datatable-search" name="search" placeholder="Pencarian..."
@@ -123,23 +189,31 @@
                             <table class="data-table hover dataTable no-footer">
                                 <thead>
                                     <tr>
-                                        <th class="text-muted text-small text-uppercase">No.</th>
-                                        <th colspan="2" class="text-muted text-small text-uppercase">Kode Klasifikasi
-                                        </th>
-                                        <th class="text-muted text-small text-uppercase">Uraian</th>
-                                        <th class="text-muted text-small text-uppercase">Tanggal Validasi</th>
-                                        <th class="text-muted text-small text-uppercase">Jumlah Satuan Item</th>
-                                        <th class="text-muted text-small text-uppercase">Keterangan</th>
-                                        <th class="text-muted text-small text-uppercase">No. SPM</th>
+                                        <th colspan="2" class="text-muted text-small text-uppercase"
+                                            style="position: sticky;top: 0">
+                                            No.</th>
+                                        <th class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
+                                            Kode Klasifikasi</th>
+                                        <th class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
+                                            Uraian</th>
+                                        <th class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
+                                            Tanggal Validasi</th>
+                                        <th class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
+                                            Jumlah Satuan Item</th>
+                                        <th class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
+                                            Keterangan</th>
                                         <th style="width: 300px !important" class="text-muted text-small text-uppercase">
                                             No. SP2D</th>
                                         <th class="text-muted text-small text-uppercase">Nominal</th>
-                                        <th class="text-muted text-small text-uppercase">SKPD</th>
+                                        <th class="text-muted text-small text-uppercase">Kode Akun Jenis</th>
+                                        <th class="text-muted text-small text-uppercase">Nama Akun Jenis</th>
+                                        <th class="text-muted text-small text-uppercase">SKPD/Unit SKPD</th>
+                                        <th class="text-muted text-small text-uppercase">NWP</th>
                                         <th class="text-muted text-small text-uppercase">Pejabat Penandatangan</th>
                                         <th class="text-muted text-small text-uppercase">Unit Pengolah</th>
                                         <th class="text-muted text-small text-uppercase">Kurun Waktu</th>
                                         <th class="text-muted text-small text-uppercase">Jumlah Satuan Berkas</th>
-                                        <th class="text-muted text-small text-uppercase">Tkt. Perkemb</th>
+                                        <th class="text-muted text-small text-uppercase">Tingkat Perkembangan</th>
                                         <th class="text-muted text-small text-uppercase">No. Box</th>
                                         <th class="text-muted text-small text-uppercase">Status</th>
                                         <th width="10%" class="empty">&nbsp;</th>
@@ -154,72 +228,99 @@
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 <div class="mb-1 ms-3"><input type="checkbox"
                                                         class="form-check-input no-box-check"
+                                                        value="{{ $item->kurun_waktu }}"
                                                         id="check-parent_{{ $item->id }}"
-                                                        data-id="{{ $item->id }}">
+                                                        data-id="{{ $item->id }}"
+                                                        {{ $item->no_box !== null ? ' disabled' : '' }}>
                                                 </div>
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->kode_klasifikasi }}
+                                                {{ $item->kode_klasifikasi ? $item->kode_klasifikasi : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->uraian }}
+                                                {{ $item->uraian ? $item->uraian : '-' }}
+
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->tanggal_validasi }}
+                                                {{ $item->tanggal_validasi ? $item->tanggal_validasi : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->jumlah_satuan_item }}
+                                                {{ $item->jumlah_satuan_item ? $item->jumlah_satuan_item : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->keterangan }}
-                                            </td>
-                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->no_spm }}
+                                                {{ $item->keterangan ? $item->keterangan : '-' }}
                                             </td>
                                             <td style="height: 42px !important;" class="py-2 bg-primary text-white">
-                                                {{ $item->no_sp2d }}
+                                                {{ $item->no_sp2d ? $item->no_sp2d : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->nominal }}
+                                                Rp.<span
+                                                    class="text-primary">__</span>{{ number_format($item->nominal, 0, ',', '.') }},-
+                                            </td>
+                                            <td style="height: 42px !important;" class="py-2 bg-primary text-white">
+                                                {{ $item->akunJenis ? $item->akunJenis->kode_akun : '-' }}
+                                            </td>
+                                            <td style="height: 42px !important;" class="py-2 bg-primary text-white">
+                                                {{ $item->akunJenis ? $item->akunJenis->nama_akun : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->skpd }}
+                                                {{ $item->skpd ? $item->skpd : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->pejabat_penandatangan }}
+                                                {{ $item->nwp ? $item->nwp : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->unit_pengolah }}
+                                                {{ $item->pejabat_penandatangan ? $item->pejabat_penandatangan : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->kurun_waktu }}
+                                                {{ $item->unit_pengolah ? $item->unit_pengolah : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->jumlah_satuan_berkas }}
+                                                {{ $item->kurun_waktu ? $item->kurun_waktu : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->tkt_perkemb }}
+                                                {{ $item->jumlah_satuan_berkas ? $item->jumlah_satuan_berkas : '-' }}
+                                                Berkas
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->no_box }}
+                                                {{ $item->tkt_perkemb ? $item->tkt_perkemb : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                {{ $item->status }}
+                                                {{ $item->no_box ? $item->no_box : '-' }}
+                                            </td>
+                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
+                                                {{ $item->status ? $item->status : '-' }}
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                    <a href="#"
-                                                        class="btn btn-icon btn-icon-only btn-sm btn-outline-info"
+
+                                                    @if ($item->no_box)
+                                                        <a download="{{ $item->no_box }}.png"
+                                                            href="data:image/png;base64,{{ DNS2D::getBarcodePNG(url('/detail-box', Str::replace('/', '_', $item->no_box)), 'QRCODE', 200, 200) }}"
+                                                            target="_blank">
+                                                            <div class="bg-white p-1 rounded-sm" style="height: 30px">
+                                                                {!! '<img class="mb-3" src="data:image/png;base64,' .
+                                                                    DNS2D::getBarcodePNG($item->no_box, 'QRCODE', 1, 1) .
+                                                                    '" alt="' .
+                                                                    $item->no_box .
+                                                                    '"   />' !!}
+                                                            </div>
+                                                        </a>
+                                                    @endif
+
+
+
+                                                    <a href="{{ route('dokumen-masuk.show', $item->id) }}"
+                                                        class="btn btn-icon btn-icon-only btn-sm btn-outline-secondary"
                                                         type="button">
-                                                        <i data-acorn-icon="eye"></i>
+                                                        <i data-acorn-icon="info-circle"></i>
                                                     </a>
                                                 </div>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th class="text-muted text-small text-uppercase">No.</th>
-                                            <th colspan="2" class="text-muted text-small text-uppercase">Kode
-                                                Klasifikasi</th>
+                                            <th class="text-muted text-small text-uppercase">Kode Klasifikasi</th>
                                             <th class="text-muted text-small text-uppercase">Uraian</th>
                                             <th class="text-muted text-small text-uppercase">Tanggal Surat</th>
                                             <th class="text-muted text-small text-uppercase">Jumlah Satuan</th>
@@ -232,8 +333,9 @@
                                             <th class="text-muted text-small text-uppercase">Unit Pengolah</th>
                                             <th class="text-muted text-small text-uppercase">Kurun Waktu</th>
                                             <th class="text-muted text-small text-uppercase">No. Box</th>
-                                            <th class="text-muted text-small text-uppercase">Tkt. Perk.</th>
-                                            <th colspan="5" width="10%" class="empty">&nbsp;</th>
+                                            <th colspan="7" class="text-muted text-small text-uppercase">Tingkat
+                                                Perkembangan</th>
+                                            <th width="10%" class="empty">&nbsp;</th>
                                         </tr>
                                         @foreach ($item->detailDokumen ?? [] as $subitem)
                                             <tr id="tabel_{{ $item->id }}_{{ $subitem->id }}">
@@ -245,48 +347,48 @@
                                                     </div>
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->kode_klasifikasi }}
+                                                    {{ $subitem->kode_klasifikasi ? $subitem->kode_klasifikasi : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->uraian }}
+                                                    {{ $subitem->uraian ? $subitem->uraian : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->tanggal_surat }}
+                                                    {{ $subitem->tanggal_surat ? $subitem->tanggal_surat : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->jumlah_satuan }}
+                                                    {{ $subitem->jumlah_satuan ? $subitem->jumlah_satuan : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->keterangan }}
+                                                    {{ $subitem->keterangan ? $subitem->keterangan : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->jenis_naskah_dinas }}
+                                                    {{ $subitem->jenis_naskah_dinas ? $subitem->jenis_naskah_dinas : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important;" class="py-2">
-                                                    {{ $subitem->no_surat }}
+                                                    {{ $subitem->no_surat ? $subitem->no_surat : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->pejabat_penandatangan }}
+                                                    {{ $subitem->pejabat_penandatangan ? $subitem->pejabat_penandatangan : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->unit_pengolah }}
+                                                    {{ $subitem->unit_pengolah ? $subitem->unit_pengolah : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->kurun_waktu }}
+                                                    {{ $subitem->kurun_waktu ? $subitem->kurun_waktu : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->no_box }}
+                                                    {{ $subitem->no_box ? $subitem->no_box : '-' }}
                                                 </td>
-                                                <td style="height: 42px !important" class="py-2">
-                                                    {{ $subitem->tkt_perk }}
+                                                <td colspan="7" style="height: 42px !important" class="py-2">
+                                                    {{ $subitem->tkt_perk ? $subitem->tkt_perk : '-' }}
                                                 </td>
                                                 <td colspan="5" style="height: 42px !important" class="py-2">
                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                        <a href="#"
+                                                        {{-- <a href="#"
                                                             class="btn btn-icon btn-icon-only btn-sm btn-outline-info"
                                                             type="button">
                                                             <i data-acorn-icon="eye"></i>
-                                                        </a>
+                                                        </a> --}}
                                                     </div>
                                                 </td>
                                             </tr>
@@ -310,6 +412,37 @@
                 </div>
                 <!-- Content End -->
             </div>
+        </div>
+    </div>
+
+    <!-- Modal Import -->
+    <div class="modal fade" id="modalFormBarcode" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="POST" action="/data-arsip-no-box" enctype="multipart/form-data">
+                <div class="modal-content">
+                    <div class="modal-header py-3">
+                        <h5 class="modal-title" id="exampleModalLabelDefault">Buat QR Code No. Box</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex flex-column align-items-center justify-content-center text-center py-3">
+                        {{ csrf_field() }}
+                        {!! '<img class="mb-3" src="data:image/png;base64,' .
+                            DNS2D::getBarcodePNG(url('/detail-box', Str::replace('/', '_', $no_box_tmp)), 'QRCODE', 12, 12) .
+                            '" alt="' .
+                            $no_box_tmp .
+                            '"   />' !!}
+                        <div class="form-label text-primary fw-bold" id="no_box_display">Mohon Tunggu...</div>
+                        <input type="hidden" name="id[]" id="dokumen_id">
+                        <input type="hidden" name="kurun_waktu" id="kurun_waktu">
+
+                    </div>
+                    <div class="modal-footer pt-3 pb-3">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 

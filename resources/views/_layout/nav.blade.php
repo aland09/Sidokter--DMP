@@ -199,17 +199,17 @@
             <li>
                 <a href="#userManagementMenu">
                     <i data-acorn-icon="user" class="icon" data-acorn-size="18"></i>
-                    <span class="label">Manajemen User</span>
+                    <span class="label">Manajemen Pengguna</span>
                 </a>
                 <ul id="userManagementMenu">
                     <li>
                         <a href="/roles">
-                            <span class="label">Daftar Roles</span>
+                            <span class="label">Daftar Peran</span>
                         </a>
                     </li>
                     <li>
                         <a href="/users">
-                            <span class="label">Daftar User</span>
+                            <span class="label">Daftar Pengguna</span>
                         </a>
                     </li>
                 </ul>

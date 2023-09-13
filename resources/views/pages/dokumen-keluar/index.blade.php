@@ -1,27 +1,27 @@
 @php
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
-    $title = 'Daftar Pengguna';
-    $description = 'Halaman Daftar Pengguna';
-    $breadcrumbs = ['/' => 'Beranda', '/users' => 'Daftar Pengguna'];
+    $title = 'Dokumen Keluar';
+    $description = 'Halaman Dokumen Keluar';
+    $breadcrumbs = ['/' => 'Beranda', '/dokumen-keluar' => 'Dokumen Keluar'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 @section('css')
     <link rel="stylesheet" href="/css/vendor/datatables.min.css" />
+    <link rel="stylesheet" href="/css/vendor/bootstrap-datepicker3.standalone.min.css" />
 @endsection
 @section('js_vendor')
     <script src="/js/vendor/bootstrap-submenu.js"></script>
     <script src="/js/vendor/datatables.min.js"></script>
     <script src="/js/vendor/mousetrap.min.js"></script>
+    <script src="/js/cs/scrollspy.js"></script>
+    <script src="/js/vendor/jquery.validate/jquery.validate.min.js"></script>
+    <script src="/js/vendor/datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="/js/vendor/datepicker/locales/bootstrap-datepicker.es.min.js"></script>
 @endsection
 @section('js_page')
     <script src="/js/base/pagination.js"></script>
-    <script>
-        const submitBtn = document.getElementById('submitBtn');
-        $(submitBtn).click(function() {
-            $('#modalDialog').modal('hide');
-            $('#delete-form').submit();
-        });
-    </script>
+    <script src="/js/forms/validation.js"></script>
+    <script src="/js/forms/controls.datepicker.js"></script>
 @endsection
 @section('content')
 
@@ -50,10 +50,9 @@
                         </div>
                         <!-- Title End -->
                         <!-- Top Buttons Start -->
-                        <div class="col-12 col-md-5 d-flex align-items-start justify-content-end">
-                            <!-- Add New Button Start -->
-                            <a href="{{ route('users.create') }}"
-                                class="btn btn-outline-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0">
+                        <div class="col-12 col-md-5 d-flex align-items-start justify-content-end gap-3">
+                            <a href="{{ route('dokumen-keluar.create') }}"
+                                class="btn btn-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0">
                                 <i data-acorn-icon="plus"></i>
                                 <span>Tambah Data</span>
                             </a>
@@ -69,7 +68,7 @@
                     <div class="row">
                         <!-- Search Start -->
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xxl-4 mb-3">
-                            <form name="seach-form" id="search-form" action="/users">
+                            <form name="seach-form" id="search-form" action="/dokumen-keluar">
                                 <div
                                     class="d-inline-block float-md-start me-1 mb-1 search-input-container w-100 shadow bg-foreground">
                                     <input class="form-control datatable-search" name="search" placeholder="Pencarian..."
@@ -129,51 +128,52 @@
                     </div>
                     <!-- Controls End -->
                     <!-- Table Start -->
-                    @if ($users->count() > 0)
+                    @if ($dokumen->count() > 0)
                         <div class="data-table-responsive-wrapper">
                             <table class="data-table hover dataTable no-footer">
                                 <thead>
                                     <tr>
-                                        <th class="text-muted text-small text-uppercase">No.</th>
-                                        <th width="40%" class="text-muted text-small text-uppercase">Nama</th>
-                                        <th width="25%" class="text-muted text-small text-uppercase">Email</th>
-                                        <th width="25%" class="text-muted text-small text-uppercase">Peran</th>
-                                        <th width="10%" class="empty">&nbsp;</th>
+                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">No</th>
+                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">Nama Peminjam</th>
+                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">Hari/ Tanggal</td>
+                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">Instansi</th>
+                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">Tujuan</th>
+                                        <th class="text-muted text-small text-uppercase text-center" colspan="3">
+                                            Dokumen</th>
+                                        <th width="10%" class="empty" rowspan="2"></th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-muted text-small text-uppercase text-center">Tahun</th>
+                                        <th class="text-muted text-small text-uppercase text-center">No. SP2D</th>
+                                        <th class="text-muted text-small text-uppercase text-center">Uraian</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($users ?? [] as $item)
+                                    @foreach ($dokumen ?? [] as $item)
                                         <tr>
                                             <td style="height: 42px !important" class="py-2">{{ $loop->index + 1 }}.
                                             </td>
-                                            <td style="height: 42px !important" class="py-2">{{ $item->name }}</td>
-                                            <td style="height: 42px !important" class="py-2">{{ $item->email }}</td>
                                             <td style="height: 42px !important" class="py-2">
-                                                @foreach ($item->roles as $role)
-                                                    {{ $role->name }}
-                                                @endforeach
-                                            </td>
+                                                {{ $item->nama_peminjam ? $item->nama_peminjam : '-' }}</td>
+                                            <td style="height: 42px !important" class="py-2">
+                                                {{ $item->tanggal_peminjaman ? $item->tanggal_peminjaman : '-' }}</td>
+                                            <td style="height: 42px !important" class="py-2">
+                                                {{ $item->instansi ? $item->instansi : '-' }}</td>
+                                            <td style="height: 42px !important" class="py-2">
+                                                {{ $item->tujuan ? $item->tujuan : '-' }}</td>
+                                            <td style="height: 42px !important" class="py-2">
+                                                {{ $item->dokumen->kurun_waktu ? $item->dokumen->kurun_waktu : '-' }}</td>
+                                            <td style="height: 42px !important" class="py-2">
+                                                {{ $item->dokumen->no_sp2d ? $item->dokumen->no_sp2d : '-' }}</td>
+                                            <td style="height: 42px !important" class="py-2">
+                                                {{ $item->dokumen->uraian ? $item->dokumen->uraian : '-' }}</td>
                                             <td style="height: 42px !important" class="py-2">
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                    <a href="{{ route('users.edit', $item->id) }}"
-                                                        class="btn btn-icon btn-icon-only btn-sm btn-outline-warning"
+                                                    <a href="{{ route('dokumen-keluar.show', $item->id) }}"
+                                                        class="btn btn-icon btn-icon-only btn-sm btn-info"
                                                         type="button">
-                                                        <i data-acorn-icon="edit"></i>
+                                                        <i data-acorn-icon="info-circle"></i>
                                                     </a>
-                                                    <form id="delete-form" action="/users/{{ $item->id }}"
-                                                        method="POST" class="d-inline">
-                                                        @method('delete')
-                                                        @csrf
-                                                        <button type="button" id="confirmBtn"
-                                                            class="btn btn-icon btn-icon-only btn-sm btn-outline-danger"
-                                                            data-bs-toggle="modal" data-bs-target="#modalDialog"><i
-                                                                data-acorn-icon="bin"></i></button>
-
-                                                        {{-- <button
-                                                            class="btn btn-icon btn-icon-only btn-sm btn-outline-danger"
-                                                            onclick="return confirm('are you sure?')"><i
-                                                                data-acorn-icon="bin"></i></button> --}}
-                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>
@@ -184,7 +184,7 @@
                         <!-- Table End -->
 
                         <div class="d-flex flex-row justify-content-center mt-5">
-                            {{ $users->links() }}
+                            {{ $dokumen->links() }}
                         </div>
                     @else
                         <div class="d-flex align-items-center justify-content-center mt-5" style="height: 60vh">
@@ -195,22 +195,6 @@
                     @endif
                 </div>
                 <!-- Content End -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="modalDialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header pt-4 pb-3" style="border-bottom: none !important">
-                    <h5 class="modal-title" id="staticBackdropLabel">Hapus Data?</h5>
-                </div>
-                <div class="modal-footer pt-0 pb-4" style="border-top: none !important">
-                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" id="submitBtn" class="btn btn-primary">Ya</button>
-                </div>
             </div>
         </div>
     </div>

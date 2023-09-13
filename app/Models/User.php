@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
     ];
@@ -32,6 +33,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    
 
     /**
      * The attributes that should be cast to native types.
@@ -46,6 +48,7 @@ class User extends Authenticatable
     {
         $query->when($filters['search'] ?? false, function ($query, $search) {
             return $query->where('name', 'like', '%' .  $search . '%')
+                            ->orWhere('username', 'like', '%' .  $search . '%')
                             ->orWhere('email', 'like', '%' .  $search . '%');
         });
     }

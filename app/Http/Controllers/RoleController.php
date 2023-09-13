@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
@@ -12,6 +13,11 @@ class RoleController extends Controller
     *
     * @return \Illuminate\Http\Response
     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         $itemsPerPage = request('items') ?? 10;
@@ -35,7 +41,11 @@ class RoleController extends Controller
     */
     public function create()
     {
-        return view('pages/roles/create');
+        $permissions = Permission::get();
+        return view("pages/roles/create", [
+            "title"             => "Data Peran",
+            "permissionsList"   => $permissions,
+        ]);
     }
 
     /**
@@ -46,14 +56,20 @@ class RoleController extends Controller
     */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'guard_name' => 'required'
+        $this->validate($request, [
+            'name' => 'required|unique:roles,name',
+            'permission' => 'required',
         ]);
-        
-        Role::create($request->post());
 
-        return redirect()->route('roles.index')->with('message','Role user berhasil ditambahkan.');
+        $role = Role::create(['name' => $request->get('name')]);
+        $role->syncPermissions($request->get('permission'));
+
+        activity()
+            ->performedOn($role)
+            ->event('created')
+            ->log('telah melakukan <strong>penambahan data peran</strong> pada sistem');
+
+        return redirect()->route('roles.index')->with('message','Peran pengguna berhasil ditambahkan.');
     }
 
     /**
@@ -75,8 +91,13 @@ class RoleController extends Controller
     */
     public function edit(Role $role)
     {
+        $rolePermissions = $role->permissions->pluck('name')->toArray();
+        $permissions = Permission::get();
+
         return view('pages/roles/edit', [
             'roles' => $role,
+            'rolePermissions' => $rolePermissions,
+            'permissionsList' => $permissions,
         ]);
     }
 
@@ -89,16 +110,21 @@ class RoleController extends Controller
     */
     public function update(Request $request, Role $role)
     {
-        $rules = [
-            'name' => 'required|max:255',
-            'guard_name' => 'required|max:255',
-        ];
-         
-        $validatedData = $request->validate($rules);
-         
-        Role::where('id', $role->id)->update($validatedData);
+        $this->validate($request, [
+            'name' => 'required',
+            'permission' => 'required',
+        ]);
 
-        return redirect()->route('roles.index')->with('message','Role user berhasil diperbaharui');
+        $role->update($request->only('name'));
+
+        $role->syncPermissions($request->get('permission'));
+
+        activity()
+            ->performedOn($role)
+            ->event('updated')
+            ->log('telah melakukan <strong>pengeditan data peran</strong> pada sistem');
+
+        return redirect()->route('roles.index')->with('message','Peran pengguna berhasil diperbaharui');
     }
 
     /**
@@ -110,6 +136,12 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         Role::destroy($role->id);
-        return redirect()->route('roles.index')->with('message','Role user berhasil dihapus');
+
+        activity()
+            ->performedOn($role)
+            ->event('deleted')
+            ->log('telah melakukan <strong>penghapusan data peran</strong> pada sistem');
+
+        return redirect()->route('roles.index')->with('message','Peran pengguna berhasil dihapus');
     }
 }

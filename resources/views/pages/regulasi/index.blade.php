@@ -157,7 +157,7 @@
                                             <td style="height: 42px !important" class="py-2">{{ $loop->index + 1 }}.</td>
                                             <td style="height: 42px !important" class="py-2">{{ $item->name }}</td>
                                             @if($item->file_regulasi)
-                                            <td style="height: 42px !important" id="file_dokumen_append" class="py-2">{{ $item->file_regulasi }}    <a href="{{  $item->file_regulasi }}" target="_blank"
+                                            <td style="height: 42px !important" id="file_dokumen_append" class="py-2">  <!-- {{ $item->file_regulasi }} -->    <a href="{{  asset('storage/' . $item->file_regulasi) }}" target="_blank"
                                             class="btn btn-secondary">Lihat Dokumen</a> </td>
                                             @endif
                                             <td style="height: 42px !important" class="py-2">

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Regulasi;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreRegulasiRequest;
 use App\Http\Requests\UpdateRegulasiRequest;
+use Illuminate\Support\Facades\Storage;
 
 class RegulasiController extends Controller
 {
@@ -37,24 +39,33 @@ class RegulasiController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreRegulasiRequest  $request
+     * @param  Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreRegulasiRequest $request)
     {
         $data = $request->except(['_token']);
 
-        if ($request->hasFile('file_regulasi')){
-            $filenameWithExt = $request->file('file_regulasi')->getClientOriginalName();
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            $extension = $request->file('file_regulasi')->getClientOriginalExtension();
-            $filenameSimpan = $filename.'_'.time().'.'.$extension;
-            $path = $request->file('file_regulasi')->storeAs('public/dokumen_regulasi', $filenameSimpan);
-            $data['file_regulasi'] = $path;
-        }
+        // if ($request->hasFile('file_regulasi')){
+        $filenameWithExt = $request->file('file_regulasi')->getClientOriginalName();
+        $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+        $extension = $request->file('file_regulasi')->getClientOriginalExtension();
+        $filenameSimpan = $filename.'_'.time().'.'.$extension;
+        $path = $request->file('file_regulasi')->storeAs('public/dokumen_regulasi', $filenameSimpan);
+        //     $data['file_regulasi'] = $path;
+        // }
 
-        Regulasi::create($data);
-        return redirect()->route('regulasi.index')->with('message','Dataa Regulasi Berhasil Dibuat');
+        $data['file_regulasi'] = 'dokumen_regulasi/' . $filenameSimpan;
+        // dd($data);
+
+        $regulasi = Regulasi::create($data);
+
+        activity()
+            ->performedOn($regulasi)
+            ->event('created')
+            ->log('telah melakukan <strong>penambahan data regulasi</strong> pada sistem');
+
+        return redirect()->route('regulasi.index')->with('message','Data Regulasi Berhasil Dibuat');
     }
 
     /**
@@ -101,6 +112,11 @@ class RegulasiController extends Controller
 
         Regulasi::where('id', $regulasi->id)->update($data);
 
+        activity()
+            ->performedOn($regulasi)
+            ->event('updated')
+            ->log('telah melakukan <strong>pengeditan data regulasi</strong> pada sistem');
+
         return redirect()->route('regulasi.index')->with('message','Data regulasi berhasil diperbaharui');
     }
 
@@ -113,6 +129,12 @@ class RegulasiController extends Controller
     public function destroy(Regulasi $regulasi)
     {
         Regulasi::destroy($regulasi->id);
+
+        activity()
+            ->performedOn($regulasi)
+            ->event('deleted')
+            ->log('telah melakukan <strong>penghapusan data regulasi</strong> pada sistem');
+
         return redirect()->route('regulasi.index')->with('message', 'Data regulasi berhasil dihapus');
     }
 }
