@@ -57,6 +57,25 @@
             $(".modal-body #form_verifikasi_status").val(form_verifikasi_status);
         });
 
+        $("input[name='method_type']:radio").click(function() {
+            const val = $(this).val();
+            if (val === 'harian') {
+                $("#harianContainer").addClass("d-block");
+                $("#periodeContainer").addClass("d-none");
+                $("#harianContainer").removeClass("d-none");
+                $('#tahunImport').prop('required',false);
+                $('#bulanImport').prop('required',false);
+                $('#tanggalImport').prop('required',true);
+            } else {
+                $("#periodeContainer").addClass("d-block");
+                $("#harianContainer").addClass("d-none");
+                $("#periodeContainer").removeClass("d-none");
+                $('#tahunImport').prop('required',true);
+                $('#bulanImport').prop('required',true);
+                $('#tanggalImport').prop('required',false);
+            }
+        });
+
         const submitBtnHapus = document.getElementById('submitBtnHapus');
         $(submitBtnHapus).click(function() {
             const formId = '#' + $(".modal-body #form_hapus_id").val();
@@ -235,11 +254,11 @@
                                 <button class="dropdown-item" type="button" data-bs-toggle="modal"
                                     data-bs-target="#modalTarikData">Tarik Data Monitoring</button>
                             </div>
-                            <a href="{{ route('data-arsip.create') }}"
+                            {{-- <a href="{{ route('data-arsip.create') }}"
                                 class="btn btn-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0">
                                 <i data-acorn-icon="plus"></i>
                                 <span>Tambah Data</span>
-                            </a>
+                            </a> --}}
                             <!-- Add New Button End -->
                         </div>
                         <!-- Top Buttons End -->
@@ -587,24 +606,50 @@
                     </div>
                     <div class="modal-body py-3">
                         {{ csrf_field() }}
-                        <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Tahun</label>
-                            <select name="tahun" class="form-select select2" required>
-                                <option value="">Pilih Tahun</option>
-                                @foreach ($yearsOptions ?? [] as $item)
-                                    <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
-                                @endforeach
-                            </select>
+
+                        <div class="mb-3">
+                            <div>
+                                <label class="form-label d-block text-primary fw-bold">Metode Tarik Data</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="method_type" id="methodRadio1"
+                                        value="periode" checked />
+                                    <label class="form-check-label" for="methodRadio1">Periode</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="method_type" id="methodRadio2"
+                                        value="harian" />
+                                    <label class="form-check-label" for="methodRadio2">Harian</label>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Bulan</label>
-                            <select name="bulan" class="form-select select2" required>
-                                <option value="">Pilih Bulan</option>
-                                @foreach ($monthsOptions ?? [] as $item)
-                                    <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
-                                @endforeach
-                            </select>
+                        <div id="periodeContainer">
+                            <div class="mb-3 position-relative form-group">
+                                <label class="form-label text-primary fw-bold">Tahun</label>
+                                <select name="tahun" id="tahunImport" class="form-select select2" required>
+                                    <option value="">Pilih Tahun</option>
+                                    @foreach ($yearsOptions ?? [] as $item)
+                                        <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-3 position-relative form-group">
+                                <label class="form-label text-primary fw-bold">Bulan</label>
+                                <select name="bulan" id="bulanImport" class="form-select select2" required>
+                                    <option value="">Pilih Bulan</option>
+                                    @foreach ($monthsOptions ?? [] as $item)
+                                        <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="d-none" id="harianContainer">
+                            <div class="mb-3 position-relative form-group">
+                                <label class="form-label text-primary fw-bold">Tanggal Tarik Data</label>
+                                <input type="text" id="tanggalImport" class="form-control datepicker" autocomplete="off" name="tanggal" />
+                            </div>
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -881,10 +926,10 @@
                         </div>
 
                         <!--<div class="col text-end">
-                                            <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                                Kegiatan</button>
+                                                        <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                                            Kegiatan</button>
 
-                                        </div>-->
+                                                    </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
@@ -982,9 +1027,9 @@
                             <label class="form-label text-primary fw-bold">Pejabat
                                 Penandatangan</label>
                             <!-- <select id="parent_add_pejabat_penandatangan" name="pejabat_penandatangan"
-                                            class="form-select" required>
-                                            <option selected value="PA/KPA">PA/KPA</option>
-                                        </select> -->
+                                                        class="form-select" required>
+                                                        <option selected value="PA/KPA">PA/KPA</option>
+                                                    </select> -->
                             <input type="text" class="form-control" id="parent_add_pejabat_penandatangan"
                                 name="pejabat_penandatangan" required />
                         </div>
