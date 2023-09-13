@@ -63,6 +63,11 @@
                         </div>
 
                         <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">Nama Pengguna</label>
+                            <input type="text" class="form-control" name="username" value="{{$users->username}}" required />
+                        </div>
+
+                        <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Email</label>
                             <input type="email" class="form-control" name="email" value="{{$users->email}}" required />
                         </div>

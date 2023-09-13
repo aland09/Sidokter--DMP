@@ -44,6 +44,7 @@ Route::group(['middleware' => ['auth', 'permission']], function () {
     Route::resource('regulasi', RegulasiController::class);
     Route::resource('data-arsip', DokumenController::class);
     Route::resource('dokumen-masuk', DokumenMasukController::class);
+    Route::get('detail-box/{no_box?}', [DokumenMasukController::class, 'detail_box'])->name('detail-box');
     Route::resource('dokumen-keluar', DokumenKeluarController::class);
     Route::post('data-arsip/import-excel', [DokumenController::class, 'import_excel'])->name('data-arsip.import-excel');
     Route::get('data-arsip/export-excel/{ext?}', [DokumenController::class, 'export_excel'])->name('data-arsip.export-excel');
@@ -54,5 +55,6 @@ Route::group(['middleware' => ['auth', 'permission']], function () {
     Route::post('import-monitoring', [DokumenController::class, 'import_monitoring'])->name('import-monitoring');
     Route::get('get-no-box/{year?}', [DokumenMasukController::class, 'get_no_box'])->name('get-no-box');
     Route::post('data-arsip-no-box', [DokumenMasukController::class, 'update_no_box'])->name('data-arsip-no-box');
+    Route::get('generate-barcode', [DokumenMasukController::class, 'generate_barcode'])->name('generate-barcode');
 
 });
