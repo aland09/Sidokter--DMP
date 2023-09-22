@@ -10,6 +10,13 @@
     <link rel="stylesheet" href="/css/vendor/bootstrap-datepicker3.standalone.min.css" />
     <link rel="stylesheet" href="/css/vendor/select2.min.css" />
     <link rel="stylesheet" href="/css/vendor/select2-bootstrap4.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .text-sortable a,
+        .text-sortable a:hover {
+            color: #afafaf !important;
+        }
+    </style>
 @endsection
 @section('js_vendor')
     <script src="/js/vendor/bootstrap-submenu.js"></script>
@@ -338,32 +345,32 @@
                             <table class="data-table hover dataTable no-footer">
                                 <thead style="position: sticky;top: 0">
                                     <tr>
-                                        <th class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
-                                            No.</th>
-                                        <th class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
-                                            Kode Klasifikasi</th>
-                                        <th class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
-                                            Uraian</th>
-                                        <th class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
-                                            Tanggal Validasi</th>
-                                        <th class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
-                                            Jumlah Satuan Item</th>
-                                        <th class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
-                                            Keterangan</th>
-                                        <th style="width: 300px !important" class="text-muted text-small text-uppercase">
-                                            No. SP2D</th>
-                                        <th class="text-muted text-small text-uppercase">Nominal</th>
-                                        <th class="text-muted text-small text-uppercase">Kode Akun Jenis</th>
-                                        <th class="text-muted text-small text-uppercase">Nama Akun Jenis</th>
-                                        <th class="text-muted text-small text-uppercase">SKPD/Unit SKPD</th>
-                                        <th class="text-muted text-small text-uppercase">NWP</th>
-                                        <th class="text-muted text-small text-uppercase">Pejabat Penandatangan</th>
-                                        <th class="text-muted text-small text-uppercase">Unit Pengolah</th>
-                                        <th class="text-muted text-small text-uppercase">Kurun Waktu</th>
-                                        <th class="text-muted text-small text-uppercase">Jumlah Satuan Berkas</th>
-                                        <th class="text-muted text-small text-uppercase">Tingkat Perkembangan</th>
-                                        <th class="text-muted text-small text-uppercase">No. Box</th>
-                                        <th class="text-muted text-small text-uppercase">Status</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable" style="position: sticky;top: 0">
+                                            @sortablelink('id', 'No.')</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable" style="position: sticky;top: 0;">
+                                            @sortablelink('kode_klasifikasi', 'Kode Klasifikasi')</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable" style="position: sticky;top: 0">
+                                            @sortablelink('uraian', 'Uraian')</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable" style="position: sticky;top: 0">
+                                            @sortablelink('tanggal_validasi', 'Tanggal Validasi')</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable" style="position: sticky;top: 0">
+                                            @sortablelink('jumlah_satuan_item', 'Jumlah Satuan Item')</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable" style="position: sticky;top: 0">
+                                            @sortablelink('keterangan', 'Keterangan')</th>
+                                        <th style="width: 300px !important" class="text-muted text-small text-uppercase text-sortable">
+                                            @sortablelink('no_sp2d', 'No. SP2D')</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable">@sortablelink('nominal', 'Nominal')</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable">@sortablelink('akun_jenis_id', 'Kode Akun Jenis')</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable">@sortablelink('akun_jenis_id', 'Nama Akun Jenis')</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable">@sortablelink('skpd', 'SKPD/Unit SKPD')</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable">@sortablelink('nwp', 'NWP')</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable">@sortablelink('pejabat_penandatangan', 'Pejabat Penandatangan')</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable">@sortablelink('unit_pengolah', 'Unit Pengolah')</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable">@sortablelink('kurun_waktu', 'Kurun Waktu')</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable">@sortablelink('jumlah_satuan_berkas', 'Jumlah Satuan Berkas')</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable">@sortablelink('tkt_perkemb', 'Tingkat Perkembangan')</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable">@sortablelink('no_box', 'No. Box')</th>
+                                        <th class="text-muted text-small text-uppercase text-sortable">@sortablelink('status', 'Status')</th>
                                         <th width="10%" class="empty">&nbsp;</th>
                                     </tr>
                                 </thead>

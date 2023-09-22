@@ -40,6 +40,7 @@ class DokumenController extends Controller
                     ->filter(request(['search']))
                     ->orderBy('tanggal_validasi', 'DESC')
                     ->where('status', '=', 'Menunggu Verifikasi')
+                    ->sortable()
                     ->paginate($itemsPerPage)
                     ->withQueryString();
 
