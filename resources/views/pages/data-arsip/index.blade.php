@@ -29,160 +29,165 @@
     <script src="/js/vendor/select2.full.min.js"></script>
 @endsection
 @section('js_page')
-    <script src="/js/base/pagination.js"></script>
     <script src="/js/forms/validation.js"></script>
     <script src="/js/forms/controls.datepicker.js"></script>
     <script src="/js/forms/controls.select2.js"></script>
     <script>
         const submitBtnEditChild = document.getElementById('submitBtnEditChild');
-        $(submitBtnEditChild).click(function() {
-            $('#modalEditChild').modal('hide');
-            $('#form_edit_child').submit();
-        });
-
-        const submitBtnEditParent = document.getElementById('submitBtnEditParent');
-        $(submitBtnEditParent).click(function() {
-            $('#modalEditParent').modal('hide');
-            $('#form_edit_parent').submit();
-        });
-
-        const submitBtnAddParent = document.getElementById('submitBtnAddParent');
-        $(submitBtnAddParent).click(function() {
-            $('#modalAddParent').modal('hide');
-            $('#form_add_parent').submit();
-        });
-
-        $(document).on("click", ".modal-hapus", function() {
-            var form_hapus_id = $(this).data('id');
-            $(".modal-body #form_hapus_id").val(form_hapus_id);
-        });
-
-        $(document).on("click", ".modal-verifikasi", function() {
-            var form_verifikasi_id = $(this).data('id');
-            var form_verifikasi_status = $(this).data('status');
-            $(".modal-body #form_verifikasi_id").val(form_verifikasi_id);
-            $(".modal-body #form_verifikasi_status").val(form_verifikasi_status);
-        });
-
-        $("input[name='method_type']:radio").click(function() {
-            const val = $(this).val();
-            if (val === 'harian') {
-                $("#harianContainer").addClass("d-block");
-                $("#periodeContainer").addClass("d-none");
-                $("#harianContainer").removeClass("d-none");
-                $('#tahunImport').prop('required', false);
-                $('#bulanImport').prop('required', false);
-                $('#tanggalImport').prop('required', true);
-            } else {
-                $("#periodeContainer").addClass("d-block");
-                $("#harianContainer").addClass("d-none");
-                $("#periodeContainer").removeClass("d-none");
-                $('#tahunImport').prop('required', true);
-                $('#bulanImport').prop('required', true);
-                $('#tanggalImport').prop('required', false);
-            }
-        });
-
-        const submitBtnHapus = document.getElementById('submitBtnHapus');
-        $(submitBtnHapus).click(function() {
-            const formId = '#' + $(".modal-body #form_hapus_id").val();
-            $('#modalHapus').modal('hide');
-            $(formId).submit();
-        });
-
-        $(document).on('click', '.btn-edit-child', function() {
-            const item = $(this).data('item');
-            const subitem = $(this).data('subitem');
-            const index = $(this).data('index');
-            var disable = true;
+        var pages = 0;
+        var keyword = '';
+        var items = 10;
 
 
+        $(document).ready(function() {
+            $(submitBtnEditChild).click(function() {
+                $('#modalEditChild').modal('hide');
+                $('#form_edit_child').submit();
+            });
 
-            if (index > 3) {
-                disable = false;
-            }
-            // TRIGER PROP INPUT
-            $(".modal-body #child_kode_klasifikasi").prop("disabled", disable);
-            $(".modal-body #child_jumlah_satuan").prop("disabled", disable);
-            $(".modal-body #child_keterangan").prop("disabled", disable);
-            $(".modal-body #child_jenis_naskah_dinas").prop("disabled", disable);
-            $(".modal-body #child_pejabat_penandatangan").prop("disabled", disable);
-            $(".modal-body #child_unit_pengolah").prop("disabled", disable);
-            $(".modal-body #child_kurun_waktu").prop("disabled", disable);
-            $(".modal-body #child_no_box").prop("disabled", disable);
+            const submitBtnEditParent = document.getElementById('submitBtnEditParent');
+            $(submitBtnEditParent).click(function() {
+                $('#modalEditParent').modal('hide');
+                $('#form_edit_parent').submit();
+            });
 
-            // UUPDATE VALUE INPUT
-            $('#form_edit_child').attr('action', '/detail-data-arsip/' + subitem['id']);
-            $(".modal-body #child_dokumen_id").val(subitem['dokumen_id']);
-            $(".modal-body #child_kode_klasifikasi").val(subitem['kode_klasifikasi']);
-            $(".modal-body #child_uraian").val(subitem['uraian']);
-            $(".modal-body #child_tanggal_surat").val(subitem['tanggal_surat']);
-            $(".modal-body #child_jumlah_satuan").val(subitem['jumlah_satuan']);
-            $(".modal-body #child_keterangan").val(subitem['keterangan']);
-            $(".modal-body #child_jenis_naskah_dinas").val(subitem['jenis_naskah_dinas']);
-            $(".modal-body #child_no_surat").val(subitem['no_surat']);
-            $(".modal-body #child_pejabat_penandatangan").val(subitem['pejabat_penandatangan']);
-            $(".modal-body #child_unit_pengolah").val(subitem['unit_pengolah']);
-            $(".modal-body #child_kurun_waktu").val(subitem['kurun_waktu']);
-            $(".modal-body #child_no_box").val(subitem['no_box']);
-            $(".modal-body #child_tkt_perk").val(subitem['tkt_perk']);
+            const submitBtnAddParent = document.getElementById('submitBtnAddParent');
+            $(submitBtnAddParent).click(function() {
+                $('#modalAddParent').modal('hide');
+                $('#form_add_parent').submit();
+            });
 
-            const file_dokumen = subitem['file_dokumen'];
-            if (file_dokumen) {
-                $('#file_dokumen_append').html(`<a href="storage/${file_dokumen}"
+            $(document).on("click", ".modal-hapus", function() {
+                var form_hapus_id = $(this).data('id');
+                $(".modal-body #form_hapus_id").val(form_hapus_id);
+            });
+
+            $(document).on("click", ".modal-verifikasi", function() {
+                var form_verifikasi_id = $(this).data('id');
+                var form_verifikasi_status = $(this).data('status');
+                $(".modal-body #form_verifikasi_id").val(form_verifikasi_id);
+                $(".modal-body #form_verifikasi_status").val(form_verifikasi_status);
+            });
+
+            $("input[name='method_type']:radio").click(function() {
+                const val = $(this).val();
+                if (val === 'harian') {
+                    $("#harianContainer").addClass("d-block");
+                    $("#periodeContainer").addClass("d-none");
+                    $("#harianContainer").removeClass("d-none");
+                    $('#tahunImport').prop('required', false);
+                    $('#bulanImport').prop('required', false);
+                    $('#tanggalImport').prop('required', true);
+                } else {
+                    $("#periodeContainer").addClass("d-block");
+                    $("#harianContainer").addClass("d-none");
+                    $("#periodeContainer").removeClass("d-none");
+                    $('#tahunImport').prop('required', true);
+                    $('#bulanImport').prop('required', true);
+                    $('#tanggalImport').prop('required', false);
+                }
+            });
+
+            const submitBtnHapus = document.getElementById('submitBtnHapus');
+            $(submitBtnHapus).click(function() {
+                const formId = '#' + $(".modal-body #form_hapus_id").val();
+                $('#modalHapus').modal('hide');
+                $(formId).submit();
+            });
+
+            $(document).on('click', '.btn-edit-child', function() {
+                const item = $(this).data('item');
+                const subitem = $(this).data('subitem');
+                const index = $(this).data('index');
+                var disable = true;
+
+
+
+                if (index > 3) {
+                    disable = false;
+                }
+                // TRIGER PROP INPUT
+                $(".modal-body #child_kode_klasifikasi").prop("disabled", disable);
+                $(".modal-body #child_jumlah_satuan").prop("disabled", disable);
+                $(".modal-body #child_keterangan").prop("disabled", disable);
+                $(".modal-body #child_jenis_naskah_dinas").prop("disabled", disable);
+                $(".modal-body #child_pejabat_penandatangan").prop("disabled", disable);
+                $(".modal-body #child_unit_pengolah").prop("disabled", disable);
+                $(".modal-body #child_kurun_waktu").prop("disabled", disable);
+                $(".modal-body #child_no_box").prop("disabled", disable);
+
+                // UUPDATE VALUE INPUT
+                $('#form_edit_child').attr('action', '/detail-data-arsip/' + subitem['id']);
+                $(".modal-body #child_dokumen_id").val(subitem['dokumen_id']);
+                $(".modal-body #child_kode_klasifikasi").val(subitem['kode_klasifikasi']);
+                $(".modal-body #child_uraian").val(subitem['uraian']);
+                $(".modal-body #child_tanggal_surat").val(subitem['tanggal_surat']);
+                $(".modal-body #child_jumlah_satuan").val(subitem['jumlah_satuan']);
+                $(".modal-body #child_keterangan").val(subitem['keterangan']);
+                $(".modal-body #child_jenis_naskah_dinas").val(subitem['jenis_naskah_dinas']);
+                $(".modal-body #child_no_surat").val(subitem['no_surat']);
+                $(".modal-body #child_pejabat_penandatangan").val(subitem['pejabat_penandatangan']);
+                $(".modal-body #child_unit_pengolah").val(subitem['unit_pengolah']);
+                $(".modal-body #child_kurun_waktu").val(subitem['kurun_waktu']);
+                $(".modal-body #child_no_box").val(subitem['no_box']);
+                $(".modal-body #child_tkt_perk").val(subitem['tkt_perk']);
+
+                const file_dokumen = subitem['file_dokumen'];
+                if (file_dokumen) {
+                    $('#file_dokumen_append').html(`<a href="storage/${file_dokumen}"
                             target="_blank"
                             class="btn btn-outline-primary mb-3">Lihat File</a>
                 `);
-            }
+                }
 
-            $('#modalSideEditChild').modal('show');
-        });
+                $('#modalSideEditChild').modal('show');
+            });
 
-        $(document).on('click', '.btn-edit-parent', function() {
-            const item = $(this).data('item');
-            $('#form_edit_parent').attr('action', '/data-arsip/' + item['id']);
+            $(document).on('click', '.btn-edit-parent', function() {
+                const item = $(this).data('item');
+                $('#form_edit_parent').attr('action', '/data-arsip/' + item['id']);
 
-            $(".modal-body #parent_kode_klasifikasi").val(item['kode_klasifikasi']);
-            $(".modal-body #parent_uraian").val(item['uraian']);
-            $(".modal-body #parent_tanggal_validasi").val(item['tanggal_validasi']);
-            $(".modal-body #parent_jumlah_satuan_item").val(item['jumlah_satuan_item']);
-            $(".modal-body #parent_keterangan").val(item['keterangan']);
-            $(".modal-body #parent_no_spm").val(item['no_spm']);
-            $(".modal-body #parent_no_sp2d").val(item['no_sp2d']);
-            $(".modal-body #parent_no_spp").val(item['no_surat']);
-            $(".modal-body #parent_nominal").val(item['nominal']);
-            $(".modal-body #parent_skpd").val(item['skpd']);
-            $(".modal-body #parent_nwp").val(item['nwp']);
-            $(".modal-body #parent_pejabat_penandatangan").val(item['pejabat_penandatangan']);
-            $(".modal-body #parent_unit_pengolah").val(item['unit_pengolah']);
-            $(".modal-body #parent_kurun_waktu").val(item['kurun_waktu']);
-            $(".modal-body #parent_jumlah_satuan_berkas").val(item['jumlah_satuan_berkas']);
-            $(".modal-body #parent_tkt_perkemb").val(item['tkt_perkemb']);
-            $(".modal-body #parent_no_box").val(item['no_box']);
-            $('#modalSideEditParent').modal('show');
-        });
+                $(".modal-body #parent_kode_klasifikasi").val(item['kode_klasifikasi']);
+                $(".modal-body #parent_uraian").val(item['uraian']);
+                $(".modal-body #parent_tanggal_validasi").val(item['tanggal_validasi']);
+                $(".modal-body #parent_jumlah_satuan_item").val(item['jumlah_satuan_item']);
+                $(".modal-body #parent_keterangan").val(item['keterangan']);
+                $(".modal-body #parent_no_spm").val(item['no_spm']);
+                $(".modal-body #parent_no_sp2d").val(item['no_sp2d']);
+                $(".modal-body #parent_no_spp").val(item['no_surat']);
+                $(".modal-body #parent_nominal").val(item['nominal']);
+                $(".modal-body #parent_skpd").val(item['skpd']);
+                $(".modal-body #parent_nwp").val(item['nwp']);
+                $(".modal-body #parent_pejabat_penandatangan").val(item['pejabat_penandatangan']);
+                $(".modal-body #parent_unit_pengolah").val(item['unit_pengolah']);
+                $(".modal-body #parent_kurun_waktu").val(item['kurun_waktu']);
+                $(".modal-body #parent_jumlah_satuan_berkas").val(item['jumlah_satuan_berkas']);
+                $(".modal-body #parent_tkt_perkemb").val(item['tkt_perkemb']);
+                $(".modal-body #parent_no_box").val(item['no_box']);
+                $('#modalSideEditParent').modal('show');
+            });
 
-        $(document).on('click', '.btn-add-parent', function() {
-            const id = $(this).data('id');
-            const subitem = $(this).data('subitem');
-            console.log('subitem', subitem);
-            $(".modal-body #parent_add_kode_klasifikasi").val(subitem['kode_klasifikasi']);
-            $(".modal-body #parent_add_tanggal_surat").val(subitem['tanggal_surat']);
-            $(".modal-body #parent_add_jumlah_satuan").val(subitem['jumlah_satuan']);
-            $(".modal-body #parent_add_keterangan").val(subitem['keterangan']);
-            $(".modal-body #parent_add_jenis_naskah_dinas").val(subitem['jenis_naskah_dinas']);
-            $(".modal-body #parent_add_pejabat_penandatangan").val('PA/KPA');
-            $(".modal-body #parent_add_unit_pengolah").val(subitem['unit_pengolah']);
-            $(".modal-body #parent_add_kurun_waktu").val(subitem['kurun_waktu']);
-            $(".modal-body #parent_add_no_box").val(subitem['no_box']);
-            $(".modal-body #parent_add_tkt_perk").val(subitem['tkt_perk']);
-            $(".modal-body #parent_add_dokumen_id").val(id);
-            $('#modalSideAddParent').modal('show');
-        });
+            $(document).on('click', '.btn-add-parent', function() {
+                const id = $(this).data('id');
+                const subitem = $(this).data('subitem');
+                console.log('subitem', subitem);
+                $(".modal-body #parent_add_kode_klasifikasi").val(subitem['kode_klasifikasi']);
+                $(".modal-body #parent_add_tanggal_surat").val(subitem['tanggal_surat']);
+                $(".modal-body #parent_add_jumlah_satuan").val(subitem['jumlah_satuan']);
+                $(".modal-body #parent_add_keterangan").val(subitem['keterangan']);
+                $(".modal-body #parent_add_jenis_naskah_dinas").val(subitem['jenis_naskah_dinas']);
+                $(".modal-body #parent_add_pejabat_penandatangan").val('PA/KPA');
+                $(".modal-body #parent_add_unit_pengolah").val(subitem['unit_pengolah']);
+                $(".modal-body #parent_add_kurun_waktu").val(subitem['kurun_waktu']);
+                $(".modal-body #parent_add_no_box").val(subitem['no_box']);
+                $(".modal-body #parent_add_tkt_perk").val(subitem['tkt_perk']);
+                $(".modal-body #parent_add_dokumen_id").val(id);
+                $('#modalSideAddParent').modal('show');
+            });
 
-        $('#addSection').click(function() {
+            $('#addSection').click(function() {
 
-            let section = `<div class="mb-3 position-relative form-group">
+                let section = `<div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Uraian</label>
                             <input type="text" class="form-control" name="uraian"
                                 id="parent_uraian" required />
@@ -194,59 +199,79 @@
                                 id="parent_tanggal_surat" required />
                             </div>`
 
-            $('#box').append(section);
-        });
+                $('#box').append(section);
+            });
 
-        $(window).on('hashchange', function() {
-            if (window.location.hash) {
-                var page = window.location.hash.replace('#', '');
-                if (page == Number.NaN || page <= 0) {
-                    console.log('false');
-                    return false;
-                } else {
-                    console.log('getdata');
-                    getData(page);
-                }
-            }
-        });
-
-        $(document).ready(function() {
             $(document).on('click', '.pagination a', function(event) {
                 $('li').removeClass('active');
                 $(this).parent('li').addClass('active');
                 event.preventDefault();
-
-
                 var myurl = $(this).attr('href');
                 var page = $(this).attr('href').split('page=')[1];
-                console.log('click paginate', page);
+                console.log('page', page);
+                console.log('myurl', myurl);
+                pages = page;
+                getData();
+            });
 
-                getData(page);
+            $('#search').on('input', function(e) {
+                let val = $(this).val();
+                keyword = val;
+                clearTimeout($(this).data('timeout'));
+                $(this).data('timeout', setTimeout(function() {
+                    getData();
+                }, 500));
+            });
+
+            $(".paginate-item").on('click', function(event) {
+                const item = $(this).data('items');
+                items = item;
+                getData();
             });
         });
 
-        function getData(page) {
-            $.ajax({
-                    url: '?page=' + page,
-                    type: "get",
-                    datatype: "html",
-                })
+        function getData() {
 
+            let requestData = {};
+            if (pages !== 0) {
+                requestData.page = pages;
+            }
+
+            if (keyword !== '') {
+                requestData.search = keyword;
+            }
+
+            requestData.items = items;
+
+            $.ajax({
+                    url: '/data-arsip',
+                    type: "get",
+                    data: requestData,
+                    dataType: "html",
+                    beforeSend: function() {
+                        $('#loader').show();
+                    }
+                })
                 .done(function(data) {
                     $("#item-lists").empty().html(data);
-                    location.hash = page;
-                    console.log('data', data);
+                    backToTop();
                 })
-
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     alert('No response from server');
+                })
+                .always(function() {
+                    $('#loader').hide();
                 });
 
+        }
+
+        function backToTop() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
         }
     </script>
 @endsection
 @section('content')
-
     @if (session()->has('message'))
         <div class="position-fixed top-0 end-0 p-3" style="z-index: 5">
             <div class="toast bg-success fade show" role="alert" aria-live="assertive" aria-atomic="true">
@@ -322,16 +347,14 @@
                     <div class="row">
                         <!-- Search Start -->
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xxl-4 mb-3">
-                            <form name="seach-form" id="search-form" action="/data-arsip">
-                                <div
-                                    class="d-inline-block float-md-start me-1 mb-1 search-input-container w-100 shadow bg-foreground">
-                                    <input class="form-control datatable-search" name="search" placeholder="Pencarian..."
-                                        value="{{ request('search') }}" />
-                                    <span class="search-magnifier-icon" onClick="document.forms['search-form'].submit();">
-                                        <i data-acorn-icon="search"></i>
-                                    </span>
-                                </div>
-                            </form>
+                            <div
+                                class="d-inline-block float-md-start me-1 mb-1 search-input-container w-100 shadow bg-foreground">
+                                <input class="form-control datatable-search" name="search" id="search"
+                                    placeholder="Pencarian..." />
+                                <span class="search-magnifier-icon" onClick="getData()">
+                                    <i data-acorn-icon="search"></i>
+                                </span>
+                            </div>
                         </div>
                         <!-- Search End -->
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xxl-8 text-end mb-3">
@@ -372,10 +395,13 @@
                                         </span>
                                     </button>
                                     <div class="dropdown-menu shadow dropdown-menu-end">
-                                        <a class="dropdown-item paginate-item" data-items="5" href="#">5 Data</a>
-                                        <a class="dropdown-item paginate-item active" data-items="10" href="#">10
+                                        <a class="dropdown-item paginate-item" data-items="5" href="javascript:void(0)">5
                                             Data</a>
-                                        <a class="dropdown-item paginate-item" data-items="20" href="#">20 Data</a>
+                                        <a class="dropdown-item paginate-item active" data-items="10"
+                                            href="javascript:void(0">10
+                                            Data</a>
+                                        <a class="dropdown-item paginate-item" data-items="20"
+                                            href="javascript:void(0">20 Data</a>
                                     </div>
                                 </div>
                                 <!-- Length End -->
@@ -752,10 +778,10 @@
                         </div>
 
                         <!--<div class="col text-end">
-                                                                                        <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                                                                            Kegiatan</button>
+                                                                                                                                                    <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                                                                                                                                        Kegiatan</button>
 
-                                                                                    </div>-->
+                                                                                                                                                </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
@@ -853,9 +879,9 @@
                             <label class="form-label text-primary fw-bold">Pejabat
                                 Penandatangan</label>
                             <!-- <select id="parent_add_pejabat_penandatangan" name="pejabat_penandatangan"
-                                                                                        class="form-select" required>
-                                                                                        <option selected value="PA/KPA">PA/KPA</option>
-                                                                                    </select> -->
+                                                                                                                                                    class="form-select" required>
+                                                                                                                                                    <option selected value="PA/KPA">PA/KPA</option>
+                                                                                                                                                </select> -->
                             <input type="text" class="form-control" id="parent_add_pejabat_penandatangan"
                                 name="pejabat_penandatangan" required />
                         </div>
@@ -962,5 +988,4 @@
             </form>
         </div>
     </div>
-
 @endsection
