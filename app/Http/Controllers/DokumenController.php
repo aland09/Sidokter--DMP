@@ -13,6 +13,7 @@ use App\Imports\DokumenSpmImport;
 use App\Imports\DokumenSppImport;
 use App\Exports\DokumenExport;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -24,11 +25,12 @@ class DokumenController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request) : View
     {
         $akunJenisOptions = AkunJenis::select('kode_akun','nama_akun')->get();
 
         $itemsPerPage = request('items') ?? 10;
+
         $dokumen = Dokumen::with([
                         'detailDokumen' => function($query) {
                             $query->orderBy('id', 'ASC');
@@ -40,8 +42,13 @@ class DokumenController extends Controller
                     ->filter(request(['search']))
                     ->orderBy('tanggal_validasi', 'DESC')
                     ->where('status', '=', 'Menunggu Verifikasi')
+                    ->sortable()
                     ->paginate($itemsPerPage)
                     ->withQueryString();
+
+        if ($request->ajax()) {
+            return view('pages/data-arsip/data', compact('dokumen'));
+        }
 
         return view("pages/data-arsip/index", [
             "title"             => "Data Arsip",
