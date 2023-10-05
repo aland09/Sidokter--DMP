@@ -7,13 +7,14 @@
 @endsection
 
 @section('js_vendor')
-    <script src="/js/vendor/jquery.validate/jquery.validate.min.js"></script>
-    <script src="/js/vendor/jquery.validate/additional-methods.min.js"></script>
+    <script src="{{ asset('js/vendor/jquery.validate/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/jquery.validate/additional-methods.min.js') }}"></script>
 @endsection
 
 @section('js_page')
-    <script src="/js/pages/auth.login.js"></script>
+    <script src="{{ asset('js/pages/auth.login.js') }}"></script>
 @endsection
+
 
 @section('content_left')
     <div class="min-h-100 d-flex align-items-center">
@@ -24,10 +25,10 @@
                     <h1 class="display-3 text-white">SISTEM DOKUMEN TERPADU</h1>
                 </div>
                 <p class="h6 text-white lh-1-5 mb-5">
-                   
+
                 </p>
                 <div class="mb-5">
-                    <a class="btn btn-lg btn-outline-white" href="/login">Telusuri</a>
+                    <a class="btn btn-lg btn-outline-white" href="{{ route('login') }}">Telusuri</a>
                 </div>
             </div>
         </div>
@@ -41,7 +42,7 @@
             <div class="d-flex flex-row gap-3 mb-3 align-items-center">
                 <div class="sw-14">
                     <a href="/">
-                        <img class="img-fluid h-100" src="/img/logo/logo-alt.png" alt="logo" />
+                        <img class="img-fluid h-100" src="{{ asset('img/logo/logo-alt.png') }}" alt="logo" />
                     </a>
                 </div>
                 <div class="">
@@ -58,7 +59,7 @@
                 </p> -->
             </div>
             <div>
-                <form id="loginForm" class="tooltip-end-bottom" novalidate action="/login" method="POST">
+                <form id="loginForm" class="tooltip-end-bottom" novalidate action="{{ route('login') }}" method="POST">
                     @csrf
                     <div class="mb-3 filled form-group tooltip-end-top">
                         <i data-acorn-icon="email"></i>
