@@ -23,7 +23,7 @@
     <div class="user-container d-flex">
         <a href="#" class="d-flex user position-relative" data-bs-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">
-            <img class="profile rounded-circle mb-3" alt="profile" src="/img/profile/profile-3.webp" />
+            <img class="profile rounded-circle mb-3" alt="profile" src="{{ asset('img/profile/profile-3.webp') }}" />
             <div class="name">Admin</div>
         </a>
         <div class="dropdown-menu dropdown-menu-end user-menu wide">
@@ -109,7 +109,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="/logout">
+                            <a href="{{ route('logout') }}">
                                 <i data-acorn-icon="logout" class="me-2" data-acorn-size="17"></i>
                                 <span class="align-middle">Logout</span>
                             </a>
@@ -146,28 +146,28 @@
                 <div class="scroll">
                     <ul class="list-unstyled border-last-none">
                         <li class="mb-3 pb-3 border-bottom border-separator-light d-flex">
-                            <img src="/img/profile/profile-1.webp" class="me-3 sw-4 sh-4 rounded-xl align-self-center"
+                            <img src="{{ asset('img/profile/profile-1.webp') }}" class="me-3 sw-4 sh-4 rounded-xl align-self-center"
                                 alt="..." />
                             <div class="align-self-center">
                                 <a href="#">Joisse Kaycee just sent a new comment!</a>
                             </div>
                         </li>
                         <li class="mb-3 pb-3 border-bottom border-separator-light d-flex">
-                            <img src="/img/profile/profile-2.webp" class="me-3 sw-4 sh-4 rounded-xl align-self-center"
+                            <img src="{{ asset('img/profile/profile-2.webp') }}" class="me-3 sw-4 sh-4 rounded-xl align-self-center"
                                 alt="..." />
                             <div class="align-self-center">
                                 <a href="#">New order received! It is total $147,20.</a>
                             </div>
                         </li>
                         <li class="mb-3 pb-3 border-bottom border-separator-light d-flex">
-                            <img src="/img/profile/profile-3.webp" class="me-3 sw-4 sh-4 rounded-xl align-self-center"
+                            <img src="{{ asset('img/profile/profile-3.webp') }}" class="me-3 sw-4 sh-4 rounded-xl align-self-center"
                                 alt="..." />
                             <div class="align-self-center">
                                 <a href="#">3 items just added to wish list by a user!</a>
                             </div>
                         </li>
                         <li class="pb-3 pb-3 border-bottom border-separator-light d-flex">
-                            <img src="/img/profile/profile-6.webp" class="me-3 sw-4 sh-4 rounded-xl align-self-center"
+                            <img src="{{ asset('img/profile/profile-6.webp') }}" class="me-3 sw-4 sh-4 rounded-xl align-self-center"
                                 alt="..." />
                             <div class="align-self-center">
                                 <a href="#">Kirby Peters just sent a new message!</a>
@@ -182,16 +182,15 @@
 
     <!-- Menu Start -->
     <div class="menu-container flex-grow-1">
-
         <ul id="menu" class="menu">
             <li>
-                <a href="/dashboard">
+                <a href="{{ route('dashboard.index') }}">
                     <i data-acorn-icon="dashboard-1" class="icon" data-acorn-size="18"></i>
                     <span class="label">Dashboard</span>
                 </a>
             </li>
             <li>
-                <a href="/regulasi">
+                <a href="{{ route('regulasi.index') }}">
                     <i data-acorn-icon="notebook-1" class="icon" data-acorn-size="18"></i>
                     <span class="label">Regulasi</span>
                 </a>
@@ -203,12 +202,12 @@
                 </a>
                 <ul id="userManagementMenu">
                     <li>
-                        <a href="/roles">
+                        <a href="{{ route('roles.index') }}">
                             <span class="label">Daftar Peran</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/users">
+                        <a href="{{ route('users.index') }}">
                             <span class="label">Daftar Pengguna</span>
                         </a>
                     </li>
@@ -221,17 +220,17 @@
                 </a>
                 <ul id="dokumenMenu">
                     <li>
-                        <a href="/dokumen-masuk">
+                        <a href="{{ route('dokumen-masuk.index') }}">
                             <span class="label">Dokumen Masuk</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/dokumen-keluar">
+                        <a href="{{ route('dokumen-keluar.index') }}">
                             <span class="label">Dokumen Keluar</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/data-arsip">
+                        <a href="{{ route('data-arsip.index') }}">
                             <span class="label">Pemberkasan</span>
                         </a>
                     </li>
@@ -239,6 +238,7 @@
             </li>
         </ul>
     </div>
+
     <!-- Menu End -->
 
     <!-- Mobile Buttons Start -->

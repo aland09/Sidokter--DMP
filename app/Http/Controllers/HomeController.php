@@ -22,7 +22,7 @@ class HomeController extends Controller
         $dokumen_keluar = Dokumen::where('status', '=', 'Dipinjam')->count();
         $logs = Activity::with('causer')->latest()->take(15)->get();
 
-        return view("pages/dashboard/index", [
+        return view("pages.dashboard.index", [
             "title"             => "Data Arsip",
             "total_dokumen" => $total_dokumen,
             "dokumen_terverifikasi" => $dokumen_terverifikasi,
