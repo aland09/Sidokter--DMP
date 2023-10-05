@@ -2,7 +2,7 @@
     <!-- Logo Start -->
     <div class="logo position-relative">
         <a href="{{ route('beranda') }}">
-            <img class="w-50" src="/img/logo/logo-alt.png" alt="logo" />
+            <img class="w-50" src="{{ asset('img/logo/logo-alt.png') }}" alt="logo" />
         </a>
     </div>
     <!-- Logo End -->
