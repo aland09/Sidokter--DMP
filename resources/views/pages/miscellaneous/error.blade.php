@@ -21,7 +21,7 @@
     <div class="sw-lg-80 min-h-100 bg-foreground d-flex justify-content-center align-items-center shadow-deep py-5 full-page-content-right-border">
         <div class="sw-lg-60 px-5">
             <div class="sh-11">
-                <a href="/">
+                <a href="{{ route('beranda') }}">
                     <div class="logo-default"></div>
                 </a>
             </div>
@@ -33,12 +33,12 @@
                 <p class="h6">It looks like the page you are looking for is not available.</p>
                 <p class="h6">
                     If you think that is a mistake, please
-                    <a href="/">contact</a>
+                    <a href="{{ route('beranda') }}">contact</a>
                     us.
                 </p>
             </div>
             <div>
-                <a href="/" class="btn btn-icon btn-icon-start btn-primary">
+                <a href="{{ route('beranda') }}" class="btn btn-icon btn-icon-start btn-primary">
                     <i data-acorn-icon="arrow-left"></i>
                     <span>Back to Home</span>
                 </a>

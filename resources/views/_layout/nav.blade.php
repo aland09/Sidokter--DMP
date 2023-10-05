@@ -1,7 +1,7 @@
 <div class="nav-content d-flex">
     <!-- Logo Start -->
     <div class="logo position-relative">
-        <a href="/">
+        <a href="{{ route('beranda') }}">
             <img class="w-50" src="/img/logo/logo-alt.png" alt="logo" />
         </a>
     </div>
@@ -182,7 +182,7 @@
 
     <!-- Menu Start -->
     <div class="menu-container flex-grow-1">
-        
+
         <ul id="menu" class="menu">
             <li>
                 <a href="/dashboard">

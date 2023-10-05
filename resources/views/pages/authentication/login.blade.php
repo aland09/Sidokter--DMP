@@ -41,7 +41,7 @@
         <div class="sw-lg-50 px-5">
             <div class="d-flex flex-row gap-3 mb-3 align-items-center">
                 <div class="sw-14">
-                    <a href="/">
+                    <a href="{{ route('beranda') }}">
                         <img class="img-fluid h-100" src="{{ asset('img/logo/logo-alt.png') }}" alt="logo" />
                     </a>
                 </div>
