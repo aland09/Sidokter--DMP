@@ -28,7 +28,7 @@
                     process-centric communities...
                 </p>
                 <div class="mb-5">
-                    <a class="btn btn-lg btn-outline-white" href="/">Learn More</a>
+                    <a class="btn btn-lg btn-outline-white" href="{{ route('beranda') }}">Learn More</a>
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
     <div class="sw-lg-70 min-h-100 bg-foreground d-flex justify-content-center align-items-center shadow-deep py-5 full-page-content-right-border">
         <div class="sw-lg-50 px-5">
             <div class="sh-11">
-                <a href="/">
+                <a href="{{ route('beranda') }}">
                     <div class="logo-default"></div>
                 </a>
             </div>
