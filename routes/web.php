@@ -53,8 +53,8 @@ Route::group(['middleware' => ['auth', 'permission']], function () {
     Route::resource('detail-data-arsip', DetailDokumenController::class);
     Route::get('get-berkas-arsip/{id?}', [DokumenController::class, 'getBerkasArsip'])->name('get-berkas-arsip');
     Route::post('import-monitoring', [DokumenController::class, 'import_monitoring'])->name('import-monitoring');
-    Route::get('get-no-box/{year?}', [DokumenMasukController::class, 'get_no_box'])->name('get-no-box');
-    Route::post('data-arsip-no-box', [DokumenMasukController::class, 'update_no_box'])->name('data-arsip-no-box');
-    Route::get('generate-barcode', [DokumenMasukController::class, 'generate_barcode'])->name('generate-barcode');
+    Route::get('get-no-box/{year?}', [DokumenController::class, 'get_no_box'])->name('get-no-box');
+    Route::post('data-arsip-no-box', [DokumenController::class, 'update_no_box'])->name('data-arsip-no-box');
+    Route::get('generate-barcode', [DokumenController::class, 'generate_barcode'])->name('generate-barcode');
 
 });

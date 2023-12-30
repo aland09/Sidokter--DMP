@@ -22,61 +22,6 @@
     <script src="/js/base/pagination.js"></script>
     <script src="/js/forms/validation.js"></script>
     <script src="/js/forms/controls.datepicker.js"></script>
-    <script>
-        var ids = [];
-        $('.no-box-check').change(function() {
-            const id = $(this).data('id');
-            // $('.no-box-check:not(#check-parent_' + id + ')').prop("checked", false);
-            // $('.check-child').prop("checked", false);
-            if ($(this).is(":checked")) {
-                $('.no-box-check_' + id).prop("checked", true);
-                $('#btn-barcode').prop('disabled', false);
-                year = $(this).val();
-                $('#kurun_waktu').val(year);
-                $('#dokumen_id').val(id);
-                ids.push(id);
-            } else {
-                $('#kurun_waktu').val('');
-                $('#dokumen_id').val('');
-                $('.no-box-check_' + id).prop("checked", false);
-                $('#btn-barcode').prop('disabled', true);
-                const index = ids.indexOf(id);
-                if (index > -1) { // only splice array when item is found
-                    ids.splice(index, 1); // 2nd parameter means remove one item only
-                }
-            }
-
-            $('#dokumen_id').val(ids);
-            console.log('ids', ids);
-        });
-
-        $('#btn-barcode').click(function() {
-            $('#modalFormBarcode').modal('show');
-            const year = $('#kurun_waktu').val();
-            if (year) {
-                $.ajax({
-                    url: '/get-no-box/' + year,
-                    type: "GET",
-                    data: {
-                        "_token": "{{ csrf_token() }}"
-                    },
-                    dataType: "json",
-                    success: function(data) {
-                        if (data) {
-                            $('#no_box_display').html(data);
-                            $('#no_box').val(data);
-                        } else {
-                            $('#no_box_display').html("Gagal Membuat QR Code");
-                            $('#no_box').val('');
-                        }
-                    }
-                });
-            } else {
-                $('#no_box_display').html("Gagal Membuat QR Code");
-                $('#no_box').val('');
-            }
-        });
-    </script>
 @endsection
 @section('content')
 
@@ -99,22 +44,11 @@
                 <div class="page-title-container">
                     <div class="row">
                         <!-- Title Start -->
-                        <div class="col-12 col-md-7">
+                        <div class="col-12 col-md-12">
                             <h1 class="mb-0 pb-0 display-4" id="title">{{ $title }}</h1>
                             @include('_layout.breadcrumb', ['breadcrumbs' => $breadcrumbs])
                         </div>
                         <!-- Title End -->
-                        <!-- Top Buttons Start -->
-                        <div class="col-12 col-md-5 d-flex align-items-start justify-content-end gap-3">
-                            <button type="button"
-                                class="btn btn-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0"
-                                id="btn-barcode" disabled>
-                                <i data-acorn-icon="plus"></i>
-                                <span>Buat QR Code No. Box</span>
-                            </button>
-                            <!-- Add New Button End -->
-                        </div>
-                        <!-- Top Buttons End -->
                     </div>
                 </div>
                 <!-- Title and Top Buttons End -->
@@ -189,7 +123,7 @@
                             <table class="data-table hover dataTable no-footer">
                                 <thead>
                                     <tr>
-                                        <th colspan="2" class="text-muted text-small text-uppercase"
+                                        <th class="text-muted text-small text-uppercase"
                                             style="position: sticky;top: 0">
                                             No.</th>
                                         <th class="text-muted text-small text-uppercase" style="position: sticky;top: 0">
@@ -224,15 +158,6 @@
                                         <tr>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $loop->index + 1 }}.
-                                            </td>
-                                            <td style="height: 42px !important" class="py-2 bg-primary text-white">
-                                                <div class="mb-1 ms-3"><input type="checkbox"
-                                                        class="form-check-input no-box-check"
-                                                        value="{{ $item->kurun_waktu }}"
-                                                        id="check-parent_{{ $item->id }}"
-                                                        data-id="{{ $item->id }}"
-                                                        {{ $item->no_box !== null ? ' disabled' : '' }}>
-                                                </div>
                                             </td>
                                             <td style="height: 42px !important" class="py-2 bg-primary text-white">
                                                 {{ $item->kode_klasifikasi ? $item->kode_klasifikasi : '-' }}
@@ -333,7 +258,7 @@
                                             <th class="text-muted text-small text-uppercase">Unit Pengolah</th>
                                             <th class="text-muted text-small text-uppercase">Kurun Waktu</th>
                                             <th class="text-muted text-small text-uppercase">No. Box</th>
-                                            <th colspan="7" class="text-muted text-small text-uppercase">Tingkat
+                                            <th colspan="6" class="text-muted text-small text-uppercase">Tingkat
                                                 Perkembangan</th>
                                             <th width="10%" class="empty">&nbsp;</th>
                                         </tr>
@@ -341,12 +266,7 @@
                                             <tr id="tabel_{{ $item->id }}_{{ $subitem->id }}">
                                                 <td style="height: 42px !important" class="empty py-2">
                                                     {{ $loop->index + 1 }}.</td>
-                                                <td style="height: 42px !important" class="py-2">
-                                                    <div class="mb-1 ms-3"><input type="checkbox" disabled
-                                                            class="form-check-input check-child no-box-check_{{ $item->id }}">
-                                                    </div>
-                                                </td>
-                                                <td style="height: 42px !important" class="py-2">
+                                             <td style="height: 42px !important" class="py-2">
                                                     {{ $subitem->kode_klasifikasi ? $subitem->kode_klasifikasi : '-' }}
                                                 </td>
                                                 <td style="height: 42px !important" class="py-2">
@@ -379,7 +299,7 @@
                                                 <td style="height: 42px !important" class="py-2">
                                                     {{ $subitem->no_box ? $subitem->no_box : '-' }}
                                                 </td>
-                                                <td colspan="7" style="height: 42px !important" class="py-2">
+                                                <td colspan="6" style="height: 42px !important" class="py-2">
                                                     {{ $subitem->tkt_perk ? $subitem->tkt_perk : '-' }}
                                                 </td>
                                                 <td colspan="5" style="height: 42px !important" class="py-2">
@@ -412,37 +332,6 @@
                 </div>
                 <!-- Content End -->
             </div>
-        </div>
-    </div>
-
-    <!-- Modal Import -->
-    <div class="modal fade" id="modalFormBarcode" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form method="POST" action="/data-arsip-no-box" enctype="multipart/form-data">
-                <div class="modal-content">
-                    <div class="modal-header py-3">
-                        <h5 class="modal-title" id="exampleModalLabelDefault">Buat QR Code No. Box</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body d-flex flex-column align-items-center justify-content-center text-center py-3">
-                        {{ csrf_field() }}
-                        {!! '<img class="mb-3" src="data:image/png;base64,' .
-                            DNS2D::getBarcodePNG(url('/detail-box', Str::replace('/', '_', $no_box_tmp)), 'QRCODE', 12, 12) .
-                            '" alt="' .
-                            $no_box_tmp .
-                            '"   />' !!}
-                        <div class="form-label text-primary fw-bold" id="no_box_display">Mohon Tunggu...</div>
-                        <input type="hidden" name="id[]" id="dokumen_id">
-                        <input type="hidden" name="kurun_waktu" id="kurun_waktu">
-
-                    </div>
-                    <div class="modal-footer pt-3 pb-3">
-                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                    </div>
-                </div>
-            </form>
         </div>
     </div>
 
