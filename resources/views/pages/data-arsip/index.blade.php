@@ -36,6 +36,8 @@
         const submitBtnEditChild = document.getElementById('submitBtnEditChild');
         var pages = 0;
         var keyword = '';
+        var start_date_validate = '';
+        var end_date_validate = '';
         var items = 10;
 
 
@@ -283,6 +285,25 @@
                 items = item;
                 getData();
             });
+
+            $(".btn-reset-filter").on('click', function(event) {
+                start_date_validate = '';
+                end_date_validate = '';
+                
+                // Reset input field values
+                $("input[name=start_date_validate]").val('');
+                $("input[name=end_date_validate]").val('');
+                
+                getData();
+                $('#modalFilter').modal('hide');
+            });
+
+            $(".btn-filter").on('click', function(event) {
+                start_date_validate = $("input[name=start_date_validate]").val();
+                end_date_validate = $("input[name=end_date_validate]").val();
+                getData();
+                $('#modalFilter').modal('hide');
+            });
         });
 
         function getData() {
@@ -294,6 +315,14 @@
 
             if (keyword !== '') {
                 requestData.search = keyword;
+            }
+
+            if (start_date_validate !== '') {
+                requestData.start_date_validate = start_date_validate;
+            }
+
+            if (end_date_validate !== '') {
+                requestData.end_date_validate = end_date_validate;
             }
 
             requestData.items = items;
@@ -422,10 +451,9 @@
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xxl-8 text-end mb-3">
                             <div class="d-inline-block">
                                 <!-- Print Button Start -->
-                                <button class="btn btn-icon btn-icon-only btn-foreground-alternate shadow datatable-print"
-                                    data-bs-delay="0" data-datatable="#datatableRowsServerSide" data-bs-toggle="tooltip"
-                                    data-bs-placement="top" title="Print" type="button">
-                                    <i data-acorn-icon="print"></i>
+                                <button class="btn btn-icon btn-icon-only btn-primary shadow datatable-print" type="button"
+                                    data-bs-toggle="modal" data-bs-target="#modalFilter">
+                                    <i data-acorn-icon="filter"></i>
                                 </button>
                                 <!-- Print Button End -->
                                 <!-- Export Dropdown Start -->
@@ -840,10 +868,10 @@
                         </div>
 
                         <!--<div class="col text-end">
-                                                                                                                                                        <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                                                                                                                                            Kegiatan</button>
+                                                                                                                                                                <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                                                                                                                                                    Kegiatan</button>
 
-                                                                                                                                                    </div>-->
+                                                                                                                                                            </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
@@ -941,9 +969,9 @@
                             <label class="form-label text-primary fw-bold">Pejabat
                                 Penandatangan</label>
                             <!-- <select id="parent_add_pejabat_penandatangan" name="pejabat_penandatangan"
-                                                                                                                                                        class="form-select" required>
-                                                                                                                                                        <option selected value="PA/KPA">PA/KPA</option>
-                                                                                                                                                    </select> -->
+                                                                                                                                                                class="form-select" required>
+                                                                                                                                                                <option selected value="PA/KPA">PA/KPA</option>
+                                                                                                                                                            </select> -->
                             <input type="text" class="form-control" id="parent_add_pejabat_penandatangan"
                                 name="pejabat_penandatangan" required />
                         </div>
@@ -1076,6 +1104,39 @@
                     <div class="modal-footer pt-3 pb-3">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Filter -->
+    <div class="modal fade" id="modalFilter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form>
+                <div class="modal-content">
+                    <div class="modal-header py-3">
+                        <h5 class="modal-title" id="exampleModalLabelDefault">Filter Data</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body py-3">
+                        {{ csrf_field() }}
+
+                        <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">Tanggal Validasi</label>
+                            <div class="input-daterange input-group" id="datePickerRange">
+                                <input type="text" class="form-control" name="start_date_validate" placeholder="Awal Periode" />
+                                <span class="mx-2"></span>
+                                <input type="text" class="form-control" name="end_date_validate" placeholder="Akhir Periode" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer pt-0 pb-4" style="border-top: none !important">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-outline-primary btn-reset-filter">Reset</button>
+                        <button type="button" class="btn btn-primary btn-filter">Filter</button>
                     </div>
                 </div>
             </form>

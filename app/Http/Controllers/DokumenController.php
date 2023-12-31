@@ -27,24 +27,39 @@ class DokumenController extends Controller
      */
     public function index(Request $request) : View
     {
-        $akunJenisOptions = AkunJenis::select('kode_akun','nama_akun')->get();
+        $akunJenisOptions       = AkunJenis::select('kode_akun','nama_akun')->get();
 
-        $itemsPerPage = request('items') ?? 10;
+        $itemsPerPage           = request('items') ?? 10;
+
+        $start_date_validate = $request->input('start_date_validate');
+        $end_date_validate = $request->input('end_date_validate');
 
         $dokumen = Dokumen::with([
-                        'detailDokumen' => function($query) {
-                            $query->orderBy('id', 'ASC');
-                        },
-                        'akunJenis' => function($query) {
-                            $query->select('id', 'kode_akun','nama_akun');
-                        },
-                    ])
-                    ->filter(request(['search']))
-                    ->orderBy('tanggal_validasi', 'DESC')
-                    ->where('status', '=', 'Menunggu Verifikasi')
-                    ->sortable()
-                    ->paginate($itemsPerPage)
-                    ->withQueryString();
+                'detailDokumen' => function ($query) {
+                    $query->orderBy('id', 'ASC');
+                },
+                'akunJenis' => function ($query) {
+                    $query->select('id', 'kode_akun', 'nama_akun');
+                },
+            ])
+            ->filter(request(['search']))
+            ->orderBy('tanggal_validasi', 'DESC')
+            ->where('status', '=', 'Menunggu Verifikasi')
+            ->when($start_date_validate, function ($query) use ($start_date_validate) {
+                $start_date_validate = date('Y-m-d', strtotime($start_date_validate));
+                $query->whereDate('tanggal_validasi', '>=', $start_date_validate);
+            })
+            ->when($end_date_validate, function ($query) use ($end_date_validate) {
+                $end_date_validate = date('Y-m-d', strtotime($end_date_validate));
+                $query->whereDate('tanggal_validasi', '<=', $end_date_validate);
+            })
+            ->sortable()
+            ->paginate($itemsPerPage)
+            ->withQueryString();
+
+
+// Print or log the queries
+
 
         if ($request->ajax()) {
             return view('pages/data-arsip/data', compact('dokumen'));
