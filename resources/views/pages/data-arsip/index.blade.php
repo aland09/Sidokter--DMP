@@ -289,13 +289,8 @@
             $(".btn-reset-filter").on('click', function(event) {
                 start_date_validate = '';
                 end_date_validate = '';
-                
-                // Reset input field values
                 $("input[name=start_date_validate]").val('');
                 $("input[name=end_date_validate]").val('');
-                
-                getData();
-                $('#modalFilter').modal('hide');
             });
 
             $(".btn-filter").on('click', function(event) {
