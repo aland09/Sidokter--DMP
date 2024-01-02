@@ -114,6 +114,23 @@
                 $('#form_add_parent').submit();
             });
 
+            $('#parent_add_pejabat_penandatangan_select').on('change', function (e) {
+                let optionSelected = $("option:selected", this);
+                let valueSelected = this.value
+
+                if(valueSelected === 'Lainnya') {
+                    $('#parent_add_pejabat_penandatangan_select').addClass('d-none');
+                    $('#parent_add_pejabat_penandatangan_input').removeClass('d-none');
+                    $('#parent_add_pejabat_penandatangan_select').prop('disabled', true);
+                    $('#parent_add_pejabat_penandatangan_input').prop('disabled', false);
+                } else {
+                    $('#parent_add_pejabat_penandatangan_select').removeClass('d-none');
+                    $('#parent_add_pejabat_penandatangan_input').addClass('d-none');
+                    $('#parent_add_pejabat_penandatangan_select').prop('disabled', false);
+                    $('#parent_add_pejabat_penandatangan_input').prop('disabled', true);
+                }
+            });
+
             $(document).on("click", ".modal-hapus", function() {
                 var form_hapus_id = $(this).data('id');
                 $(".modal-body #form_hapus_id").val(form_hapus_id);
@@ -227,13 +244,15 @@
             $(document).on('click', '.btn-add-parent', function() {
                 const id = $(this).data('id');
                 const subitem = $(this).data('subitem');
-                console.log('subitem', subitem);
+                $('#parent_add_pejabat_penandatangan_select').removeClass('d-none');
+                $('#parent_add_pejabat_penandatangan_input').addClass('d-none');
+                $(".modal-body #parent_add_pejabat_penandatangan_select").val('PA/KPA');
+                $(".modal-body #parent_add_pejabat_penandatangan_input").prop('disabled', true);
                 $(".modal-body #parent_add_kode_klasifikasi").val(subitem['kode_klasifikasi']);
                 $(".modal-body #parent_add_tanggal_surat").val(subitem['tanggal_surat']);
                 $(".modal-body #parent_add_jumlah_satuan").val(subitem['jumlah_satuan']);
                 $(".modal-body #parent_add_keterangan").val(subitem['keterangan']);
                 $(".modal-body #parent_add_jenis_naskah_dinas").val(subitem['jenis_naskah_dinas']);
-                $(".modal-body #parent_add_pejabat_penandatangan").val('PA/KPA');
                 $(".modal-body #parent_add_unit_pengolah").val(subitem['unit_pengolah']);
                 $(".modal-body #parent_add_kurun_waktu").val(subitem['kurun_waktu']);
                 $(".modal-body #parent_add_no_box").val(subitem['no_box']);
@@ -963,11 +982,14 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Pejabat
                                 Penandatangan</label>
-                            <!-- <select id="parent_add_pejabat_penandatangan" name="pejabat_penandatangan"
-                                                                                                                                                                class="form-select" required>
-                                                                                                                                                                <option selected value="PA/KPA">PA/KPA</option>
-                                                                                                                                                            </select> -->
-                            <input type="text" class="form-control" id="parent_add_pejabat_penandatangan"
+                                <select id="parent_add_pejabat_penandatangan_select" name="pejabat_penandatangan"
+                                    class="form-select" required>
+                                    <option selected value="PA/KPA">PA/KPA</option>
+                                    <option value="PPK">PPK</option>
+                                    <option value="Bendahara">Bendahara</option>
+                                    <option value="Lainnya">Lainnya</option>
+                                </select>
+                            <input type="text" class="form-control d-none" id="parent_add_pejabat_penandatangan_input"
                                 name="pejabat_penandatangan" required />
                         </div>
 
@@ -988,7 +1010,7 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No.
                                 Box</label>
-                            <input type="text" class="form-control" id="parent_add_no_box" name="no_box" disabled
+                            <input type="text" class="form-control bg-muted" id="parent_add_no_box" name="no_box" readonly
                                 required />
                         </div>
 
