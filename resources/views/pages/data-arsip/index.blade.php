@@ -131,6 +131,23 @@
                 }
             });
 
+            $('#parent_add_jenis_naskah_dinas_select').on('change', function (e) {
+                let optionSelected = $("option:selected", this);
+                let valueSelected = this.value
+
+                if(valueSelected === 'Lainnya') {
+                    $('#parent_add_jenis_naskah_dinas_select').addClass('d-none');
+                    $('#parent_add_jenis_naskah_dinas_input').removeClass('d-none');
+                    $('#parent_add_jenis_naskah_dinas_select').prop('disabled', true);
+                    $('#parent_add_jenis_naskah_dinas_input').prop('disabled', false);
+                } else {
+                    $('#parent_add_jenis_naskah_dinas_select').removeClass('d-none');
+                    $('#parent_add_jenis_naskah_dinas_input').addClass('d-none');
+                    $('#parent_add_jenis_naskah_dinas_select').prop('disabled', false);
+                    $('#parent_add_jenis_naskah_dinas_input').prop('disabled', true);
+                }
+            });
+
             $(document).on("click", ".modal-hapus", function() {
                 var form_hapus_id = $(this).data('id');
                 $(".modal-body #form_hapus_id").val(form_hapus_id);
@@ -247,12 +264,19 @@
                 $('#parent_add_pejabat_penandatangan_select').removeClass('d-none');
                 $('#parent_add_pejabat_penandatangan_input').addClass('d-none');
                 $(".modal-body #parent_add_pejabat_penandatangan_select").val('PA/KPA');
+                $(".modal-body #parent_add_pejabat_penandatangan_select").removeClass('d-none');
+                $(".modal-body #parent_add_pejabat_penandatangan_select").prop('disabled', false);
                 $(".modal-body #parent_add_pejabat_penandatangan_input").prop('disabled', true);
+                $(".modal-body #parent_add_pejabat_penandatangan_input").addClass('d-none');
                 $(".modal-body #parent_add_kode_klasifikasi").val(subitem['kode_klasifikasi']);
                 $(".modal-body #parent_add_tanggal_surat").val(subitem['tanggal_surat']);
                 $(".modal-body #parent_add_jumlah_satuan").val(subitem['jumlah_satuan']);
                 $(".modal-body #parent_add_keterangan").val(subitem['keterangan']);
-                $(".modal-body #parent_add_jenis_naskah_dinas").val(subitem['jenis_naskah_dinas']);
+                $(".modal-body #parent_add_jenis_naskah_dinas_select").val('SPTJM,Ceklis SPM');
+                $(".modal-body #parent_add_jenis_naskah_dinas_select").removeClass('d-none');
+                $(".modal-body #parent_add_jenis_naskah_dinas_select").prop('disabled', false);
+                $(".modal-body #parent_add_jenis_naskah_dinas_input").prop('disabled', true);
+                $(".modal-body #parent_add_jenis_naskah_dinas_input").addClass('d-none');
                 $(".modal-body #parent_add_unit_pengolah").val(subitem['unit_pengolah']);
                 $(".modal-body #parent_add_kurun_waktu").val(subitem['kurun_waktu']);
                 $(".modal-body #parent_add_no_box").val(subitem['no_box']);
@@ -968,7 +992,14 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Jenis Naskah
                                 Dinas</label>
-                            <input type="text" class="form-control" id="parent_add_jenis_naskah_dinas"
+                            <select id="parent_add_jenis_naskah_dinas_select" name="jenis_naskah_dinas"
+                                class="form-select" required>
+                                <option selected value="SPTJM,Ceklis SPM">SPTJM,Ceklis SPM</option>
+                                <option value="Pernyataan Verifikasi">Pernyataan Verifikasi</option>
+                                <option value="Ringkasan Kontrak">Ringkasan Kontrak</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                            <input type="text" class="form-control d-none" id="parent_add_jenis_naskah_dinas_input"
                                 name="jenis_naskah_dinas" required />
                         </div>
 
