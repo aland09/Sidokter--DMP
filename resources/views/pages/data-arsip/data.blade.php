@@ -49,67 +49,87 @@
                 @foreach ($dokumen ?? [] as $item)
                     <tr>
                         <td style="height: 42px !important" class="py-2">
-                            <div class="mb-1 ms-3"><input type="checkbox" class="form-check-input no-box-check {{ $item->no_box !== null ? ' bg-muted' : '' }}"
+                            <div class="mb-1 ms-3"><input type="checkbox"
+                                    class="form-check-input no-box-check {{ $item->no_box !== null ? ' bg-muted' : '' }}"
                                     value="{{ $item->kurun_waktu }}" id="check-parent_{{ $item->id }}"
                                     data-id="{{ $item->id }}" {{ $item->no_box !== null ? ' disabled' : '' }}>
                             </div>
                         </td>
-                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $loop->index + 1 }}.
                         </td>
-                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $item->kode_klasifikasi ? $item->kode_klasifikasi : '-' }}
                         </td>
-                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $item->uraian ? $item->uraian : '-' }}
                         </td>
-                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $item->tanggal_validasi ? $item->tanggal_validasi : '-' }}
                         </td>
-                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $item->jumlah_satuan_item ? $item->jumlah_satuan_item : '-' }}
                         </td>
-                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $item->keterangan ? $item->keterangan : '-' }}
                         </td>
-                        <td style="height: 42px !important;" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important;" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $item->no_sp2d ? $item->no_sp2d : '-' }}
                         </td>
-                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             Rp.<span class="text-white">__</span>{{ number_format($item->nominal, 0, ',', '.') }},-
                         </td>
-                        <td style="height: 42px !important;" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important;" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $item->akunJenis ? $item->akunJenis->kode_akun : '-' }}
                         </td>
-                        <td style="height: 42px !important;" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important;" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $item->akunJenis ? $item->akunJenis->nama_akun : '-' }}
                         </td>
-                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $item->skpd ? $item->skpd : '-' }}
                         </td>
-                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $item->nwp ? $item->nwp : '-' }}
                         </td>
-                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $item->pejabat_penandatangan ? $item->pejabat_penandatangan : '-' }}
                         </td>
-                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $item->unit_pengolah ? $item->unit_pengolah : '-' }}
                         </td>
-                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $item->kurun_waktu ? $item->kurun_waktu : '-' }}
                         </td>
-                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $item->jumlah_satuan_berkas ? $item->jumlah_satuan_berkas : '-' }}
                             Berkas
                         </td>
-                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $item->tkt_perkemb ? $item->tkt_perkemb : '-' }}
                         </td>
-                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $item->no_box ? $item->no_box : '-' }}
                         </td>
-                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item->id }}">
+                        <td style="height: 42px !important" class="cursor-pointer py-2" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $item->id }}">
                             {{ $item->status ? $item->status : '-' }}
                         </td>
                         <td style="height: 42px !important" class="py-2">
@@ -133,7 +153,8 @@
 
                                 <button class="btn btn-icon btn-icon-only btn-sm btn-primary modal-verifikasi"
                                     type="button" data-id="{{ $item->id }}" data-status="Terverifikasi"
-                                    data-bs-toggle="modal" data-bs-target="#modalVerifikasi">
+                                    data-bs-toggle="modal" data-bs-target="#modalVerifikasi"
+                                    {{ $item->no_box === null ? ' disabled' : '' }}>
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 </button>
                             </div>
