@@ -36,10 +36,67 @@
         const submitBtnEditChild = document.getElementById('submitBtnEditChild');
         var pages = 0;
         var keyword = '';
+        var start_date_validate = '';
+        var end_date_validate = '';
         var items = 10;
 
 
         $(document).ready(function() {
+
+            var ids = [];
+            $('.no-box-check').change(function() {
+                const id = $(this).data('id');
+                // $('.no-box-check:not(#check-parent_' + id + ')').prop("checked", false);
+                // $('.check-child').prop("checked", false);
+                if ($(this).is(":checked")) {
+                    $('.no-box-check_' + id).prop("checked", true);
+                    $('#btn-barcode').prop('disabled', false);
+                    year = $(this).val();
+                    $('#kurun_waktu').val(year);
+                    $('#dokumen_id').val(id);
+                    ids.push(id);
+                } else {
+                    $('#kurun_waktu').val('');
+                    $('#dokumen_id').val('');
+                    $('.no-box-check_' + id).prop("checked", false);
+                    $('#btn-barcode').prop('disabled', true);
+                    const index = ids.indexOf(id);
+                    if (index > -1) { // only splice array when item is found
+                        ids.splice(index, 1); // 2nd parameter means remove one item only
+                    }
+                }
+
+                $('#dokumen_id').val(ids);
+                console.log('ids', ids);
+            });
+
+            $('#btn-barcode').click(function() {
+                $('#modalFormBarcode').modal('show');
+                const year = $('#kurun_waktu').val();
+                if (year) {
+                    $.ajax({
+                        url: '/get-no-box/' + year,
+                        type: "GET",
+                        data: {
+                            "_token": "{{ csrf_token() }}"
+                        },
+                        dataType: "json",
+                        success: function(data) {
+                            if (data) {
+                                $('#no_box_display').html(data);
+                                $('#no_box').val(data);
+                            } else {
+                                $('#no_box_display').html("Gagal Membuat QR Code");
+                                $('#no_box').val('');
+                            }
+                        }
+                    });
+                } else {
+                    $('#no_box_display').html("Gagal Membuat QR Code");
+                    $('#no_box').val('');
+                }
+            });
+
             $(submitBtnEditChild).click(function() {
                 $('#modalEditChild').modal('hide');
                 $('#form_edit_child').submit();
@@ -55,6 +112,74 @@
             $(submitBtnAddParent).click(function() {
                 $('#modalAddParent').modal('hide');
                 $('#form_add_parent').submit();
+            });
+
+            $('#parent_add_pejabat_penandatangan_select').on('change', function(e) {
+                let optionSelected = $("option:selected", this);
+                let valueSelected = this.value;
+
+                if (valueSelected === 'Lainnya') {
+                    $('#parent_add_pejabat_penandatangan_select').addClass('d-none');
+                    $('#parent_add_pejabat_penandatangan_input').removeClass('d-none');
+                    $('#parent_add_pejabat_penandatangan_select').prop('disabled', true);
+                    $('#parent_add_pejabat_penandatangan_input').prop('disabled', false);
+                } else {
+                    $('#parent_add_pejabat_penandatangan_select').removeClass('d-none');
+                    $('#parent_add_pejabat_penandatangan_input').addClass('d-none');
+                    $('#parent_add_pejabat_penandatangan_select').prop('disabled', false);
+                    $('#parent_add_pejabat_penandatangan_input').prop('disabled', true);
+                }
+            });
+
+            $('#parent_add_jenis_naskah_dinas_select').on('change', function(e) {
+                let optionSelected = $("option:selected", this);
+                let valueSelected = this.value;
+
+                if (valueSelected === 'Lainnya') {
+                    $('#parent_add_jenis_naskah_dinas_select').addClass('d-none');
+                    $('#parent_add_jenis_naskah_dinas_input').removeClass('d-none');
+                    $('#parent_add_jenis_naskah_dinas_select').prop('disabled', true);
+                    $('#parent_add_jenis_naskah_dinas_input').prop('disabled', false);
+                } else {
+                    $('#parent_add_jenis_naskah_dinas_select').removeClass('d-none');
+                    $('#parent_add_jenis_naskah_dinas_input').addClass('d-none');
+                    $('#parent_add_jenis_naskah_dinas_select').prop('disabled', false);
+                    $('#parent_add_jenis_naskah_dinas_input').prop('disabled', true);
+                }
+            });
+
+            $('#child_pejabat_penandatangan_select').on('change', function(e) {
+                let optionSelected = $("option:selected", this);
+                let valueSelected = this.value
+
+                if (valueSelected === 'Lainnya') {
+                    $('#child_pejabat_penandatangan_select').addClass('d-none');
+                    $('#child_pejabat_penandatangan_input').removeClass('d-none');
+                    $('#child_pejabat_penandatangan_select').prop('disabled', true);
+                    $('#child_pejabat_penandatangan_input').prop('disabled', false);
+                } else {
+                    $('#child_pejabat_penandatangan_select').removeClass('d-none');
+                    $('#child_pejabat_penandatangan_input').addClass('d-none');
+                    $('#child_pejabat_penandatangan_select').prop('disabled', false);
+                    $('#child_pejabat_penandatangan_input').prop('disabled', true);
+                }
+            });
+
+            $('#child_jenis_naskah_dinas_select').on('change', function(e) {
+                let optionSelected = $("option:selected", this);
+                let valueSelected = this.value
+
+                if (valueSelected === 'Lainnya') {
+                    $('#child_jenis_naskah_dinas_select').addClass('d-none');
+                    $('#child_jenis_naskah_dinas_input').removeClass('d-none');
+                    $('#child_jenis_naskah_dinas_select').prop('disabled', true);
+                    $('#child_jenis_naskah_dinas_input').prop('disabled', false);
+                } else {
+                    $('#child_jenis_naskah_dinas_select').removeClass('d-none');
+                    $('#child_jenis_naskah_dinas_input').addClass('d-none');
+                    $('#child_jenis_naskah_dinas_select').prop('disabled', false);
+                    $('#child_jenis_naskah_dinas_input').prop('disabled', true);
+                }
             });
 
             $(document).on("click", ".modal-hapus", function() {
@@ -105,16 +230,59 @@
 
                 if (index > 3) {
                     disable = false;
+
+                    // NASKAH DINAS
+                    $('.modal-body #child_jenis_naskah_dinas_select').empty();
+                    if(subitem['jenis_naskah_dinas']) {
+                        $('.modal-body #child_jenis_naskah_dinas_select').append('<option selected value="' +
+                        subitem['jenis_naskah_dinas'] + '">' + subitem['jenis_naskah_dinas'] + '</option>');
+                    }
+                    $('.modal-body #child_jenis_naskah_dinas_select').append('<option value="SPTJM,Ceklis SPM">SPTJM,Ceklis SPM</option>');
+                    $('.modal-body #child_jenis_naskah_dinas_select').append('<option value="Pernyataan Verifikasi">Pernyataan Verifikasi</option>');
+                    $('.modal-body #child_jenis_naskah_dinas_select').append('<option value="Ringkasan Kontrak">Ringkasan Kontrak</option>');
+                    $('.modal-body #child_jenis_naskah_dinas_select').append('<option value="Lainnya">Lainnya</option>');
+
+                    // PEJABAT PENANDATANGANAN
+                    $('.modal-body #child_pejabat_penandatangan_select').empty();
+                    if(subitem['pejabat_penandatangan']) {
+                        $('.modal-body #child_pejabat_penandatangan_select').append('<option selected value="' +
+                        subitem['pejabat_penandatangan'] + '">' + subitem['pejabat_penandatangan'] + '</option>');
+                    }
+                    $('.modal-body #child_pejabat_penandatangan_select').append('<option value="PA/KPA">PA/KPA</option>');
+                    $('.modal-body #child_pejabat_penandatangan_select').append('<option value="PPK">PPK</option>');
+                    $('.modal-body #child_pejabat_penandatangan_select').append('<option value="Bendahara">Bendahara</option>');
+                    $('.modal-body #child_pejabat_penandatangan_select').append('<option value="Lainnya">Lainnya</option>');
+                } else {
+                    if(subitem['jenis_naskah_dinas']) {
+                        $('.modal-body #child_jenis_naskah_dinas_select').append('<option selected value="' +
+                        subitem['jenis_naskah_dinas'] + '">' + subitem['jenis_naskah_dinas'] + '</option>');
+                    }
+
+                    if(subitem['pejabat_penandatangan']) {
+                        $('.modal-body #child_pejabat_penandatangan_select').append('<option selected value="' +
+                        subitem['pejabat_penandatangan'] + '">' + subitem['pejabat_penandatangan'] + '</option>');
+                    }
                 }
+
                 // TRIGER PROP INPUT
                 $(".modal-body #child_kode_klasifikasi").prop("disabled", disable);
                 $(".modal-body #child_jumlah_satuan").prop("disabled", disable);
                 $(".modal-body #child_keterangan").prop("disabled", disable);
-                $(".modal-body #child_jenis_naskah_dinas").prop("disabled", disable);
-                $(".modal-body #child_pejabat_penandatangan").prop("disabled", disable);
+                $(".modal-body #child_jenis_naskah_dinas_select").prop("disabled", disable);
+                $(".modal-body #child_pejabat_penandatangan_select").prop("disabled", disable);
                 $(".modal-body #child_unit_pengolah").prop("disabled", disable);
                 $(".modal-body #child_kurun_waktu").prop("disabled", disable);
                 $(".modal-body #child_no_box").prop("disabled", disable);
+
+                // TRIGER INIT JENIS NASKAH DINAS
+                $(".modal-body #child_jenis_naskah_dinas_select").removeClass('d-none');
+                $(".modal-body #child_jenis_naskah_dinas_input").prop('disabled', true);
+                $(".modal-body #child_jenis_naskah_dinas_input").addClass('d-none');
+
+                // TRIGER INIT PEJABAT PENANDATANGANAN
+                $(".modal-body #child_pejabat_penandatangan_select").removeClass('d-none');
+                $(".modal-body #child_pejabat_penandatangan_input").prop('disabled', true);
+                $(".modal-body #child_pejabat_penandatangan_input").addClass('d-none');
 
                 // UUPDATE VALUE INPUT
                 $('#form_edit_child').attr('action', '/detail-data-arsip/' + subitem['id']);
@@ -124,9 +292,7 @@
                 $(".modal-body #child_tanggal_surat").val(subitem['tanggal_surat']);
                 $(".modal-body #child_jumlah_satuan").val(subitem['jumlah_satuan']);
                 $(".modal-body #child_keterangan").val(subitem['keterangan']);
-                $(".modal-body #child_jenis_naskah_dinas").val(subitem['jenis_naskah_dinas']);
                 $(".modal-body #child_no_surat").val(subitem['no_surat']);
-                $(".modal-body #child_pejabat_penandatangan").val(subitem['pejabat_penandatangan']);
                 $(".modal-body #child_unit_pengolah").val(subitem['unit_pengolah']);
                 $(".modal-body #child_kurun_waktu").val(subitem['kurun_waktu']);
                 $(".modal-body #child_no_box").val(subitem['no_box']);
@@ -170,13 +336,22 @@
             $(document).on('click', '.btn-add-parent', function() {
                 const id = $(this).data('id');
                 const subitem = $(this).data('subitem');
-                console.log('subitem', subitem);
+                $('#parent_add_pejabat_penandatangan_select').removeClass('d-none');
+                $('#parent_add_pejabat_penandatangan_input').addClass('d-none');
+                $(".modal-body #parent_add_pejabat_penandatangan_select").val('PA/KPA');
+                $(".modal-body #parent_add_pejabat_penandatangan_select").removeClass('d-none');
+                $(".modal-body #parent_add_pejabat_penandatangan_select").prop('disabled', false);
+                $(".modal-body #parent_add_pejabat_penandatangan_input").prop('disabled', true);
+                $(".modal-body #parent_add_pejabat_penandatangan_input").addClass('d-none');
                 $(".modal-body #parent_add_kode_klasifikasi").val(subitem['kode_klasifikasi']);
                 $(".modal-body #parent_add_tanggal_surat").val(subitem['tanggal_surat']);
                 $(".modal-body #parent_add_jumlah_satuan").val(subitem['jumlah_satuan']);
                 $(".modal-body #parent_add_keterangan").val(subitem['keterangan']);
-                $(".modal-body #parent_add_jenis_naskah_dinas").val(subitem['jenis_naskah_dinas']);
-                $(".modal-body #parent_add_pejabat_penandatangan").val('PA/KPA');
+                $(".modal-body #parent_add_jenis_naskah_dinas_select").val('SPTJM,Ceklis SPM');
+                $(".modal-body #parent_add_jenis_naskah_dinas_select").removeClass('d-none');
+                $(".modal-body #parent_add_jenis_naskah_dinas_select").prop('disabled', false);
+                $(".modal-body #parent_add_jenis_naskah_dinas_input").prop('disabled', true);
+                $(".modal-body #parent_add_jenis_naskah_dinas_input").addClass('d-none');
                 $(".modal-body #parent_add_unit_pengolah").val(subitem['unit_pengolah']);
                 $(".modal-body #parent_add_kurun_waktu").val(subitem['kurun_waktu']);
                 $(".modal-body #parent_add_no_box").val(subitem['no_box']);
@@ -228,6 +403,20 @@
                 items = item;
                 getData();
             });
+
+            $(".btn-reset-filter").on('click', function(event) {
+                start_date_validate = '';
+                end_date_validate = '';
+                $("input[name=start_date_validate]").val('');
+                $("input[name=end_date_validate]").val('');
+            });
+
+            $(".btn-filter").on('click', function(event) {
+                start_date_validate = $("input[name=start_date_validate]").val();
+                end_date_validate = $("input[name=end_date_validate]").val();
+                getData();
+                $('#modalFilter').modal('hide');
+            });
         });
 
         function getData() {
@@ -239,6 +428,14 @@
 
             if (keyword !== '') {
                 requestData.search = keyword;
+            }
+
+            if (start_date_validate !== '') {
+                requestData.start_date_validate = start_date_validate;
+            }
+
+            if (end_date_validate !== '') {
+                requestData.end_date_validate = end_date_validate;
             }
 
             requestData.items = items;
@@ -330,6 +527,13 @@
                                 <button class="dropdown-item" type="button" data-bs-toggle="modal"
                                     data-bs-target="#modalTarikData">Tarik Data Monitoring</button>
                             </div>
+
+                            <button type="button"
+                                class="btn btn-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0"
+                                id="btn-barcode" disabled>
+                                <i data-acorn-icon="plus"></i>
+                                <span>Buat QR Code No. Box</span>
+                            </button>
                             {{-- <a href="{{ route('data-arsip.create') }}"
                                 class="btn btn-primary btn-icon btn-icon-start w-100 w-md-auto mt-3 mt-sm-0">
                                 <i data-acorn-icon="plus"></i>
@@ -360,10 +564,9 @@
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xxl-8 text-end mb-3">
                             <div class="d-inline-block">
                                 <!-- Print Button Start -->
-                                <button class="btn btn-icon btn-icon-only btn-foreground-alternate shadow datatable-print"
-                                    data-bs-delay="0" data-datatable="#datatableRowsServerSide" data-bs-toggle="tooltip"
-                                    data-bs-placement="top" title="Print" type="button">
-                                    <i data-acorn-icon="print"></i>
+                                <button class="btn btn-icon btn-icon-only btn-primary shadow datatable-print" type="button"
+                                    data-bs-toggle="modal" data-bs-target="#modalFilter">
+                                    <i data-acorn-icon="filter"></i>
                                 </button>
                                 <!-- Print Button End -->
                                 <!-- Export Dropdown Start -->
@@ -574,8 +777,9 @@
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Jenis Naskah Dinas</label>
-                            <input type="text" class="form-control" name="jenis_naskah_dinas"
-                                id="child_jenis_naskah_dinas" disabled required />
+                            <select id="child_jenis_naskah_dinas_select" name="jenis_naskah_dinas" class="form-select" required></select>
+                            <input type="text" class="form-control d-none" id="child_jenis_naskah_dinas_input"
+                                name="jenis_naskah_dinas" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -585,8 +789,9 @@
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Pejabat Penandatangan</label>
-                            <input type="text" class="form-control" name="pejabat_penandatangan"
-                                id="child_pejabat_penandatangan" disabled required />
+                            <select id="child_pejabat_penandatangan_select" name="pejabat_penandatangan" class="form-select" required></select>
+                            <input type="text" class="form-control d-none" id="child_pejabat_penandatangan_input"
+                                name="pejabat_penandatangan" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -723,8 +928,7 @@
                         </div>
 
                         <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Pejabat
-                                Penandatangan</label>
+                            <label class="form-label text-primary fw-bold">Pejabat Penandatangan</label>
                             <select name="pejabat_penandatangan" id="parent_pejabat_penandatangan" class="form-select"
                                 required>
                                 <option value="Kuasa BUD">Kuasa BUD</option>
@@ -734,8 +938,7 @@
                         </div>
 
                         <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Unit
-                                Pengolah</label>
+                            <label class="form-label text-primary fw-bold">Unit Pengolah</label>
                             <select name="unit_pengolah" id="parent_unit_pengolah" class="form-select" required>
                                 <option value="SBPK-JP">SBPK-JP</option>
                                 <option value="SBPK-JU">SBPK-JU</option>
@@ -778,10 +981,10 @@
                         </div>
 
                         <!--<div class="col text-end">
-                                                                                                                                                    <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                                                                                                                                        Kegiatan</button>
+                                                                                                                                                                                        <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                                                                                                                                                                            Kegiatan</button>
 
-                                                                                                                                                </div>-->
+                                                                                                                                                                                    </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
@@ -864,7 +1067,14 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Jenis Naskah
                                 Dinas</label>
-                            <input type="text" class="form-control" id="parent_add_jenis_naskah_dinas"
+                            <select id="parent_add_jenis_naskah_dinas_select" name="jenis_naskah_dinas"
+                                class="form-select" required>
+                                <option selected value="SPTJM,Ceklis SPM">SPTJM,Ceklis SPM</option>
+                                <option value="Pernyataan Verifikasi">Pernyataan Verifikasi</option>
+                                <option value="Ringkasan Kontrak">Ringkasan Kontrak</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                            <input type="text" class="form-control d-none" id="parent_add_jenis_naskah_dinas_input"
                                 name="jenis_naskah_dinas" required />
                         </div>
 
@@ -878,11 +1088,14 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Pejabat
                                 Penandatangan</label>
-                            <!-- <select id="parent_add_pejabat_penandatangan" name="pejabat_penandatangan"
-                                                                                                                                                    class="form-select" required>
-                                                                                                                                                    <option selected value="PA/KPA">PA/KPA</option>
-                                                                                                                                                </select> -->
-                            <input type="text" class="form-control" id="parent_add_pejabat_penandatangan"
+                            <select id="parent_add_pejabat_penandatangan_select" name="pejabat_penandatangan"
+                                class="form-select" required>
+                                <option selected value="PA/KPA">PA/KPA</option>
+                                <option value="PPK">PPK</option>
+                                <option value="Bendahara">Bendahara</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                            <input type="text" class="form-control d-none" id="parent_add_pejabat_penandatangan_input"
                                 name="pejabat_penandatangan" required />
                         </div>
 
@@ -903,8 +1116,8 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No.
                                 Box</label>
-                            <input type="text" class="form-control" id="parent_add_no_box" name="no_box" disabled
-                                required />
+                            <input type="text" class="form-control bg-muted" id="parent_add_no_box" name="no_box"
+                                readonly required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -983,6 +1196,72 @@
                     <div class="modal-footer pt-0 pb-4" style="border-top: none !important">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary">Ya</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal No. Box -->
+    <div class="modal fade" id="modalFormBarcode" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="POST" action="/data-arsip-no-box" enctype="multipart/form-data">
+                <div class="modal-content">
+                    <div class="modal-header py-3">
+                        <h5 class="modal-title" id="exampleModalLabelDefault">Buat QR Code No. Box</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex flex-column align-items-center justify-content-center text-center py-3">
+                        {{ csrf_field() }}
+                        {!! '<img class="mb-3" src="data:image/png;base64,' .
+                            DNS2D::getBarcodePNG(url('/detail-box', Str::replace('/', '_', $no_box_tmp)), 'QRCODE', 12, 12) .
+                            '" alt="' .
+                            $no_box_tmp .
+                            '"   />' !!}
+                        <div class="form-label text-primary fw-bold" id="no_box_display">Mohon Tunggu...</div>
+                        <input type="hidden" name="id[]" id="dokumen_id">
+                        <input type="hidden" name="kurun_waktu" id="kurun_waktu">
+
+                    </div>
+                    <div class="modal-footer pt-3 pb-3">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Filter -->
+    <div class="modal fade" id="modalFilter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form>
+                <div class="modal-content">
+                    <div class="modal-header py-3">
+                        <h5 class="modal-title" id="exampleModalLabelDefault">Filter Data</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body py-3">
+                        {{ csrf_field() }}
+
+                        <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">Tanggal Validasi</label>
+                            <div class="input-daterange input-group" id="datePickerRange">
+                                <input type="text" class="form-control" name="start_date_validate"
+                                    placeholder="Awal Periode" />
+                                <span class="mx-2"></span>
+                                <input type="text" class="form-control" name="end_date_validate"
+                                    placeholder="Akhir Periode" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer pt-0 pb-4" style="border-top: none !important">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-outline-primary btn-reset-filter">Reset</button>
+                        <button type="button" class="btn btn-primary btn-filter">Filter</button>
                     </div>
                 </div>
             </form>

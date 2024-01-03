@@ -27,24 +27,39 @@ class DokumenController extends Controller
      */
     public function index(Request $request) : View
     {
-        $akunJenisOptions = AkunJenis::select('kode_akun','nama_akun')->get();
+        $akunJenisOptions       = AkunJenis::select('kode_akun','nama_akun')->get();
 
-        $itemsPerPage = request('items') ?? 10;
+        $itemsPerPage           = request('items') ?? 10;
+
+        $start_date_validate = $request->input('start_date_validate');
+        $end_date_validate = $request->input('end_date_validate');
 
         $dokumen = Dokumen::with([
-                        'detailDokumen' => function($query) {
-                            $query->orderBy('id', 'ASC');
-                        },
-                        'akunJenis' => function($query) {
-                            $query->select('id', 'kode_akun','nama_akun');
-                        },
-                    ])
-                    ->filter(request(['search']))
-                    ->orderBy('tanggal_validasi', 'DESC')
-                    ->where('status', '=', 'Menunggu Verifikasi')
-                    ->sortable()
-                    ->paginate($itemsPerPage)
-                    ->withQueryString();
+                'detailDokumen' => function ($query) {
+                    $query->orderBy('id', 'ASC');
+                },
+                'akunJenis' => function ($query) {
+                    $query->select('id', 'kode_akun', 'nama_akun');
+                },
+            ])
+            ->filter(request(['search']))
+            ->orderBy('tanggal_validasi', 'DESC')
+            ->where('status', '=', 'Menunggu Verifikasi')
+            ->when($start_date_validate, function ($query) use ($start_date_validate) {
+                $start_date_validate = date('Y-m-d', strtotime($start_date_validate));
+                $query->whereDate('tanggal_validasi', '>=', $start_date_validate);
+            })
+            ->when($end_date_validate, function ($query) use ($end_date_validate) {
+                $end_date_validate = date('Y-m-d', strtotime($end_date_validate));
+                $query->whereDate('tanggal_validasi', '<=', $end_date_validate);
+            })
+            ->sortable()
+            ->paginate($itemsPerPage)
+            ->withQueryString();
+
+
+// Print or log the queries
+
 
         if ($request->ajax()) {
             return view('pages/data-arsip/data', compact('dokumen'));
@@ -55,7 +70,8 @@ class DokumenController extends Controller
             "monthsOptions"     => $this->getMonths(),
             "yearsOptions"      => $this->getYears(),
             "akunJenisOptions"  => $akunJenisOptions,
-            "dokumen"           => $dokumen
+            "dokumen"           => $dokumen,
+            "no_box_tmp"        => $this->generate_no_box(2023)
         ]);
     }
 
@@ -460,5 +476,33 @@ class DokumenController extends Controller
         }
 
         return $years;
+    }
+
+    public function generate_no_box($year) {
+        $counter = Dokumen::whereNotNull('no_box')->where('kurun_waktu', '=', $year)->distinct()->count('no_box');
+        $short_year = substr($year,2);
+        $current_number = sprintf("%05d", $counter+1);
+        $no_box = $current_number."/".$year."/P.".$short_year."/SBPKDJP";
+        return $no_box;
+    }
+
+    public function get_no_box($year) {
+        return response()->json($this->generate_no_box($year));
+    }
+
+    public function update_no_box(Request $request) {
+        $ids = $request['id'];
+        $id = explode(",",$ids[0]);
+        $kurun_waktu = $request['kurun_waktu'];
+        $no_box = $this->generate_no_box($kurun_waktu);
+        $data['no_box'] = $no_box;
+        
+        foreach($id as $item) {
+            
+            Dokumen::where('id', $item)->update($data);
+             DetailDokumen::where('dokumen_id', $item)->update($data);
+        }
+
+        return redirect()->route('data-arsip.index')->with('message','No. Box telah berhasil diperbaharui');
     }
 }

@@ -21,7 +21,7 @@
     <div class="sw-lg-80 min-h-100 bg-foreground d-flex justify-content-center align-items-center shadow-deep py-5 full-page-content-right-border">
         <div class="sw-lg-60 px-5">
             <div class="sh-11">
-                <a href="/">
+                <a href="{{ route('beranda') }}">
                     <div class="logo-default"></div>
                 </a>
             </div>
@@ -43,7 +43,7 @@
                         <i data-acorn-icon="email"></i>
                         <input class="form-control" id="password" type="password" placeholder="Email" />
                     </div>
-                    <a href="/" class="btn btn-icon btn-icon-end btn-primary">
+                    <a href="{{ route('beranda') }}" class="btn btn-icon btn-icon-end btn-primary">
                         <span>Submit</span>
                         <i data-acorn-icon="chevron-right"></i>
                     </a>
