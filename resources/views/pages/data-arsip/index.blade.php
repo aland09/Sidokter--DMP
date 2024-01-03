@@ -114,11 +114,11 @@
                 $('#form_add_parent').submit();
             });
 
-            $('#parent_add_pejabat_penandatangan_select').on('change', function (e) {
+            $('#parent_add_pejabat_penandatangan_select').on('change', function(e) {
                 let optionSelected = $("option:selected", this);
-                let valueSelected = this.value
+                let valueSelected = this.value;
 
-                if(valueSelected === 'Lainnya') {
+                if (valueSelected === 'Lainnya') {
                     $('#parent_add_pejabat_penandatangan_select').addClass('d-none');
                     $('#parent_add_pejabat_penandatangan_input').removeClass('d-none');
                     $('#parent_add_pejabat_penandatangan_select').prop('disabled', true);
@@ -131,11 +131,11 @@
                 }
             });
 
-            $('#parent_add_jenis_naskah_dinas_select').on('change', function (e) {
+            $('#parent_add_jenis_naskah_dinas_select').on('change', function(e) {
                 let optionSelected = $("option:selected", this);
-                let valueSelected = this.value
+                let valueSelected = this.value;
 
-                if(valueSelected === 'Lainnya') {
+                if (valueSelected === 'Lainnya') {
                     $('#parent_add_jenis_naskah_dinas_select').addClass('d-none');
                     $('#parent_add_jenis_naskah_dinas_input').removeClass('d-none');
                     $('#parent_add_jenis_naskah_dinas_select').prop('disabled', true);
@@ -145,6 +145,23 @@
                     $('#parent_add_jenis_naskah_dinas_input').addClass('d-none');
                     $('#parent_add_jenis_naskah_dinas_select').prop('disabled', false);
                     $('#parent_add_jenis_naskah_dinas_input').prop('disabled', true);
+                }
+            });
+
+            $('#child_jenis_naskah_dinas_select').on('change', function(e) {
+                let optionSelected = $("option:selected", this);
+                let valueSelected = this.value
+
+                if (valueSelected === 'Lainnya') {
+                    $('#child_jenis_naskah_dinas_select').addClass('d-none');
+                    $('#child_jenis_naskah_dinas_input').removeClass('d-none');
+                    $('#child_jenis_naskah_dinas_select').prop('disabled', true);
+                    $('#child_jenis_naskah_dinas_input').prop('disabled', false);
+                } else {
+                    $('#child_jenis_naskah_dinas_select').removeClass('d-none');
+                    $('#child_jenis_naskah_dinas_input').addClass('d-none');
+                    $('#child_jenis_naskah_dinas_select').prop('disabled', false);
+                    $('#child_jenis_naskah_dinas_input').prop('disabled', true);
                 }
             });
 
@@ -196,16 +213,37 @@
 
                 if (index > 3) {
                     disable = false;
+
+                    $('.modal-body #child_jenis_naskah_dinas_select').empty();
+                    if(subitem['jenis_naskah_dinas']) {
+                        $('.modal-body #child_jenis_naskah_dinas_select').append('<option selected value="' +
+                        subitem['jenis_naskah_dinas'] + '">' + subitem['jenis_naskah_dinas'] + '</option>');
+                    }
+                    $('.modal-body #child_jenis_naskah_dinas_select').append('<option value="SPTJM,Ceklis SPM">SPTJM,Ceklis SPM</option>');
+                    $('.modal-body #child_jenis_naskah_dinas_select').append('<option value="Pernyataan Verifikasi">Pernyataan Verifikasi</option>');
+                    $('.modal-body #child_jenis_naskah_dinas_select').append('<option value="Ringkasan Kontrak">Ringkasan Kontrak</option>');
+                    $('.modal-body #child_jenis_naskah_dinas_select').append('<option value="Lainnya">Lainnya</option>');
+                } else {
+                    if(subitem['jenis_naskah_dinas']) {
+                        $('.modal-body #child_jenis_naskah_dinas_select').append('<option selected value="' +
+                        subitem['jenis_naskah_dinas'] + '">' + subitem['jenis_naskah_dinas'] + '</option>');
+                    }
                 }
+
                 // TRIGER PROP INPUT
                 $(".modal-body #child_kode_klasifikasi").prop("disabled", disable);
                 $(".modal-body #child_jumlah_satuan").prop("disabled", disable);
                 $(".modal-body #child_keterangan").prop("disabled", disable);
-                $(".modal-body #child_jenis_naskah_dinas").prop("disabled", disable);
+                $(".modal-body #child_jenis_naskah_dinas_select").prop("disabled", disable);
                 $(".modal-body #child_pejabat_penandatangan").prop("disabled", disable);
                 $(".modal-body #child_unit_pengolah").prop("disabled", disable);
                 $(".modal-body #child_kurun_waktu").prop("disabled", disable);
                 $(".modal-body #child_no_box").prop("disabled", disable);
+
+                // TRIGER INIT JENIS NASKAH DINAS
+                $(".modal-body #child_jenis_naskah_dinas_select").removeClass('d-none');
+                $(".modal-body #child_jenis_naskah_dinas_input").prop('disabled', true);
+                $(".modal-body #child_jenis_naskah_dinas_input").addClass('d-none');
 
                 // UUPDATE VALUE INPUT
                 $('#form_edit_child').attr('action', '/detail-data-arsip/' + subitem['id']);
@@ -215,7 +253,7 @@
                 $(".modal-body #child_tanggal_surat").val(subitem['tanggal_surat']);
                 $(".modal-body #child_jumlah_satuan").val(subitem['jumlah_satuan']);
                 $(".modal-body #child_keterangan").val(subitem['keterangan']);
-                $(".modal-body #child_jenis_naskah_dinas").val(subitem['jenis_naskah_dinas']);
+
                 $(".modal-body #child_no_surat").val(subitem['no_surat']);
                 $(".modal-body #child_pejabat_penandatangan").val(subitem['pejabat_penandatangan']);
                 $(".modal-body #child_unit_pengolah").val(subitem['unit_pengolah']);
@@ -702,8 +740,9 @@
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Jenis Naskah Dinas</label>
-                            <input type="text" class="form-control" name="jenis_naskah_dinas"
-                                id="child_jenis_naskah_dinas" disabled required />
+                            <select id="child_jenis_naskah_dinas_select" name="jenis_naskah_dinas" class="form-select" required></select>
+                            <input type="text" class="form-control d-none" id="child_jenis_naskah_dinas_input"
+                                name="jenis_naskah_dinas" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -851,8 +890,7 @@
                         </div>
 
                         <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Pejabat
-                                Penandatangan</label>
+                            <label class="form-label text-primary fw-bold">Pejabat Penandatangan</label>
                             <select name="pejabat_penandatangan" id="parent_pejabat_penandatangan" class="form-select"
                                 required>
                                 <option value="Kuasa BUD">Kuasa BUD</option>
@@ -862,8 +900,7 @@
                         </div>
 
                         <div class="mb-3 position-relative form-group">
-                            <label class="form-label text-primary fw-bold">Unit
-                                Pengolah</label>
+                            <label class="form-label text-primary fw-bold">Unit Pengolah</label>
                             <select name="unit_pengolah" id="parent_unit_pengolah" class="form-select" required>
                                 <option value="SBPK-JP">SBPK-JP</option>
                                 <option value="SBPK-JU">SBPK-JU</option>
@@ -906,10 +943,10 @@
                         </div>
 
                         <!--<div class="col text-end">
-                                                                                                                                                                <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                                                                                                                                                    Kegiatan</button>
+                                                                                                                                                                                        <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                                                                                                                                                                            Kegiatan</button>
 
-                                                                                                                                                            </div>-->
+                                                                                                                                                                                    </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
@@ -1013,13 +1050,13 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Pejabat
                                 Penandatangan</label>
-                                <select id="parent_add_pejabat_penandatangan_select" name="pejabat_penandatangan"
-                                    class="form-select" required>
-                                    <option selected value="PA/KPA">PA/KPA</option>
-                                    <option value="PPK">PPK</option>
-                                    <option value="Bendahara">Bendahara</option>
-                                    <option value="Lainnya">Lainnya</option>
-                                </select>
+                            <select id="parent_add_pejabat_penandatangan_select" name="pejabat_penandatangan"
+                                class="form-select" required>
+                                <option selected value="PA/KPA">PA/KPA</option>
+                                <option value="PPK">PPK</option>
+                                <option value="Bendahara">Bendahara</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
                             <input type="text" class="form-control d-none" id="parent_add_pejabat_penandatangan_input"
                                 name="pejabat_penandatangan" required />
                         </div>
@@ -1041,8 +1078,8 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">No.
                                 Box</label>
-                            <input type="text" class="form-control bg-muted" id="parent_add_no_box" name="no_box" readonly
-                                required />
+                            <input type="text" class="form-control bg-muted" id="parent_add_no_box" name="no_box"
+                                readonly required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
@@ -1174,9 +1211,11 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Tanggal Validasi</label>
                             <div class="input-daterange input-group" id="datePickerRange">
-                                <input type="text" class="form-control" name="start_date_validate" placeholder="Awal Periode" />
+                                <input type="text" class="form-control" name="start_date_validate"
+                                    placeholder="Awal Periode" />
                                 <span class="mx-2"></span>
-                                <input type="text" class="form-control" name="end_date_validate" placeholder="Akhir Periode" />
+                                <input type="text" class="form-control" name="end_date_validate"
+                                    placeholder="Akhir Periode" />
                             </div>
                         </div>
 
