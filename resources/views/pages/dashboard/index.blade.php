@@ -122,7 +122,7 @@
                                             <div
                                                 class="card-body d-flex flex-column pt-0 pb-0 ps-3 pe-4 h-100 justify-content-center">
                                                 <div class="d-flex flex-column">
-                                                    <div class="text-alternate mt-n1 lh-1-25"><strong>{{ $item->causer->name }}</strong> {!! $item->description !!}</div>
+                                                    <div class="text-alternate mt-n1 lh-1-25"><strong>{{ $item->causer->name ?? '' }}</strong> {!! $item->description !!}</div>
                                                 </div>
                                             </div>
                                         </div>
