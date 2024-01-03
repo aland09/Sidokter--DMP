@@ -148,6 +148,23 @@
                 }
             });
 
+            $('#child_pejabat_penandatangan_select').on('change', function(e) {
+                let optionSelected = $("option:selected", this);
+                let valueSelected = this.value
+
+                if (valueSelected === 'Lainnya') {
+                    $('#child_pejabat_penandatangan_select').addClass('d-none');
+                    $('#child_pejabat_penandatangan_input').removeClass('d-none');
+                    $('#child_pejabat_penandatangan_select').prop('disabled', true);
+                    $('#child_pejabat_penandatangan_input').prop('disabled', false);
+                } else {
+                    $('#child_pejabat_penandatangan_select').removeClass('d-none');
+                    $('#child_pejabat_penandatangan_input').addClass('d-none');
+                    $('#child_pejabat_penandatangan_select').prop('disabled', false);
+                    $('#child_pejabat_penandatangan_input').prop('disabled', true);
+                }
+            });
+
             $('#child_jenis_naskah_dinas_select').on('change', function(e) {
                 let optionSelected = $("option:selected", this);
                 let valueSelected = this.value
@@ -214,6 +231,7 @@
                 if (index > 3) {
                     disable = false;
 
+                    // NASKAH DINAS
                     $('.modal-body #child_jenis_naskah_dinas_select').empty();
                     if(subitem['jenis_naskah_dinas']) {
                         $('.modal-body #child_jenis_naskah_dinas_select').append('<option selected value="' +
@@ -223,10 +241,26 @@
                     $('.modal-body #child_jenis_naskah_dinas_select').append('<option value="Pernyataan Verifikasi">Pernyataan Verifikasi</option>');
                     $('.modal-body #child_jenis_naskah_dinas_select').append('<option value="Ringkasan Kontrak">Ringkasan Kontrak</option>');
                     $('.modal-body #child_jenis_naskah_dinas_select').append('<option value="Lainnya">Lainnya</option>');
+
+                    // PEJABAT PENANDATANGANAN
+                    $('.modal-body #child_pejabat_penandatangan_select').empty();
+                    if(subitem['pejabat_penandatangan']) {
+                        $('.modal-body #child_pejabat_penandatangan_select').append('<option selected value="' +
+                        subitem['pejabat_penandatangan'] + '">' + subitem['pejabat_penandatangan'] + '</option>');
+                    }
+                    $('.modal-body #child_pejabat_penandatangan_select').append('<option value="PA/KPA">PA/KPA</option>');
+                    $('.modal-body #child_pejabat_penandatangan_select').append('<option value="PPK">PPK</option>');
+                    $('.modal-body #child_pejabat_penandatangan_select').append('<option value="Bendahara">Bendahara</option>');
+                    $('.modal-body #child_pejabat_penandatangan_select').append('<option value="Lainnya">Lainnya</option>');
                 } else {
                     if(subitem['jenis_naskah_dinas']) {
                         $('.modal-body #child_jenis_naskah_dinas_select').append('<option selected value="' +
                         subitem['jenis_naskah_dinas'] + '">' + subitem['jenis_naskah_dinas'] + '</option>');
+                    }
+
+                    if(subitem['pejabat_penandatangan']) {
+                        $('.modal-body #child_pejabat_penandatangan_select').append('<option selected value="' +
+                        subitem['pejabat_penandatangan'] + '">' + subitem['pejabat_penandatangan'] + '</option>');
                     }
                 }
 
@@ -235,7 +269,7 @@
                 $(".modal-body #child_jumlah_satuan").prop("disabled", disable);
                 $(".modal-body #child_keterangan").prop("disabled", disable);
                 $(".modal-body #child_jenis_naskah_dinas_select").prop("disabled", disable);
-                $(".modal-body #child_pejabat_penandatangan").prop("disabled", disable);
+                $(".modal-body #child_pejabat_penandatangan_select").prop("disabled", disable);
                 $(".modal-body #child_unit_pengolah").prop("disabled", disable);
                 $(".modal-body #child_kurun_waktu").prop("disabled", disable);
                 $(".modal-body #child_no_box").prop("disabled", disable);
@@ -245,6 +279,11 @@
                 $(".modal-body #child_jenis_naskah_dinas_input").prop('disabled', true);
                 $(".modal-body #child_jenis_naskah_dinas_input").addClass('d-none');
 
+                // TRIGER INIT PEJABAT PENANDATANGANAN
+                $(".modal-body #child_pejabat_penandatangan_select").removeClass('d-none');
+                $(".modal-body #child_pejabat_penandatangan_input").prop('disabled', true);
+                $(".modal-body #child_pejabat_penandatangan_input").addClass('d-none');
+
                 // UUPDATE VALUE INPUT
                 $('#form_edit_child').attr('action', '/detail-data-arsip/' + subitem['id']);
                 $(".modal-body #child_dokumen_id").val(subitem['dokumen_id']);
@@ -253,9 +292,7 @@
                 $(".modal-body #child_tanggal_surat").val(subitem['tanggal_surat']);
                 $(".modal-body #child_jumlah_satuan").val(subitem['jumlah_satuan']);
                 $(".modal-body #child_keterangan").val(subitem['keterangan']);
-
                 $(".modal-body #child_no_surat").val(subitem['no_surat']);
-                $(".modal-body #child_pejabat_penandatangan").val(subitem['pejabat_penandatangan']);
                 $(".modal-body #child_unit_pengolah").val(subitem['unit_pengolah']);
                 $(".modal-body #child_kurun_waktu").val(subitem['kurun_waktu']);
                 $(".modal-body #child_no_box").val(subitem['no_box']);
@@ -752,8 +789,9 @@
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Pejabat Penandatangan</label>
-                            <input type="text" class="form-control" name="pejabat_penandatangan"
-                                id="child_pejabat_penandatangan" disabled required />
+                            <select id="child_pejabat_penandatangan_select" name="pejabat_penandatangan" class="form-select" required></select>
+                            <input type="text" class="form-control d-none" id="child_pejabat_penandatangan_input"
+                                name="pejabat_penandatangan" required />
                         </div>
 
                         <div class="mb-3 position-relative form-group">
