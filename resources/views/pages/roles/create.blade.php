@@ -10,12 +10,13 @@
 @endsection
 
 @section('js_vendor')
-    <script src="/js/cs/scrollspy.js"></script>
-    <script src="/js/vendor/jquery.validate/jquery.validate.min.js"></script>
+    <script src="{{ asset('js/cs/scrollspy.js') }}"></script>
+    <script src="{{ asset('js/vendor/jquery.validate/jquery.validate.min.js') }}"></script>
 @endsection
 
+
 @section('js_page')
-    <script src="/js/forms/validation.js"></script>
+    <script src="{{ asset('js/forms/validation.js') }}"></script>
     <script>
         $(document).ready(function() {
             const submitBtn = document.getElementById('submitBtn');
@@ -66,7 +67,7 @@
                         {{ $description }}
                     </p>
                     <!-- tooltip-label-end inputs should be wrapped in form-group class -->
-                    <form id="form" class="tooltip-label-end" novalidate action="/roles" method="POST">
+                    <form id="form" class="tooltip-label-end" novalidate action="{{ route('roles.store') }}" method="POST">
                         @csrf
                         <div class="mb-3 position-relative form-group mb-5">
                             <label class="form-label text-primary fw-bold">Nama</label>

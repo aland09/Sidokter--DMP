@@ -15,7 +15,7 @@
 @endsection
 
 @section('js_page')
-    <script src="/js/forms/validation.js"></script>
+    <script src="{{ asset('js/forms/validation.js') }}"></script>
     <script>
         const submitBtn = document.getElementById('submitBtn');
         $(submitBtn).click(function() {
@@ -92,5 +92,5 @@
             </div>
         </div>
     </div>
-    
+
 @endsection

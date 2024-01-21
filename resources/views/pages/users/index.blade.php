@@ -2,19 +2,21 @@
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
     $title = 'Daftar Pengguna';
     $description = 'Halaman Daftar Pengguna';
-    $breadcrumbs = ['/' => 'Beranda', '/users' => 'Daftar Pengguna'];
+    $breadcrumbs = [route('dashboard.index') => 'Beranda', route('users.index') => 'Daftar Pengguna'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 @section('css')
-    <link rel="stylesheet" href="/css/vendor/datatables.min.css" />
+    <link rel="stylesheet" href="{{ asset('css/vendor/datatables.min.css') }}" />
 @endsection
+
 @section('js_vendor')
-    <script src="/js/vendor/bootstrap-submenu.js"></script>
-    <script src="/js/vendor/datatables.min.js"></script>
-    <script src="/js/vendor/mousetrap.min.js"></script>
+    <script src="{{ asset('js/vendor/bootstrap-submenu.js') }}"></script>
+    <script src="{{ asset('js/vendor/datatables.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/mousetrap.min.js') }}"></script>
 @endsection
+
 @section('js_page')
-    <script src="/js/base/pagination.js"></script>
+    <script src="{{ asset('js/base/pagination.js') }}"></script>
     <script>
         const submitBtn = document.getElementById('submitBtn');
         $(submitBtn).click(function() {
@@ -23,6 +25,7 @@
         });
     </script>
 @endsection
+
 @section('content')
 
     @if (session()->has('message'))
@@ -69,7 +72,7 @@
                     <div class="row">
                         <!-- Search Start -->
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xxl-4 mb-3">
-                            <form name="seach-form" id="search-form" action="/users">
+                            <form name="seach-form" id="search-form" action="{{ route('users.index') }}">
                                 <div
                                     class="d-inline-block float-md-start me-1 mb-1 search-input-container w-100 shadow bg-foreground">
                                     <input class="form-control datatable-search" name="search" placeholder="Pencarian..."
@@ -160,8 +163,10 @@
                                                         type="button">
                                                         <i data-acorn-icon="edit"></i>
                                                     </a>
-                                                    <form id="delete-form" action="/users/{{ $item->id }}"
+                                                    <form id="delete-form"
+                                                        action="{{ route('users.destroy', ['user' => $item->id]) }}"
                                                         method="POST" class="d-inline">
+
                                                         @method('delete')
                                                         @csrf
                                                         <button type="button" id="confirmBtn"

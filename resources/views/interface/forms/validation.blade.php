@@ -23,7 +23,7 @@
 @endsection
 
 @section('js_page')
-    <script src="/js/forms/validation.js"></script>
+    <script src="{{ asset('js/forms/validation.js') }}"></script>
 @endsection
 
 @section('content')

@@ -15,7 +15,7 @@
 @endsection
 
 @section('js_page')
-    <script src="/js/forms/validation.js"></script>
+    <script src="{{ asset('js/forms/validation.js') }}"></script>
     <script>
         $(document).ready(function() {
             const submitBtn = document.getElementById('submitBtn');

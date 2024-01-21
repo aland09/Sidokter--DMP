@@ -2,7 +2,7 @@
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
     $title = 'Edit Data';
     $description = 'Halaman Edit Peran';
-    $breadcrumbs = ['/' => 'Beranda', '/roles' => 'Daftar Peran', '/roles/' . $roles->id . '/edit' => 'Edit Data'];
+    $breadcrumbs = [route('dashboard.index') => 'Beranda', route('roles.index') => 'Daftar Data Pengguna',  route('roles.index') . '/' . $roles->id => 'Edit Data'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 
@@ -10,12 +10,13 @@
 @endsection
 
 @section('js_vendor')
-    <script src="/js/cs/scrollspy.js"></script>
-    <script src="/js/vendor/jquery.validate/jquery.validate.min.js"></script>
+    <script src="{{ asset('js/cs/scrollspy.js') }}"></script>
+    <script src="{{ asset('js/vendor/jquery.validate/jquery.validate.min.js') }}"></script>
 @endsection
 
+
 @section('js_page')
-    <script src="/js/forms/validation.js"></script>
+    <script src="{{ asset('js/forms/validation.js') }}"></script>
     <script>
         $(document).ready(function() {
             const submitBtn = document.getElementById('submitBtn');
@@ -64,7 +65,7 @@
                         {{ $description }}
                     </p>
                     <!-- tooltip-label-end inputs should be wrapped in form-group class -->
-                    <form id="form" class="tooltip-label-end" novalidate action="/roles/{{ $roles->id }}"
+                    <form id="form" class="tooltip-label-end" novalidate action="{{ route('roles.update', ['role' => $roles->id]) }}"
                         method="POST">
                         @method('put')
                         @csrf

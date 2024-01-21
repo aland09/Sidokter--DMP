@@ -2,24 +2,24 @@
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
     $title = 'Tambah Data';
     $description = 'Halaman Tambah Data Pengguna';
-    $breadcrumbs = ['/' => 'Beranda', '/users' => 'Daftar Pengguna', '/users/create' => 'Tambah Data'];
+    $breadcrumbs = [route('dashboard.index') => 'Beranda', route('users.index') => 'Daftar Pengguna', route('users.create')  => 'Tambah Data'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 
 @section('css')
-    <link rel="stylesheet" href="/css/vendor/select2.min.css" />
-    <link rel="stylesheet" href="/css/vendor/select2-bootstrap4.min.css" />
+    <link rel="stylesheet" href="{{ asset('css/vendor/select2.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/vendor/select2-bootstrap4.min.css') }}" />
 @endsection
 
 @section('js_vendor')
-    <script src="/js/cs/scrollspy.js"></script>
-    <script src="/js/vendor/jquery.validate/jquery.validate.min.js"></script>
-    <script src="/js/vendor/select2.full.min.js"></script>
+    <script src="{{ asset('js/cs/scrollspy.js') }}"></script>
+    <script src="{{ asset('js/vendor/jquery.validate/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/select2.full.min.js') }}"></script>
 @endsection
 
 @section('js_page')
-    <script src="/js/forms/validation.js"></script>
-    <script src="/js/forms/controls.select2.js"></script>
+    <script src="{{ asset('js/forms/validation.js') }}"></script>
+    <script src="{{ asset('js/forms/controls.select2.js') }}"></script>
     <script>
         const submitBtn = document.getElementById('submitBtn');
         $(submitBtn).click(function() {
@@ -28,6 +28,7 @@
         });
     </script>
 @endsection
+
 
 
 @section('content')
@@ -54,7 +55,7 @@
                         {{ $description }}
                     </p>
                     <!-- tooltip-label-end inputs should be wrapped in form-group class -->
-                    <form id="form" class="tooltip-label-end" novalidate action="/users" method="POST">
+                    <form id="form" class="tooltip-label-end" novalidate action="{{ route('users.store') }}" method="POST">
                         @csrf
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Nama</label>
