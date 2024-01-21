@@ -2,7 +2,7 @@
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
     $title = 'Dashboard';
     $description = 'Selamat Datang, Dalam Layanan Sistem Dokumen Terpadu (SiDOKTER)';
-    $breadcrumbs = ['/' => 'Dashboard'];
+    $breadcrumbs = [route('dashboard.index') => 'Dashboard'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 

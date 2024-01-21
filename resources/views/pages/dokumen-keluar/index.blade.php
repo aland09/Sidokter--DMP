@@ -2,26 +2,27 @@
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
     $title = 'Dokumen Keluar';
     $description = 'Halaman Dokumen Keluar';
-    $breadcrumbs = ['/' => 'Beranda', '/dokumen-keluar' => 'Dokumen Keluar'];
+    $breadcrumbs = [route('dashboard.index') => 'Beranda', route('dokumen-keluar.index') => 'Dokumen Keluar'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 @section('css')
-    <link rel="stylesheet" href="/css/vendor/datatables.min.css" />
-    <link rel="stylesheet" href="/css/vendor/bootstrap-datepicker3.standalone.min.css" />
+    <link rel="stylesheet" href="{{ asset('css/vendor/datatables.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/vendor/bootstrap-datepicker3.standalone.min.css') }}" />
 @endsection
 @section('js_vendor')
-    <script src="/js/vendor/bootstrap-submenu.js"></script>
-    <script src="/js/vendor/datatables.min.js"></script>
-    <script src="/js/vendor/mousetrap.min.js"></script>
-    <script src="/js/cs/scrollspy.js"></script>
-    <script src="/js/vendor/jquery.validate/jquery.validate.min.js"></script>
-    <script src="/js/vendor/datepicker/bootstrap-datepicker.min.js"></script>
-    <script src="/js/vendor/datepicker/locales/bootstrap-datepicker.es.min.js"></script>
+    <script src="{{ asset('js/vendor/bootstrap-submenu.js') }}"></script>
+    <script src="{{ asset('js/vendor/datatables.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/mousetrap.min.js') }}"></script>
+    <script src="{{ asset('js/cs/scrollspy.js') }}"></script>
+    <script src="{{ asset('js/vendor/jquery.validate/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/datepicker/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/datepicker/locales/bootstrap-datepicker.es.min.js') }}"></script>
 @endsection
+
 @section('js_page')
-    <script src="/js/base/pagination.js"></script>
-    <script src="/js/forms/validation.js"></script>
-    <script src="/js/forms/controls.datepicker.js"></script>
+    <script src="{{ asset('js/base/pagination.js') }}"></script>
+    <script src="{{ asset('js/forms/validation.js') }}"></script>
+    <script src="{{ asset('js/forms/controls.datepicker.js') }}"></script>
 @endsection
 @section('content')
 
@@ -68,7 +69,7 @@
                     <div class="row">
                         <!-- Search Start -->
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xxl-4 mb-3">
-                            <form name="seach-form" id="search-form" action="/dokumen-keluar">
+                            <form name="search-form" id="search-form" action="{{ route('dokumen-keluar.index') }}">
                                 <div
                                     class="d-inline-block float-md-start me-1 mb-1 search-input-container w-100 shadow bg-foreground">
                                     <input class="form-control datatable-search" name="search" placeholder="Pencarian..."
@@ -134,10 +135,14 @@
                                 <thead>
                                     <tr>
                                         <th class="text-muted text-small text-uppercase text-center" rowspan="2">No</th>
-                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">Nama Peminjam</th>
-                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">Hari/ Tanggal</td>
-                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">Instansi</th>
-                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">Tujuan</th>
+                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">Nama
+                                            Peminjam</th>
+                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">Hari/
+                                            Tanggal</td>
+                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">
+                                            Instansi</th>
+                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">Tujuan
+                                        </th>
                                         <th class="text-muted text-small text-uppercase text-center" colspan="3">
                                             Dokumen</th>
                                         <th width="10%" class="empty" rowspan="2"></th>
@@ -170,8 +175,7 @@
                                             <td style="height: 42px !important" class="py-2">
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                     <a href="{{ route('dokumen-keluar.show', $item->id) }}"
-                                                        class="btn btn-icon btn-icon-only btn-sm btn-info"
-                                                        type="button">
+                                                        class="btn btn-icon btn-icon-only btn-sm btn-info" type="button">
                                                         <i data-acorn-icon="info-circle"></i>
                                                     </a>
                                                 </div>

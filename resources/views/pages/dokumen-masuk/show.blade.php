@@ -2,7 +2,7 @@
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
     $title = 'Detail Data';
     $description = 'Halaman Detail Data Dokumen Masuk';
-    $breadcrumbs = ['/' => 'Beranda', '/dokumen-masuk' => 'Dokumen Masuk', '/dokumen-masuk/' . $dokumen->id => 'Detail Data'];
+    $breadcrumbs = [route('dashboard.index') => 'Beranda', route('dokumen-masuk.index') => 'Data Dokumen Masuk',  route('dokumen-masuk.index') . '/' . $dokumen->id => 'Detail Data'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 

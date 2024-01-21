@@ -2,7 +2,7 @@
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
     $title = 'Detail Data';
     $description = 'Halaman Detail Data Dokumen Masuk Berdasarkan No. Box';
-    $breadcrumbs = ['/' => 'Beranda', '/detail-box/' . $no_box => 'Detail Box'];
+    $breadcrumbs = [route('dashboard.index') => 'Beranda',  route('detail-box.index') . '/' . $no_box => 'Detail Box'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 
@@ -10,13 +10,14 @@
 @endsection
 
 @section('js_vendor')
-    <script src="/js/cs/scrollspy.js"></script>
-    <script src="/js/cs/responsivetab.js"></script>
+    <script src="{{ asset('js/cs/scrollspy.js') }}"></script>
+    <script src="{{ asset('js/cs/responsivetab.js') }}"></script>
 @endsection
 
 @section('js_page')
-    <script src="/js/components/navs.js"></script>
+    <script src="{{ asset('js/components/navs.js') }}"></script>
 @endsection
+
 
 
 @section('content')
