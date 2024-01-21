@@ -2,14 +2,14 @@
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
     $title = 'Pemberkasan';
     $description = 'Halaman Pemberkasan';
-    $breadcrumbs = ['/' => 'Beranda', '/data-arsip' => 'Pemberkasan'];
+    $breadcrumbs = [route('dashboard.index') => 'Beranda', route('data-arsip.index') => 'Pemberkasan'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 @section('css')
-    <link rel="stylesheet" href="/css/vendor/datatables.min.css" />
-    <link rel="stylesheet" href="/css/vendor/bootstrap-datepicker3.standalone.min.css" />
-    <link rel="stylesheet" href="/css/vendor/select2.min.css" />
-    <link rel="stylesheet" href="/css/vendor/select2-bootstrap4.min.css" />
+    <link rel="stylesheet" href="{{ asset('css/vendor/datatables.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/vendor/bootstrap-datepicker3.standalone.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/vendor/select2.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/vendor/select2-bootstrap4.min.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         .text-sortable a,
@@ -19,19 +19,19 @@
     </style>
 @endsection
 @section('js_vendor')
-    <script src="/js/vendor/bootstrap-submenu.js"></script>
-    <script src="/js/vendor/datatables.min.js"></script>
-    <script src="/js/vendor/mousetrap.min.js"></script>
-    <script src="/js/cs/scrollspy.js"></script>
-    <script src="/js/vendor/jquery.validate/jquery.validate.min.js"></script>
-    <script src="/js/vendor/datepicker/bootstrap-datepicker.min.js"></script>
-    <script src="/js/vendor/datepicker/locales/bootstrap-datepicker.es.min.js"></script>
-    <script src="/js/vendor/select2.full.min.js"></script>
+    <script src="{{ asset('js/vendor/bootstrap-submenu.js') }}"></script>
+    <script src="{{ asset('js/vendor/datatables.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/mousetrap.min.js') }}"></script>
+    <script src="{{ asset('js/cs/scrollspy.js') }}"></script>
+    <script src="{{ asset('js/vendor/jquery.validate/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/datepicker/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/datepicker/locales/bootstrap-datepicker.es.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/select2.full.min.js') }}"></script>
 @endsection
 @section('js_page')
-    <script src="/js/forms/validation.js"></script>
-    <script src="/js/forms/controls.datepicker.js"></script>
-    <script src="/js/forms/controls.select2.js"></script>
+    <script src="{{ asset('js/forms/validation.js') }}"></script>
+    <script src="{{ asset('js/forms/controls.datepicker.js') }}"></script>
+    <script src="{{ asset('js/forms/controls.select2.js') }}"></script>
     <script>
         const submitBtnEditChild = document.getElementById('submitBtnEditChild');
         var pages = 0;
@@ -67,7 +67,6 @@
                 }
 
                 $('#dokumen_id').val(ids);
-                console.log('ids', ids);
             });
 
             $('#btn-barcode').click(function() {
@@ -75,7 +74,7 @@
                 const year = $('#kurun_waktu').val();
                 if (year) {
                     $.ajax({
-                        url: '/get-no-box/' + year,
+                        url: '{{ url('get-no-box') }}/' + year,
                         type: "GET",
                         data: {
                             "_token": "{{ csrf_token() }}"
@@ -233,34 +232,50 @@
 
                     // NASKAH DINAS
                     $('.modal-body #child_jenis_naskah_dinas_select').empty();
-                    if(subitem['jenis_naskah_dinas']) {
-                        $('.modal-body #child_jenis_naskah_dinas_select').append('<option selected value="' +
-                        subitem['jenis_naskah_dinas'] + '">' + subitem['jenis_naskah_dinas'] + '</option>');
+                    if (subitem['jenis_naskah_dinas']) {
+                        $('.modal-body #child_jenis_naskah_dinas_select').append(
+                            '<option selected value="' +
+                            subitem['jenis_naskah_dinas'] + '">' + subitem['jenis_naskah_dinas'] +
+                            '</option>');
                     }
-                    $('.modal-body #child_jenis_naskah_dinas_select').append('<option value="SPTJM,Ceklis SPM">SPTJM,Ceklis SPM</option>');
-                    $('.modal-body #child_jenis_naskah_dinas_select').append('<option value="Pernyataan Verifikasi">Pernyataan Verifikasi</option>');
-                    $('.modal-body #child_jenis_naskah_dinas_select').append('<option value="Ringkasan Kontrak">Ringkasan Kontrak</option>');
-                    $('.modal-body #child_jenis_naskah_dinas_select').append('<option value="Lainnya">Lainnya</option>');
+                    $('.modal-body #child_jenis_naskah_dinas_select').append(
+                        '<option value="SPTJM,Ceklis SPM">SPTJM,Ceklis SPM</option>');
+                    $('.modal-body #child_jenis_naskah_dinas_select').append(
+                        '<option value="Pernyataan Verifikasi">Pernyataan Verifikasi</option>');
+                    $('.modal-body #child_jenis_naskah_dinas_select').append(
+                        '<option value="Ringkasan Kontrak">Ringkasan Kontrak</option>');
+                    $('.modal-body #child_jenis_naskah_dinas_select').append(
+                        '<option value="Lainnya">Lainnya</option>');
 
                     // PEJABAT PENANDATANGANAN
                     $('.modal-body #child_pejabat_penandatangan_select').empty();
-                    if(subitem['pejabat_penandatangan']) {
-                        $('.modal-body #child_pejabat_penandatangan_select').append('<option selected value="' +
-                        subitem['pejabat_penandatangan'] + '">' + subitem['pejabat_penandatangan'] + '</option>');
+                    if (subitem['pejabat_penandatangan']) {
+                        $('.modal-body #child_pejabat_penandatangan_select').append(
+                            '<option selected value="' +
+                            subitem['pejabat_penandatangan'] + '">' + subitem['pejabat_penandatangan'] +
+                            '</option>');
                     }
-                    $('.modal-body #child_pejabat_penandatangan_select').append('<option value="PA/KPA">PA/KPA</option>');
-                    $('.modal-body #child_pejabat_penandatangan_select').append('<option value="PPK">PPK</option>');
-                    $('.modal-body #child_pejabat_penandatangan_select').append('<option value="Bendahara">Bendahara</option>');
-                    $('.modal-body #child_pejabat_penandatangan_select').append('<option value="Lainnya">Lainnya</option>');
+                    $('.modal-body #child_pejabat_penandatangan_select').append(
+                        '<option value="PA/KPA">PA/KPA</option>');
+                    $('.modal-body #child_pejabat_penandatangan_select').append(
+                        '<option value="PPK">PPK</option>');
+                    $('.modal-body #child_pejabat_penandatangan_select').append(
+                        '<option value="Bendahara">Bendahara</option>');
+                    $('.modal-body #child_pejabat_penandatangan_select').append(
+                        '<option value="Lainnya">Lainnya</option>');
                 } else {
-                    if(subitem['jenis_naskah_dinas']) {
-                        $('.modal-body #child_jenis_naskah_dinas_select').append('<option selected value="' +
-                        subitem['jenis_naskah_dinas'] + '">' + subitem['jenis_naskah_dinas'] + '</option>');
+                    if (subitem['jenis_naskah_dinas']) {
+                        $('.modal-body #child_jenis_naskah_dinas_select').append(
+                            '<option selected value="' +
+                            subitem['jenis_naskah_dinas'] + '">' + subitem['jenis_naskah_dinas'] +
+                            '</option>');
                     }
 
-                    if(subitem['pejabat_penandatangan']) {
-                        $('.modal-body #child_pejabat_penandatangan_select').append('<option selected value="' +
-                        subitem['pejabat_penandatangan'] + '">' + subitem['pejabat_penandatangan'] + '</option>');
+                    if (subitem['pejabat_penandatangan']) {
+                        $('.modal-body #child_pejabat_penandatangan_select').append(
+                            '<option selected value="' +
+                            subitem['pejabat_penandatangan'] + '">' + subitem['pejabat_penandatangan'] +
+                            '</option>');
                     }
                 }
 
@@ -285,7 +300,7 @@
                 $(".modal-body #child_pejabat_penandatangan_input").addClass('d-none');
 
                 // UUPDATE VALUE INPUT
-                $('#form_edit_child').attr('action', '/detail-data-arsip/' + subitem['id']);
+                $('#form_edit_parent').attr('action', '{{ route('data-arsip.index') }}/' + subitem['id']);
                 $(".modal-body #child_dokumen_id").val(subitem['dokumen_id']);
                 $(".modal-body #child_kode_klasifikasi").val(subitem['kode_klasifikasi']);
                 $(".modal-body #child_uraian").val(subitem['uraian']);
@@ -300,7 +315,7 @@
 
                 const file_dokumen = subitem['file_dokumen'];
                 if (file_dokumen) {
-                    $('#file_dokumen_append').html(`<a href="storage/${file_dokumen}"
+                    $('#file_dokumen_append').html(`<a href="{{ asset('storage') }}/${file_dokumen}"
                             target="_blank"
                             class="btn btn-outline-primary mb-3">Lihat File</a>
                 `);
@@ -311,8 +326,7 @@
 
             $(document).on('click', '.btn-edit-parent', function() {
                 const item = $(this).data('item');
-                $('#form_edit_parent').attr('action', '/data-arsip/' + item['id']);
-
+                $('#form_edit_parent').attr('action', '{{ route('data-arsip.index') }}/' + item['id']);
                 $(".modal-body #parent_kode_klasifikasi").val(item['kode_klasifikasi']);
                 $(".modal-body #parent_uraian").val(item['uraian']);
                 $(".modal-body #parent_tanggal_validasi").val(item['tanggal_validasi']);
@@ -441,7 +455,7 @@
             requestData.items = items;
 
             $.ajax({
-                    url: '/data-arsip',
+                    url: "{{ route('data-arsip.index') }}",
                     type: "get",
                     data: requestData,
                     dataType: "html",
@@ -626,7 +640,7 @@
     <div class="modal fade" id="modalImport" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form method="POST" action="/data-arsip/import-excel" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('data-arsip.import-excel') }}" enctype="multipart/form-data">
                 <div class="modal-content">
                     <div class="modal-header py-3">
                         <h5 class="modal-title" id="exampleModalLabelDefault">Import Data</h5>
@@ -652,7 +666,7 @@
     <div class="modal fade" id="modalTarikData" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form method="POST" action="/import-monitoring" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('import-monitoring') }}" enctype="multipart/form-data">
                 <div class="modal-content">
                     <div class="modal-header py-3">
                         <h5 class="modal-title" id="exampleModalLabelDefault">Tarik Data Monitoring</h5>
@@ -777,7 +791,8 @@
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Jenis Naskah Dinas</label>
-                            <select id="child_jenis_naskah_dinas_select" name="jenis_naskah_dinas" class="form-select" required></select>
+                            <select id="child_jenis_naskah_dinas_select" name="jenis_naskah_dinas" class="form-select"
+                                required></select>
                             <input type="text" class="form-control d-none" id="child_jenis_naskah_dinas_input"
                                 name="jenis_naskah_dinas" required />
                         </div>
@@ -789,7 +804,8 @@
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Pejabat Penandatangan</label>
-                            <select id="child_pejabat_penandatangan_select" name="pejabat_penandatangan" class="form-select" required></select>
+                            <select id="child_pejabat_penandatangan_select" name="pejabat_penandatangan"
+                                class="form-select" required></select>
                             <input type="text" class="form-control d-none" id="child_pejabat_penandatangan_input"
                                 name="pejabat_penandatangan" required />
                         </div>
@@ -981,10 +997,10 @@
                         </div>
 
                         <!--<div class="col text-end">
-                                                                                                                                                                                        <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                                                                                                                                                                            Kegiatan</button>
+                                                                                                                                                                                                <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                                                                                                                                                                                    Kegiatan</button>
 
-                                                                                                                                                                                    </div>-->
+                                                                                                                                                                                            </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
@@ -1018,8 +1034,8 @@
     <!-- Modal Side Add Parent -->
     <div class="modal modal-right fade" id="modalSideAddParent" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <form id="form_add_parent" action="/detail-data-arsip" class="tooltip-label-end edit-form" novalidate
-            method="POST" enctype="multipart/form-data">
+        <form id="form_add_parent" action="{{ route('detail-data-arsip.create') }}" class="tooltip-label-end edit-form"
+            novalidate method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -1183,7 +1199,7 @@
     <div class="modal fade" id="modalVerifikasi" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form method="POST" action="/data-arsip/verifikasi_dokumen">
+            <form method="POST" action="{{ route('data-arsip.verifikasi_dokumen') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header pt-4 pb-3" style="border-bottom: none !important">
@@ -1206,7 +1222,7 @@
     <div class="modal fade" id="modalFormBarcode" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form method="POST" action="/data-arsip-no-box" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('data-arsip-no-box') }}" enctype="multipart/form-data">
                 <div class="modal-content">
                     <div class="modal-header py-3">
                         <h5 class="modal-title" id="exampleModalLabelDefault">Buat QR Code No. Box</h5>

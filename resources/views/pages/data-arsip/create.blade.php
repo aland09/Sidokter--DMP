@@ -2,7 +2,7 @@
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
     $title = 'Tambah Data';
     $description = 'Halaman Tambah Data Pemberkasan';
-    $breadcrumbs = ['/' => 'Beranda', '/data-arsip' => 'Data Pemberkasan', '/data-arsip/create' => 'Tambah Data'];
+    $breadcrumbs = [route('dashboard.index') => 'Beranda',  route('data-arsip.index') => 'Data Pemberkasan', route('data-arsip.create') => 'Tambah Data'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 
@@ -27,7 +27,7 @@
             $('#berkas_arsip').on('change', function() {
                 const dokumenId = $(this).val();
                 const sp2d = $( "#berkas_arsip option:selected" ).text();
-                
+
                 $("#no_sp2d_dokumen").val(sp2d);
 
                 let html = '';

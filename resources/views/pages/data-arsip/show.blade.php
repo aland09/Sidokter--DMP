@@ -2,7 +2,7 @@
     $html_tag_data = ['override' => '{ "attributes" : { "placement" : "vertical", "layout":"fluid" }, "showSettings" : false }'];
     $title = 'Detail Data';
     $description = 'Halaman Detail Data Pemberkasan';
-    $breadcrumbs = ['/' => 'Beranda', '/data-arsip' => 'Data Pemberkasan', '/data-arsip/' . $dokumen->id => 'Detail Data'];
+    $breadcrumbs = [route('dashboard.index') => 'Beranda', route('data-arsip.index') => 'Data Pemberkasan', route('data-arsip.index') . '/' . $dokumen->id => 'Detail Data'];
 @endphp
 @extends('layout', ['html_tag_data' => $html_tag_data, 'title' => $title, 'description' => $description])
 
@@ -10,7 +10,7 @@
 @endsection
 
 @section('js_vendor')
-    <script src="/js/cs/scrollspy.js"></script>
+    <script src="{{ asset('js/cs/scrollspy.js') }}"></script>
 @endsection
 
 @section('js_page')
@@ -219,7 +219,7 @@
                                         </p>
 
                                         <p class="mb-1"><strong>Tingkat
-                                            Perkembangan</strong></p>
+                                                Perkembangan</strong></p>
                                         <p class="mb-4">
                                             {{ $subitem->tkt_perk ? $subitem->tkt_perk : '-' }}
                                         </p>
