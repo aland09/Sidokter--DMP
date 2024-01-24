@@ -155,7 +155,7 @@
                                                         type="button">
                                                         <i data-acorn-icon="edit"></i>
                                                     </a>
-                                                    <form id="delete-form"   action="{{ route('roles.destroy', ['roles' => $item->id]) }}" method="POST"
+                                                    <form id="delete-form"   action="{{ route('roles.destroy', ['role' => $item->id]) }}" method="POST"
                                                         class="d-inline">
                                                         @method('delete')
                                                         @csrf
