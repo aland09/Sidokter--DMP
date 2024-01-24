@@ -300,7 +300,7 @@
                 $(".modal-body #child_pejabat_penandatangan_input").addClass('d-none');
 
                 // UUPDATE VALUE INPUT
-                $('#form_edit_parent').attr('action', '{{ route('data-arsip.index') }}/' + encodeURIComponent(subitem.id));
+                $('#form_edit_parent').attr('action', '/data-arsip/' + encodeURIComponent(subitem.id));
                 $(".modal-body #child_dokumen_id").val(subitem['dokumen_id']);
                 $(".modal-body #child_kode_klasifikasi").val(subitem['kode_klasifikasi']);
                 $(".modal-body #child_uraian").val(subitem['uraian']);
