@@ -124,9 +124,9 @@ class DokumenController extends Controller
             $nilai_count = $request['nilai_count'];
 
             if(!empty($request['nilai_count'])) {
-        
+
                 foreach($nilai_count as $key=>$value){
-    
+
                     $arsipData['dokumen_id'] = $dokumen_id;
                     $arsipData['kode_klasifikasi'] = $request['kode_klasifikasi'][$key];
                     $arsipData['uraian'] = $request['uraian'][$key];
@@ -144,7 +144,7 @@ class DokumenController extends Controller
                     $arsipData['jumlah_satuan_berkas'] = $request['jumlah_satuan_berkas'][$key];
                     $arsipData['tkt_perkemb'] = $request['tkt_perkemb'][$key];
                     $arsipData['no_box'] = $request['no_box'][$key];
-                    
+
                     DetailDokumen::create($arsipData);
                 }
             }
@@ -207,7 +207,7 @@ class DokumenController extends Controller
         ]);
     }
 
-    public function verification_document(Request $request) 
+    public function verification_document(Request $request)
     {
         $id         = $request['id'];
         $status     = $request['status'];
@@ -225,7 +225,7 @@ class DokumenController extends Controller
         return Excel::download(new DokumenExport, 'daftar-berkas.'.$ext);
     }
 
-    public function import_excel(Request $request) 
+    public function import_excel(Request $request)
 	{
 		$this->validate($request, [
 			'file' => 'required|mimes:csv,xls,xlsx'
@@ -243,8 +243,8 @@ class DokumenController extends Controller
         Excel::import(new DokumenSpmImport, public_path('/file_dokumen/'.$nama_file));
         Excel::import(new DokumenSppImport, public_path('/file_dokumen/'.$nama_file));
 
-       
-        
+
+
         return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diimport');
 
 	}
@@ -252,8 +252,8 @@ class DokumenController extends Controller
     public function import_monitoring(Request $request) {
         $success = 0;
 
-        $method     = $request['method_type']; 
-        $akun_jenis = $request['akun_jenis']; 
+        $method     = $request['method_type'];
+        $akun_jenis = $request['akun_jenis'];
 
         $query_main = "";
         $query_akun = "";
@@ -272,8 +272,8 @@ class DokumenController extends Controller
         }
 
         if($method === 'periode') {
-            $tahun      = $request['tahun']; 
-            $bulan      = $request['bulan']; 
+            $tahun      = $request['tahun'];
+            $bulan      = $request['bulan'];
             $hari       = cal_days_in_month(CAL_GREGORIAN,$bulan,$tahun);
             $start      = '1.'.$bulan.'.'.$tahun;
             $end        = $hari.'.'.$bulan.'.'.$tahun;
@@ -354,11 +354,11 @@ class DokumenController extends Controller
                     $dataSptjm['kurun_waktu'] = $value->tahun;
                     $dataSptjm['tkt_perk'] = 'Asli';
                     DetailDokumen::create($dataSptjm);
-                    
+
                     $success = $success + 1;
                 }
 
-                
+
             }
 
             $dokumenMonitoring = Dokumen::find(1);
@@ -373,7 +373,7 @@ class DokumenController extends Controller
         } else {
             return redirect()->route('data-arsip.index')->with('error', 'Tidak ada data yang dapat ditarik pada periode tersebut');
         }
-        
+
     }
 
     // Get Arsip Budle
@@ -496,9 +496,9 @@ class DokumenController extends Controller
         $kurun_waktu = $request['kurun_waktu'];
         $no_box = $this->generate_no_box($kurun_waktu);
         $data['no_box'] = $no_box;
-        
+
         foreach($id as $item) {
-            
+
             Dokumen::where('id', $item)->update($data);
              DetailDokumen::where('dokumen_id', $item)->update($data);
         }
