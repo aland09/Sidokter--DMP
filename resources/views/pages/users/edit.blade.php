@@ -54,7 +54,7 @@
                         {{ $description }}
                     </p>
                     <!-- tooltip-label-end inputs should be wrapped in form-group class -->
-                    <form id="form" class="tooltip-label-end" novalidate action="/users/{{ $users->id }}"
+                    <form id="form" class="tooltip-label-end" novalidate action="{{ route('users.update', ['user' => $users->id]) }}"
                         method="POST">
                         @method('put')
                         @csrf
