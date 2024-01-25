@@ -328,7 +328,7 @@
             $(document).on('click', '.btn-edit-parent', function() {
                 const item = $(this).data('item');
                 $('#form_edit_parent').attr("action",
-                    "{{ url('data-arsip') }}" + '/' + item.id);
+                    "{{ url('') }}" + '/' + item.id);
                 $(".modal-body #parent_kode_klasifikasi").val(item['kode_klasifikasi']);
                 $(".modal-body #parent_uraian").val(item['uraian']);
                 $(".modal-body #parent_tanggal_validasi").val(item['tanggal_validasi']);
