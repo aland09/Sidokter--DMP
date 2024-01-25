@@ -327,8 +327,12 @@
 
             $(document).on('click', '.btn-edit-parent', function() {
                 const item = $(this).data('item');
-                const updateRoute = "{{ route('data-arsip.update', '') }}";
-                $('#form_edit_parent').attr("action", updateRoute + '/' + item.id);
+                const updateRoute = `{{ route('data-arsip.update', '') }}/${item.id}`;
+                $('#form_edit_parent').attr("action", updateRoute);
+
+                console.log('od', item.id);
+                console.log('updateRoute', updateRoute);
+                console.log($('#form_edit_parent').attr("action"));
 
 
                 $(".modal-body #parent_kode_klasifikasi").val(item['kode_klasifikasi']);
