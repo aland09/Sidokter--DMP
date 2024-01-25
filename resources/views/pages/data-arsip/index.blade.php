@@ -327,8 +327,8 @@
 
             $(document).on('click', '.btn-edit-parent', function() {
                 const item = $(this).data('item');
-                $('#form_edit_parent').attr("action", "{{ route('data-arsip.update', '') }}" + '/' + item
-                    .id);
+                const updateRoute = "{{ route('data-arsip.update', '') }}";
+                $('#form_edit_parent').attr("action", updateRoute + '/' + item.id);
 
 
                 $(".modal-body #parent_kode_klasifikasi").val(item['kode_klasifikasi']);
@@ -1001,10 +1001,10 @@
                         </div>
 
                         <!--<div class="col text-end">
-                                                                                                                                                                                                                <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                                                                                                                                                                                                    Kegiatan</button>
+                                                                                                                                                                                                                    <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                                                                                                                                                                                                        Kegiatan</button>
 
-                                                                                                                                                                                                            </div>-->
+                                                                                                                                                                                                                </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
