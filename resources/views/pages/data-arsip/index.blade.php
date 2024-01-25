@@ -327,7 +327,7 @@
 
             $(document).on('click', '.btn-edit-parent', function() {
                 const item = $(this).data('item');
-                const updateRoute = `{{ route('data-arsip.update', '') }}/${item.id}`;
+                const updateRoute = `https://ehibah.jakarta.go.id/sidokter/data-arsip/${item.id}`;
                 $('#form_edit_parent').attr("action", updateRoute);
 
                 console.log('od', item.id);
@@ -1005,10 +1005,10 @@
                         </div>
 
                         <!--<div class="col text-end">
-                                                                                                                                                                                                                    <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                                                                                                                                                                                                        Kegiatan</button>
+                                                                                                                                                                                                                        <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                                                                                                                                                                                                            Kegiatan</button>
 
-                                                                                                                                                                                                                </div>-->
+                                                                                                                                                                                                                    </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
