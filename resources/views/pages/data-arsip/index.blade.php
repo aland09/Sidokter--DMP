@@ -326,10 +326,24 @@
             });
 
             $(document).on('click', '.btn-edit-parent', function() {
-
                 const item = $(this).data('item');
-                const actionUrl = "{{ route('data-arsip.update', ['data_arsip' => '']) }}" + "/" + item.id;
-                $('#form_edit_parent').attr("action", actionUrl);
+                console.log(item['id']);
+
+                // Assuming the current URL is stored in a variable called currentUrl
+                let currentUrl = '{{ route('data-arsip.index') }}/' + item['id'];
+
+                // Split the URL at the "?" character to separate the base URL from the parameters
+                let parts = currentUrl.split("?");
+                let baseUrl = parts[0];
+
+                // Remove the last parameter from the parameters string
+                let parameters = parts[1] ? parts[1].split("&").slice(0, -1).join("&") : "";
+
+                // Reconstruct the modified URL
+                let modifiedUrl = baseUrl + (parameters ? "?" + parameters : "");
+
+                $('#form_edit_parent').attr('action', modifiedUrl);
+
                 $(".modal-body #parent_kode_klasifikasi").val(item['kode_klasifikasi']);
                 $(".modal-body #parent_uraian").val(item['uraian']);
                 $(".modal-body #parent_tanggal_validasi").val(item['tanggal_validasi']);
