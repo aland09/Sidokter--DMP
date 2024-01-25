@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth', 'permission']], function () {
     Route::resource('jenis-belanja', JenisBelanjaController::class);
     Route::resource('regulasi', RegulasiController::class);
     Route::resource('data-arsip', DokumenController::class);
+    Route::put('data-arsip/{id}/update', [DokumenController::class, 'update'])->name('data-arsip.update');
     Route::resource('dokumen-masuk', DokumenMasukController::class);
     Route::get('detail-box/{no_box?}', [DokumenMasukController::class, 'detail_box'])->name('detail-box');
     Route::resource('dokumen-keluar', DokumenKeluarController::class);

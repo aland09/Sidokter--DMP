@@ -300,8 +300,7 @@
                 $(".modal-body #child_pejabat_penandatangan_input").addClass('d-none');
 
                 // UUPDATE VALUE INPUT
-                $('#form_edit_child').attr('action', '{{ route('detail-data-arsip.index') }}/' + subitem[
-                    'id']);
+                $('#form_edit_child').attr('action', '{{ route('detail-data-arsip.index') }}/' + subitem['id']);
                 $(".modal-body #child_dokumen_id").val(subitem['dokumen_id']);
                 $(".modal-body #child_kode_klasifikasi").val(subitem['kode_klasifikasi']);
                 $(".modal-body #child_uraian").val(subitem['uraian']);
@@ -327,14 +326,7 @@
 
             $(document).on('click', '.btn-edit-parent', function() {
                 const item = $(this).data('item');
-                const updateRoute = `https://ehibah.jakarta.go.id/sidokter/data-arsip/${item.id}`;
-                $('#form_edit_parent').attr("action", updateRoute);
-
-                console.log('od', item.id);
-                console.log('updateRoute', updateRoute);
-                console.log($('#form_edit_parent').attr("action"));
-
-
+                $('#form_edit_parent').attr('action', "{{ url('data-arsip') }}" + '/' + item.id + '/update');
                 $(".modal-body #parent_kode_klasifikasi").val(item['kode_klasifikasi']);
                 $(".modal-body #parent_uraian").val(item['uraian']);
                 $(".modal-body #parent_tanggal_validasi").val(item['tanggal_validasi']);
@@ -1005,10 +997,10 @@
                         </div>
 
                         <!--<div class="col text-end">
-                                                                                                                                                                                                                        <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                                                                                                                                                                                                            Kegiatan</button>
+                                                                                                                                                                                                <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                                                                                                                                                                                    Kegiatan</button>
 
-                                                                                                                                                                                                                    </div>-->
+                                                                                                                                                                                            </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
