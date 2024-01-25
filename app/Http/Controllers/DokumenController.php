@@ -165,18 +165,18 @@ class DokumenController extends Controller
     * @param  \App\Dokumen  $data_arsip
     * @return \Illuminate\Http\Response
     */
-    public function update(Request $request, $id)
+    public function update(Request $request, Dokumen $data_arsip)
     {
         $data = $request->except(['_token','_method']);
 
-        Dokumen::where('id', $id)->update($data);
+        Dokumen::where('id', $data_arsip->id)->update($data);
 
 
         $dataDetail['keterangan'] = $request['keterangan'];
         $dataDetail['unit_pengolah'] = $request['unit_pengolah'];
 
 
-        DetailDokumen::where('dokumen_id', $id)->update($dataDetail);
+        DetailDokumen::where('dokumen_id', $data_arsip->id)->update($dataDetail);
 
         return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diperbaharui');
     }
