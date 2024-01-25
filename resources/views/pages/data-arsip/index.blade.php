@@ -300,8 +300,7 @@
                 $(".modal-body #child_pejabat_penandatangan_input").addClass('d-none');
 
                 // UUPDATE VALUE INPUT
-                $('#form_edit_child').attr('action', '{{ route('detail-data-arsip.index') }}/' + subitem[
-                    'id']);
+                $('#form_edit_child').attr('action', '{{ route('detail-data-arsip.index') }}/' + subitem['id']);
                 $(".modal-body #child_dokumen_id").val(subitem['dokumen_id']);
                 $(".modal-body #child_kode_klasifikasi").val(subitem['kode_klasifikasi']);
                 $(".modal-body #child_uraian").val(subitem['uraian']);
@@ -327,22 +326,7 @@
 
             $(document).on('click', '.btn-edit-parent', function() {
                 const item = $(this).data('item');
-                console.log(item['id']);
-
-                // Assuming the current URL is stored in a variable called currentUrl
-                let currentUrl = '{{ route('data-arsip.index') }}/' + item['id'];
-
-                // Split the URL at the "?" character to separate the base URL from the parameters
-                let parts = currentUrl.split("?");
-                let baseUrl = parts[0];
-
-                // Remove the last parameter from the parameters string
-                let parameters = parts[1] ? parts[1].split("&").slice(0, -1).join("&") : "";
-
-                // Reconstruct the modified URL
-                let modifiedUrl = baseUrl + (parameters ? "?" + parameters : "");
-
-                $('#form_edit_parent').attr('action', modifiedUrl);
+                $('#form_edit_parent').attr('action', '{{ route('data-arsip.index') }}/' + item['id']);
 
                 $(".modal-body #parent_kode_klasifikasi").val(item['kode_klasifikasi']);
                 $(".modal-body #parent_uraian").val(item['uraian']);
@@ -762,7 +746,7 @@
     <!-- Modal Side Edit Child -->
     <div class="modal modal-right fade" id="modalSideEditChild" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <form id="form_edit_child" class="tooltip-label-end edit-form" novalidate method="POST"
+        <form id="form_edit_child" class="tooltip-label-end" novalidate method="POST"
             enctype="multipart/form-data">
             @method('put')
             @csrf
@@ -889,7 +873,7 @@
     <!-- Modal Side Edit Parent -->
     <div class="modal modal-right fade" id="modalSideEditParent" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <form id="form_edit_parent" class="tooltip-label-end edit-form" novalidate method="POST"
+        <form id="form_edit_parent" class="tooltip-label-end" novalidate method="POST"
             enctype="multipart/form-data">
             @method('put')
             @csrf
@@ -1014,10 +998,10 @@
                         </div>
 
                         <!--<div class="col text-end">
-                                                                                                                                                                                                    <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                                                                                                                                                                                        Kegiatan</button>
+                                                                                                                                                                                                <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                                                                                                                                                                                    Kegiatan</button>
 
-                                                                                                                                                                                                </div>-->
+                                                                                                                                                                                            </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
@@ -1051,7 +1035,7 @@
     <!-- Modal Side Add Parent -->
     <div class="modal modal-right fade" id="modalSideAddParent" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <form id="form_add_parent" action="{{ route('detail-data-arsip.create') }}" class="tooltip-label-end edit-form"
+        <form id="form_add_parent" action="{{ route('detail-data-arsip.create') }}" class="tooltip-label-end"
             novalidate method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-dialog">
