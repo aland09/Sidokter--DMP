@@ -167,7 +167,9 @@ class DokumenController extends Controller
     */
     public function update(Request $request, Dokumen $data_arsip)
     {
-        $data = $request->except(['_token','_method']);
+        $url = '/data-arsip/'.$data_arsip->id;
+
+        $data = $request->except(['_token','_method', $url]);
 
         Dokumen::where('id', $data_arsip->id)->update($data);
 

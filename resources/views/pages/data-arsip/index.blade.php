@@ -104,8 +104,7 @@
             const submitBtnEditParent = document.getElementById('submitBtnEditParent');
             $(submitBtnEditParent).click(function() {
                 $('#modalEditParent').modal('hide');
-                // $('#form_edit_parent').submit();
-                submitEditParent();
+                $('#form_edit_parent').submit();
             });
 
             const submitBtnAddParent = document.getElementById('submitBtnAddParent');
@@ -301,8 +300,7 @@
                 $(".modal-body #child_pejabat_penandatangan_input").addClass('d-none');
 
                 // UUPDATE VALUE INPUT
-                $('#form_edit_child').attr('action', '{{ route('detail-data-arsip.index') }}/' + subitem[
-                    'id']);
+                $('#form_edit_child').attr('action', '{{ route('detail-data-arsip.index') }}/' + subitem['id']);
                 $(".modal-body #child_dokumen_id").val(subitem['dokumen_id']);
                 $(".modal-body #child_kode_klasifikasi").val(subitem['kode_klasifikasi']);
                 $(".modal-body #child_uraian").val(subitem['uraian']);
@@ -326,47 +324,10 @@
                 $('#modalSideEditChild').modal('show');
             });
 
-            function submitEditParent() {
-                // Serialize the form data
-                var formData = $('#form_edit_parent').serialize();
-
-                var id = $(".modal-body #parent_id").val();
-                $.ajax({
-                    url: "{{ route('data-arsip.index') }}/" + id, // Replace with your route
-                    type: "POST",
-                    data: formData,
-                    success: function(response) {
-                        $('#modalSideEditParent').modal('hide');
-
-                        var html = `
-                        <div class="position-fixed top-0 end-0 p-3" style="z-index: 5">
-                            <div class="toast bg-success fade show" role="alert" aria-live="assertive" aria-atomic="true">
-                                <div class="toast-header py-2">
-                                    <strong class="me-auto text-white">Informasi</strong>
-                                    <button type="button" class="btn-close text-white" data-bs-dismiss="toast" aria-label="Close"></button>
-                                </div>
-                                <div class="toast-body text-white">Data arsip berhasil diperbaharui</div>
-                            </div>
-                        </div>
-                       `;
-
-                        $('#editParentSuccess').html(html);
-
-                        getData(); // Handle success response
-
-
-
-                    },
-                    error: function(error) {
-                        console.error(error); // Handle error response
-                    }
-                });
-            }
-
             $(document).on('click', '.btn-edit-parent', function() {
                 const item = $(this).data('item');
-                //  $('#form_edit_parent').attr('action', '{{ route('data-arsip.index') }}/' + item['id']);
-                $(".modal-body #parent_id").val(item['id']);
+                $('#form_edit_parent').attr('action', '{{ route('data-arsip.index') }}/' + item['id']);
+
                 $(".modal-body #parent_kode_klasifikasi").val(item['kode_klasifikasi']);
                 $(".modal-body #parent_uraian").val(item['uraian']);
                 $(".modal-body #parent_tanggal_validasi").val(item['tanggal_validasi']);
@@ -514,8 +475,6 @@
                     $('#loader').hide();
                 });
 
-
-
         }
 
         function backToTop() {
@@ -536,8 +495,6 @@
             </div>
         </div>
     @endif
-
-    <div id="editParentSuccess"></div>
 
     @if (session()->has('error'))
         <div class="position-fixed top-0 end-0 p-3" style="z-index: 5">
@@ -789,7 +746,7 @@
     <!-- Modal Side Edit Child -->
     <div class="modal modal-right fade" id="modalSideEditChild" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <form id="form_edit_child" class="tooltip-label-end edit-form" novalidate method="POST"
+        <form id="form_edit_child" class="tooltip-label-end" novalidate method="POST"
             enctype="multipart/form-data">
             @method('put')
             @csrf
@@ -916,7 +873,7 @@
     <!-- Modal Side Edit Parent -->
     <div class="modal modal-right fade" id="modalSideEditParent" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <form id="form_edit_parent" class="tooltip-label-end edit-form" novalidate method="POST"
+        <form id="form_edit_parent" class="tooltip-label-end" novalidate method="POST"
             enctype="multipart/form-data">
             @method('put')
             @csrf
@@ -930,8 +887,6 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Kode
                                 Klasifikasi</label>
-                            <input type="text" class="form-control" name="id" id="parent_id" required />
-
                             <input type="text" class="form-control" name="kode_klasifikasi"
                                 id="parent_kode_klasifikasi" required disabled />
                         </div>
@@ -1043,10 +998,10 @@
                         </div>
 
                         <!--<div class="col text-end">
-                                                                                                                                                                                                                    <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                                                                                                                                                                                                        Kegiatan</button>
+                                                                                                                                                                                                <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                                                                                                                                                                                    Kegiatan</button>
 
-                                                                                                                                                                                                                </div>-->
+                                                                                                                                                                                            </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
@@ -1080,7 +1035,7 @@
     <!-- Modal Side Add Parent -->
     <div class="modal modal-right fade" id="modalSideAddParent" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <form id="form_add_parent" action="{{ route('detail-data-arsip.create') }}" class="tooltip-label-end edit-form"
+        <form id="form_add_parent" action="{{ route('detail-data-arsip.create') }}" class="tooltip-label-end"
             novalidate method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-dialog">
