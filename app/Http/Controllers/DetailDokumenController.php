@@ -60,9 +60,11 @@ class DetailDokumenController extends Controller
         //     'tkt_perkemb' => 'required',
         //     'no_box' => 'required',
         //     'file_dokumen' => 'required',
-        // ];    
+        // ];
 
-        $data = $request->except(['_token','_method']);
+        $url = '/detail-data-arsip/'.$detail_data_arsip->id;
+
+        $data = $request->except(['_token','_method', $url]);
 
         if ($request->hasFile('file_dokumen')){
             $filenameWithExt = $request->file('file_dokumen')->getClientOriginalName();
