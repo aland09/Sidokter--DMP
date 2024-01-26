@@ -1035,7 +1035,7 @@
     <!-- Modal Side Add Parent -->
     <div class="modal modal-right fade" id="modalSideAddParent" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <form id="form_add_parent" action="{{ route('detail-data-arsip.create') }}" class="tooltip-label-end"
+        <form id="form_add_parent" action="{{ route('detail-data-arsip.store') }}" class="tooltip-label-end"
             novalidate method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-dialog">

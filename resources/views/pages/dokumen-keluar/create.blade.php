@@ -58,7 +58,7 @@
                         {{ $description }}
                     </p>
                     <!-- tooltip-label-end inputs should be wrapped in form-group class -->
-                    <form id="form" class="tooltip-label-end" novalidate action="{{ route('dokumen-keluar.create') }}" method="POST">
+                    <form id="form" class="tooltip-label-end" novalidate action="{{ route('dokumen-keluar.store') }}" method="POST">
                         @csrf
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Berkas</label>
