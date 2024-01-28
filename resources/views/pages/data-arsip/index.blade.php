@@ -16,6 +16,11 @@
         .text-sortable a:hover {
             color: #afafaf !important;
         }
+
+        .text-sticky a,
+        .text-sticky a:hover {
+            color: #ffffff !important;
+        }
     </style>
 @endsection
 @section('js_vendor')
@@ -32,6 +37,7 @@
     <script src="{{ asset('js/forms/validation.js') }}"></script>
     <script src="{{ asset('js/forms/controls.datepicker.js') }}"></script>
     <script src="{{ asset('js/forms/controls.select2.js') }}"></script>
+    <script src="{{ asset('js/base/sticky-table.js') }}"></script>
     <script>
         const submitBtnEditChild = document.getElementById('submitBtnEditChild');
         var pages = 0;
@@ -42,6 +48,22 @@
 
 
         $(document).ready(function() {
+
+            $(".sticky-header").floatThead({
+                scrollingTop: -20
+            });
+
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 50) {
+                    $('#thead-header-sticky tr th').removeClass('text-sortable');
+                    $('#thead-header-sticky tr th').addClass('bg-primary');
+                    $('#thead-header-sticky tr th').addClass('text-sticky');
+                } else {
+                    $('#thead-header-sticky tr th').removeClass('bg-primary');
+                    $('#thead-header-sticky tr th').removeClass('text-sticky');
+                    $('#thead-header-sticky tr th').addClass('text-sortable');
+                }
+            });
 
             var ids = [];
             $('.no-box-check').change(function() {
@@ -300,7 +322,8 @@
                 $(".modal-body #child_pejabat_penandatangan_input").addClass('d-none');
 
                 // UUPDATE VALUE INPUT
-                $('#form_edit_child').attr('action', '{{ route('detail-data-arsip.index') }}/' + subitem['id']);
+                $('#form_edit_child').attr('action', '{{ route('detail-data-arsip.index') }}/' + subitem[
+                    'id']);
                 $(".modal-body #child_dokumen_id").val(subitem['dokumen_id']);
                 $(".modal-body #child_kode_klasifikasi").val(subitem['kode_klasifikasi']);
                 $(".modal-body #child_uraian").val(subitem['uraian']);
@@ -746,8 +769,7 @@
     <!-- Modal Side Edit Child -->
     <div class="modal modal-right fade" id="modalSideEditChild" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <form id="form_edit_child" class="tooltip-label-end" novalidate method="POST"
-            enctype="multipart/form-data">
+        <form id="form_edit_child" class="tooltip-label-end" novalidate method="POST" enctype="multipart/form-data">
             @method('put')
             @csrf
             <div class="modal-dialog">
@@ -873,8 +895,7 @@
     <!-- Modal Side Edit Parent -->
     <div class="modal modal-right fade" id="modalSideEditParent" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <form id="form_edit_parent" class="tooltip-label-end" novalidate method="POST"
-            enctype="multipart/form-data">
+        <form id="form_edit_parent" class="tooltip-label-end" novalidate method="POST" enctype="multipart/form-data">
             @method('put')
             @csrf
             <div class="modal-dialog">
@@ -998,10 +1019,10 @@
                         </div>
 
                         <!--<div class="col text-end">
-                                                                                                                                                                                                <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                                                                                                                                                                                    Kegiatan</button>
+                                                                                                                                                                                                            <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                                                                                                                                                                                                Kegiatan</button>
 
-                                                                                                                                                                                            </div>-->
+                                                                                                                                                                                                        </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
@@ -1035,8 +1056,8 @@
     <!-- Modal Side Add Parent -->
     <div class="modal modal-right fade" id="modalSideAddParent" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <form id="form_add_parent" action="{{ route('detail-data-arsip.store') }}" class="tooltip-label-end"
-            novalidate method="POST" enctype="multipart/form-data">
+        <form id="form_add_parent" action="{{ route('detail-data-arsip.store') }}" class="tooltip-label-end" novalidate
+            method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-dialog">
                 <div class="modal-content">

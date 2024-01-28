@@ -1,20 +1,19 @@
 @if ($dokumen->count() > 0)
     <div class="data-table-responsive-wrapper overflow-auto">
-        <table class="data-table hover dataTable no-footer">
-            <thead style="position: sticky;top: 0">
+        <table class="data-table hover dataTable no-footer sticky-header">
+            <thead id="thead-header-sticky">
                 <tr>
-                    <th colspan="2" class="text-muted text-small text-uppercase text-sortable"
-                        style="position: sticky;top: 0">
+                    <th colspan="2" class="text-muted text-small text-uppercase text-sortable">
                         @sortablelink('id', 'No.')</th>
-                    <th class="text-muted text-small text-uppercase text-sortable" style="position: sticky;top: 0;">
+                    <th class="text-muted text-small text-uppercase text-sortable">
                         @sortablelink('kode_klasifikasi', 'Kode Klasifikasi')</th>
-                    <th class="text-muted text-small text-uppercase text-sortable" style="position: sticky;top: 0">
+                    <th class="text-muted text-small text-uppercase text-sortable">
                         @sortablelink('uraian', 'Uraian')</th>
-                    <th class="text-muted text-small text-uppercase text-sortable" style="position: sticky;top: 0">
+                    <th class="text-muted text-small text-uppercase text-sortable">
                         @sortablelink('tanggal_validasi', 'Tanggal Validasi')</th>
-                    <th class="text-muted text-small text-uppercase text-sortable" style="position: sticky;top: 0">
+                    <th class="text-muted text-small text-uppercase text-sortable">
                         @sortablelink('jumlah_satuan_item', 'Jumlah Satuan Item')</th>
-                    <th class="text-muted text-small text-uppercase text-sortable" style="position: sticky;top: 0">
+                    <th class="text-muted text-small text-uppercase text-sortable">
                         @sortablelink('keterangan', 'Keterangan')</th>
                     <th style="width: 300px !important" class="text-muted text-small text-uppercase text-sortable">
                         @sortablelink('no_sp2d', 'No. SP2D')</th>
@@ -206,7 +205,6 @@
                                     </tr>
                                     @foreach ($item->detailDokumen ?? [] as $subitem)
                                         <tr class="border">
-
                                             <td style="height: 42px !important"
                                                 class="empty py-2 border-start border-top border-bottom">
                                                 {{ $loop->index + 1 }}.</td>
@@ -250,14 +248,16 @@
                                             </td>
                                             <td style="height: 42px !important"
                                                 class="py-2 border-top border-bottom border-end">
-                                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                <div class="d-grid gap-2 d-md-flex justify-content-md-end position-relative">
                                                     <button type="button" data-item="{{ $item }}"
                                                         data-subitem="{{ $subitem }}"
                                                         data-index="{{ $loop->index + 1 }}"
                                                         class="btn btn-icon btn-icon-only btn-sm btn-outline-warning btn-edit-child">
                                                         <i data-acorn-icon="edit"></i>
                                                     </button>
-
+                                                    @if ($subitem->file_dokumen)
+                                                    <i class="p-1 border border-1 border-foreground bg-success position-absolute rounded-xl e-4 t-0 status"></i>
+                                                    @endif
 
                                                     {{-- <form id="delete_{{ $item->id }}_{{ $subitem->id }}"
                                                                         action="/detail-data-arsip/{{ $subitem->id }}"
