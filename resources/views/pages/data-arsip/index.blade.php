@@ -126,7 +126,7 @@
             const submitBtnEditParent = document.getElementById('submitBtnEditParent');
             $(submitBtnEditParent).click(function() {
                 $('#modalEditParent').modal('hide');
-                $('#form_edit_parent').submit();
+                submitEditParent();
             });
 
             const submitBtnAddParent = document.getElementById('submitBtnAddParent');
@@ -347,10 +347,39 @@
                 $('#modalSideEditChild').modal('show');
             });
 
+            function submitEditParent() {
+                // Serialize the form data
+                var formData = $('#form_edit_parent').serialize();
+                var id = $(".modal-body #parent_id").val();
+                $.ajax({
+                    url: "{{ route('data-arsip.index') }}/" + id, // Replace with your route
+                    type: "POST",
+                    data: formData,
+                    success: function(response) {
+                        $('#modalSideEditParent').modal('hide');
+                        var html = `
+                        <div class="position-fixed top-0 end-0 p-3" style="z-index: 5">
+                            <div class="toast bg-success fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="toast-header py-2">
+                                    <strong class="me-auto text-white">Informasi</strong>
+                                    <button type="button" class="btn-close text-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                                </div>
+                                <div class="toast-body text-white">Data arsip berhasil diperbaharui</div>
+                            </div>
+                        </div>
+                       `;
+                        $('#editParentSuccess').html(html);
+                        getData(); // Handle success response
+                    },
+                    error: function(error) {
+                        console.error(error); // Handle error response
+                    }
+                });
+            }
+
             $(document).on('click', '.btn-edit-parent', function() {
                 const item = $(this).data('item');
-                $('#form_edit_parent').attr('action', '{{ route('data-arsip.index') }}/' + item['id']);
-
+                $(".modal-body #parent_id").val(item['id']);
                 $(".modal-body #parent_kode_klasifikasi").val(item['kode_klasifikasi']);
                 $(".modal-body #parent_uraian").val(item['uraian']);
                 $(".modal-body #parent_tanggal_validasi").val(item['tanggal_validasi']);
@@ -528,6 +557,8 @@
             </div>
         </div>
     @endif
+
+    <div id="editParentSuccess"></div>
 
     {{-- notifikasi form validasi --}}
     @if ($errors->has('file'))
@@ -909,6 +940,8 @@
                             <input type="text" class="form-control" name="kode_klasifikasi"
                                 id="parent_kode_klasifikasi" required disabled />
                         </div>
+
+                        <input type="hidden" class="form-control" name="id" id="parent_id" required />
 
                         <div class="mb-3 position-relative form-group">
 
