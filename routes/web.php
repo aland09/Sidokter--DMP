@@ -25,7 +25,7 @@ use App\Http\Controllers\RegulasiController;
 */
 
 // index routing via Route feature
-Route::redirect('/', '/login')->name('beranda');
+Route::redirect('/', env('DASHBOARD_DOMAIN', '/login'))->name('beranda');
 
 // Auth
 // Route::get('register', [RegisterController::class, 'index']);
