@@ -24,14 +24,13 @@ class JenisBelanja extends Model
     public function jenisFilter($query, array $filters)
     {
         $query->when($filters['search'] ?? false, function ($query, $search) {
-            return $query->where('name', 'like', '%' .  $search . '%');
+            $lowerSearchValue = strtolower($search);
+            return $query->whereRaw('LOWER(name) LIKE ?', ['%' . $lowerSearchValue . '%']);
         });
     }
-     
+
     public function detaildokumen()
     {
-        return $this->belongsTo(DetailDokumen::class,'detail_dokumen_id');
+        return $this->belongsTo(DetailDokumen::class, 'detail_dokumen_id');
     }
-    
 }
-

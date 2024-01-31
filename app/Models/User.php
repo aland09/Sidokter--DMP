@@ -33,7 +33,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-    
+
 
     /**
      * The attributes that should be cast to native types.
@@ -47,9 +47,10 @@ class User extends Authenticatable
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['search'] ?? false, function ($query, $search) {
-            return $query->where('name', 'like', '%' .  $search . '%')
-                            ->orWhere('username', 'like', '%' .  $search . '%')
-                            ->orWhere('email', 'like', '%' .  $search . '%');
+            $lowerSearchValue = strtolower($search);
+            return $query->whereRaw('LOWER(name) LIKE ?', ['%' . $lowerSearchValue . '%'])
+                ->orWhereRaw('LOWER(username) LIKE ?', ['%' . $lowerSearchValue . '%'])
+                ->orWhereRaw('LOWER(email) LIKE ?', ['%' . $lowerSearchValue . '%']);
         });
     }
 }

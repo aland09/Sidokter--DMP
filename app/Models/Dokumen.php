@@ -69,29 +69,32 @@ class Dokumen extends Model
             ->logUnguarded('*');
     }
 
-    public function detailDokumen(){
-    	return $this->hasMany(DetailDokumen::class);
+    public function detailDokumen()
+    {
+        return $this->hasMany(DetailDokumen::class);
     }
 
-    public function akunJenis(){
-    	return $this->belongsTo(AkunJenis::class, 'akun_jenis_id');
+    public function akunJenis()
+    {
+        return $this->belongsTo(AkunJenis::class, 'akun_jenis_id');
     }
 
 
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['search'] ?? false, function ($query, $search) {
-            return $query->where('no_sp2d', 'like', '%' .  $search . '%')
-            ->orWhere('skpd', 'like', '%' .  $search . '%')
-            ->orWhere('nwp', 'like', '%' .  $search . '%')
-            ->orWhere('kode_klasifikasi', 'like', '%' .  $search . '%')
-            ->orWhere('uraian', 'like', '%' .  $search . '%')
-            ->orWhere('keterangan', 'like', '%' .  $search . '%')
-            ->orWhere('pejabat_penandatangan', 'like', '%' .  $search . '%')
-            ->orWhere('unit_pengolah', 'like', '%' .  $search . '%')
-            ->orWhere('tkt_perkemb', 'like', '%' .  $search . '%')
-            ->orWhere('kurun_waktu', 'like', '%' .  $search . '%')
-            ->orWhere('no_box', 'like', '%' .  $search . '%');
+            $lowerSearchValue = strtolower($search);
+            return $query->whereRaw('LOWER(no_sp2d) LIKE ?', ['%' . $lowerSearchValue . '%'])
+                ->orWhereRaw('LOWER(skpd) LIKE ?', ['%' . $lowerSearchValue . '%'])
+                ->orWhereRaw('LOWER(nwp) LIKE ?', ['%' . $lowerSearchValue . '%'])
+                ->orWhereRaw('LOWER(kode_klasifikasi) LIKE ?', ['%' . $lowerSearchValue . '%'])
+                ->orWhereRaw('LOWER(uraian) LIKE ?', ['%' . $lowerSearchValue . '%'])
+                ->orWhereRaw('LOWER(keterangan) LIKE ?', ['%' . $lowerSearchValue . '%'])
+                ->orWhereRaw('LOWER(pejabat_penandatangan) LIKE ?', ['%' . $lowerSearchValue . '%'])
+                ->orWhereRaw('LOWER(unit_pengolah) LIKE ?', ['%' . $lowerSearchValue . '%'])
+                ->orWhereRaw('LOWER(tkt_perkemb) LIKE ?', ['%' . $lowerSearchValue . '%'])
+                ->orWhereRaw('LOWER(kurun_waktu) LIKE ?', ['%' . $lowerSearchValue . '%'])
+                ->orWhereRaw('LOWER(no_box) LIKE ?', ['%' . $lowerSearchValue . '%']);
         });
     }
 }
