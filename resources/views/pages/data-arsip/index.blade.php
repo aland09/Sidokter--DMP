@@ -421,8 +421,6 @@
                 event.preventDefault();
                 var myurl = $(this).attr('href');
                 var page = $(this).attr('href').split('page=')[1];
-                console.log('page', page);
-                console.log('myurl', myurl);
                 pages = page;
                 getData();
             });
@@ -489,7 +487,7 @@
                 })
                 .done(function(data) {
                     $("#item-lists").empty().html(data);
-                    backToTop();
+                    // backToTop();
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     alert('No response from server');

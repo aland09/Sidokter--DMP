@@ -8,7 +8,7 @@
                     <th class="text-muted text-small text-uppercase text-sortable">
                         @sortablelink('kode_klasifikasi', 'Kode Klasifikasi')</th>
                     <th class="text-muted text-small text-uppercase text-sortable">
-                        @sortablelink('uraian', 'Uraian')</th>
+                       Uraian</th>
                     <th class="text-muted text-small text-uppercase text-sortable">
                         @sortablelink('tanggal_validasi', 'Tanggal Validasi')</th>
                     <th class="text-muted text-small text-uppercase text-sortable">

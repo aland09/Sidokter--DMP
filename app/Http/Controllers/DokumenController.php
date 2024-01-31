@@ -55,6 +55,7 @@ class DokumenController extends Controller
             })
             ->sortable()
             ->paginate($itemsPerPage)
+            ->onEachSide(0)
             ->withQueryString();
 
 
