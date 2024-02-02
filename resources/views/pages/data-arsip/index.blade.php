@@ -120,7 +120,7 @@
 
             $(submitBtnEditChild).click(function() {
                 $('#modalEditChild').modal('hide');
-                $('#form_edit_child').submit();
+                submitEditChild();
             });
 
             const submitBtnEditParent = document.getElementById('submitBtnEditParent');
@@ -323,8 +323,7 @@
                 $(".modal-body #child_pejabat_penandatangan_input").addClass('d-none');
 
                 // UUPDATE VALUE INPUT
-                $('#form_edit_child').attr('action', '{{ route('detail-data-arsip.index') }}/' + subitem[
-                    'id']);
+                $(".modal-body #child_id").val(subitem['id']);
                 $(".modal-body #child_dokumen_id").val(subitem['dokumen_id']);
                 $(".modal-body #child_kode_klasifikasi").val(subitem['kode_klasifikasi']);
                 $(".modal-body #child_uraian").val(subitem['uraian']);
@@ -382,6 +381,29 @@
                         $('#successToast').removeClass("hide");
                         $('#successToast').addClass("show");
                         $('#successMessage').html('Data isi arsip berhasil ditambahkan');
+                        getData();
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            }
+
+            function submitEditChild() {
+                var form = $('#form_edit_child')[0];
+                var formData = new FormData(form);
+                var id = $(".modal-body #child_id").val();
+                $.ajax({
+                    url: "{{ route('detail-data-arsip.index') }}/" + id, // Replace with your route
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        $('#modalSideEditChild').modal('hide');
+                        $('#successToast').removeClass("hide");
+                        $('#successToast').addClass("show");
+                        $('#successMessage').html('Data isi arsip berhasil diperbaharui');
                         getData();
                     },
                     error: function(error) {
@@ -831,6 +853,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <input type="hidden" id="child_id"/>
                         <input type="hidden" id="child_dokumen_id" name="dokumen_id" />
 
                         <div class="mb-3 position-relative form-group">
