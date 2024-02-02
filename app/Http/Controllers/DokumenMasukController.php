@@ -18,16 +18,18 @@ class DokumenMasukController extends Controller
     public function index()
     {
 
-       // $noBox = $this->generateNoBox(2023);
+        // $noBox = $this->generateNoBox(2023);
         $itemsPerPage = request('items') ?? 10;
 
         $dokumen = Dokumen::with(['detailDokumen'])
-                    ->latest()
-                    ->filter(request(['search']))
-                    ->where('status', '=', 'Terverifikasi')
-                    ->orderBy('no_box', 'ASC')
-                    ->paginate($itemsPerPage)
-                    ->withQueryString();
+            ->latest()
+            ->filter(request(['search']))
+            ->where('status', '=', 'Terverifikasi')
+            ->orderBy('no_box', 'ASC')
+            ->sortable()
+            ->paginate($itemsPerPage)
+            ->onEachSide(0)
+            ->withQueryString();
 
         return view("pages/dokumen-masuk/index", [
             "title" => "Data Arsip",
@@ -44,15 +46,15 @@ class DokumenMasukController extends Controller
     public function show(Dokumen $dokumen_masuk)
     {
         $dokumen = Dokumen::with([
-                    'detailDokumen' => function($query) {
-                        $query->orderBy('id', 'ASC');
-                    },
-                    'akunJenis' => function($query) {
-                        $query->select('id', 'kode_akun','nama_akun');
-                    },
-                ])
-                ->where('id', $dokumen_masuk->id)
-                ->first();
+            'detailDokumen' => function ($query) {
+                $query->orderBy('id', 'ASC');
+            },
+            'akunJenis' => function ($query) {
+                $query->select('id', 'kode_akun', 'nama_akun');
+            },
+        ])
+            ->where('id', $dokumen_masuk->id)
+            ->first();
 
         return view("pages/dokumen-masuk/show", [
             "title"             => "Detail Data Dokumen Masuk",
@@ -62,17 +64,17 @@ class DokumenMasukController extends Controller
 
     public function detail_box($no_box)
     {
-        $no_box_convert = str_replace("_","/",$no_box);
+        $no_box_convert = str_replace("_", "/", $no_box);
         $berkas_dokumen = Dokumen::with([
-                    'detailDokumen' => function($query) {
-                        $query->orderBy('id', 'ASC');
-                    },
-                    'akunJenis' => function($query) {
-                        $query->select('id', 'kode_akun','nama_akun');
-                    },
-                ])
-                ->where('no_box', $no_box_convert)
-                ->get();
+            'detailDokumen' => function ($query) {
+                $query->orderBy('id', 'ASC');
+            },
+            'akunJenis' => function ($query) {
+                $query->select('id', 'kode_akun', 'nama_akun');
+            },
+        ])
+            ->where('no_box', $no_box_convert)
+            ->get();
 
 
 
@@ -81,7 +83,6 @@ class DokumenMasukController extends Controller
             "no_box"            => $no_box,
             "berkas_dokumen"    => $berkas_dokumen
         ]);
-
     }
 
     public function generate_barcode(Request $request)

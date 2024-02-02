@@ -58,10 +58,6 @@ class DokumenController extends Controller
             ->onEachSide(0)
             ->withQueryString();
 
-
-// Print or log the queries
-
-
         if ($request->ajax()) {
             return view('pages/data-arsip/data', compact('dokumen'));
         }

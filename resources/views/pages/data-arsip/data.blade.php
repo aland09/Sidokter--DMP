@@ -3,7 +3,7 @@
         <table class="data-table hover dataTable no-footer sticky-header">
             <thead id="thead-header-sticky">
                 <tr>
-                    <th colspan="2" class="text-muted text-small text-uppercase text-sortable">
+                    <th colspan="2" class="text-muted text-small text-uppercase text-sortable rounded-start">
                         @sortablelink('id', 'No.')</th>
                     <th class="text-muted text-small text-uppercase text-sortable">
                         @sortablelink('kode_klasifikasi', 'Kode Klasifikasi')</th>
@@ -41,7 +41,7 @@
                     </th>
                     <th class="text-muted text-small text-uppercase text-sortable">@sortablelink('status', 'Status')
                     </th>
-                    <th width="10%" class="empty">&nbsp;</th>
+                    <th width="10%" class="empty rounded-end">&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
