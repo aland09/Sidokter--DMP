@@ -132,7 +132,8 @@
             const submitBtnAddParent = document.getElementById('submitBtnAddParent');
             $(submitBtnAddParent).click(function() {
                 $('#modalAddParent').modal('hide');
-                $('#form_add_parent').submit();
+                //  $('#form_add_parent').submit();
+                submitAddParent();
             });
 
             $('#parent_add_pejabat_penandatangan_select').on('change', function(e) {
@@ -348,7 +349,6 @@
             });
 
             function submitEditParent() {
-                // Serialize the form data
                 var formData = $('#form_edit_parent').serialize();
                 var id = $(".modal-body #parent_id").val();
                 $.ajax({
@@ -357,22 +357,35 @@
                     data: formData,
                     success: function(response) {
                         $('#modalSideEditParent').modal('hide');
-                        var html = `
-                        <div class="position-fixed top-0 end-0 p-3" style="z-index: 5">
-                            <div class="toast bg-success fade show" role="alert" aria-live="assertive" aria-atomic="true">
-                                <div class="toast-header py-2">
-                                    <strong class="me-auto text-white">Informasi</strong>
-                                    <button type="button" class="btn-close text-white" data-bs-dismiss="toast" aria-label="Close"></button>
-                                </div>
-                                <div class="toast-body text-white">Data arsip berhasil diperbaharui</div>
-                            </div>
-                        </div>
-                       `;
-                        $('#editParentSuccess').html(html);
-                        getData(); // Handle success response
+                        $('#successToast').removeClass("hide");
+                        $('#successToast').addClass("show");
+                        $('#successMessage').html('Data arsip berhasil diperbaharui');
+                        getData();
                     },
                     error: function(error) {
-                        console.error(error); // Handle error response
+                        console.error(error);
+                    }
+                });
+            }
+
+            function submitAddParent() {
+                var form = $('#form_add_parent')[0];
+                var formData = new FormData(form);
+                $.ajax({
+                    url: "{{ route('detail-data-arsip.store') }}",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        $('#modalSideAddParent').modal('hide');
+                        $('#successToast').removeClass("hide");
+                        $('#successToast').addClass("show");
+                        $('#successMessage').html('Data isi arsip berhasil ditambahkan');
+                        getData();
+                    },
+                    error: function(error) {
+                        console.error(error);
                     }
                 });
             }
@@ -558,7 +571,16 @@
         </div>
     @endif
 
-    <div id="editParentSuccess"></div>
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 5">
+        <div id="successToast" class="toast bg-success fade hide" role="alert" aria-live="assertive"
+            aria-atomic="true">
+            <div class="toast-header py-2">
+                <strong class="me-auto text-white">Informasi</strong>
+                <button type="button" class="btn-close text-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body text-white" id="successMessage"></div>
+        </div>
+    </div>
 
     {{-- notifikasi form validasi --}}
     @if ($errors->has('file'))
@@ -638,7 +660,8 @@
                                 <!-- Print Button End -->
                                 <!-- Export Dropdown Start -->
                                 <div class="d-inline-block datatable-export" data-datatable="#datatableRowsServerSide">
-                                    <button class="btn p-0" data-bs-toggle="dropdown" type="button" data-bs-offset="0,3">
+                                    <button class="btn p-0" data-bs-toggle="dropdown" type="button"
+                                        data-bs-offset="0,3">
                                         <span class="btn btn-icon btn-icon-only btn-foreground-alternate shadow dropdown"
                                             data-bs-delay="0" data-bs-placement="top" data-bs-toggle="tooltip"
                                             title="Export">
@@ -1050,10 +1073,10 @@
                         </div>
 
                         <!--<div class="col text-end">
-                                                                                                                                                                                                            <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                                                                                                                                                                                                Kegiatan</button>
+                                                                                                                                                                                                                                    <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                                                                                                                                                                                                                        Kegiatan</button>
 
-                                                                                                                                                                                                        </div>-->
+                                                                                                                                                                                                                                </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
@@ -1087,8 +1110,7 @@
     <!-- Modal Side Add Parent -->
     <div class="modal modal-right fade" id="modalSideAddParent" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <form id="form_add_parent" action="{{ route('detail-data-arsip.store') }}" class="tooltip-label-end" novalidate
-            method="POST" enctype="multipart/form-data">
+        <form id="form_add_parent" class="tooltip-label-end" novalidate method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-dialog">
                 <div class="modal-content">

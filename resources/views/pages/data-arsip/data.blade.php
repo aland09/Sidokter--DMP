@@ -253,7 +253,7 @@
                                                         data-subitem="{{ $subitem }}"
                                                         data-index="{{ $loop->index + 1 }}"
                                                         class="btn btn-icon btn-icon-only btn-sm btn-outline-warning btn-edit-child">
-                                                        <i data-acorn-icon="edit"></i>
+                                                        <i class="fa fa-pencil" aria-hidden="true"></i>
                                                     </button>
                                                     @if ($subitem->file_dokumen)
                                                     <i class="p-1 border border-1 border-foreground bg-success position-absolute rounded-xl e-4 t-0 status"></i>
