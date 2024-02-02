@@ -39,7 +39,6 @@
     <script src="{{ asset('js/forms/controls.select2.js') }}"></script>
     <script src="{{ asset('js/base/sticky-table.js') }}"></script>
     <script>
-        const submitBtnEditChild = document.getElementById('submitBtnEditChild');
         var pages = 0;
         var keyword = '';
         var start_date_validate = '';
@@ -118,6 +117,7 @@
                 }
             });
 
+            const submitBtnEditChild = document.getElementById('submitBtnEditChild');
             $(submitBtnEditChild).click(function() {
                 $('#modalEditChild').modal('hide');
                 submitEditChild();
@@ -132,9 +132,16 @@
             const submitBtnAddParent = document.getElementById('submitBtnAddParent');
             $(submitBtnAddParent).click(function() {
                 $('#modalAddParent').modal('hide');
-                //  $('#form_add_parent').submit();
                 submitAddParent();
             });
+
+            const submitBtnVerifikasi = document.getElementById('submitBtnVerifikasi');
+            $(submitBtnVerifikasi).click(function() {
+                console.log('kulik submitBtnVerifikasi');
+                submitVerifikasi();
+            });
+
+
 
             $('#parent_add_pejabat_penandatangan_select').on('change', function(e) {
                 let optionSelected = $("option:selected", this);
@@ -412,59 +419,80 @@
                 });
             }
 
-            $(document).on('click', '.btn-edit-parent', function() {
-                const item = $(this).data('item');
-                $(".modal-body #parent_id").val(item['id']);
-                $(".modal-body #parent_kode_klasifikasi").val(item['kode_klasifikasi']);
-                $(".modal-body #parent_uraian").val(item['uraian']);
-                $(".modal-body #parent_tanggal_validasi").val(item['tanggal_validasi']);
-                $(".modal-body #parent_jumlah_satuan_item").val(item['jumlah_satuan_item']);
-                $(".modal-body #parent_keterangan").val(item['keterangan']);
-                $(".modal-body #parent_no_spm").val(item['no_spm']);
-                $(".modal-body #parent_no_sp2d").val(item['no_sp2d']);
-                $(".modal-body #parent_no_spp").val(item['no_surat']);
-                $(".modal-body #parent_nominal").val(item['nominal']);
-                $(".modal-body #parent_skpd").val(item['skpd']);
-                $(".modal-body #parent_nwp").val(item['nwp']);
-                $(".modal-body #parent_pejabat_penandatangan").val(item['pejabat_penandatangan']);
-                $(".modal-body #parent_unit_pengolah").val(item['unit_pengolah']);
-                $(".modal-body #parent_kurun_waktu").val(item['kurun_waktu']);
-                $(".modal-body #parent_jumlah_satuan_berkas").val(item['jumlah_satuan_berkas']);
-                $(".modal-body #parent_tkt_perkemb").val(item['tkt_perkemb']);
-                $(".modal-body #parent_no_box").val(item['no_box']);
-                $('#modalSideEditParent').modal('show');
-            });
+            function submitVerifikasi() {
+                console.log('submitBtnVerifikasi');
+                var formData = $('#form_verifikasi').serialize();
+                $.ajax({
+                    url: "{{ route('data-arsip.verifikasi_dokumen') }}", // Replace with your route
+                    type: "POST",
+                    data: formData,
+                    success: function(response) {
+                        $('#modalVerifikasi').modal('hide');
+                        $('#successToast').removeClass("hide");
+                        $('#successToast').addClass("show");
+                        $('#successMessage').html('Data arsip berhasil diverifikasi');
+                        getData();
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            }
 
-            $(document).on('click', '.btn-add-parent', function() {
-                const id = $(this).data('id');
-                const subitem = $(this).data('subitem');
-                $('#parent_add_pejabat_penandatangan_select').removeClass('d-none');
-                $('#parent_add_pejabat_penandatangan_input').addClass('d-none');
-                $(".modal-body #parent_add_pejabat_penandatangan_select").val('PA/KPA');
-                $(".modal-body #parent_add_pejabat_penandatangan_select").removeClass('d-none');
-                $(".modal-body #parent_add_pejabat_penandatangan_select").prop('disabled', false);
-                $(".modal-body #parent_add_pejabat_penandatangan_input").prop('disabled', true);
-                $(".modal-body #parent_add_pejabat_penandatangan_input").addClass('d-none');
-                $(".modal-body #parent_add_kode_klasifikasi").val(subitem['kode_klasifikasi']);
-                $(".modal-body #parent_add_tanggal_surat").val(subitem['tanggal_surat']);
-                $(".modal-body #parent_add_jumlah_satuan").val(subitem['jumlah_satuan']);
-                $(".modal-body #parent_add_keterangan").val(subitem['keterangan']);
-                $(".modal-body #parent_add_jenis_naskah_dinas_select").val('SPTJM,Ceklis SPM');
-                $(".modal-body #parent_add_jenis_naskah_dinas_select").removeClass('d-none');
-                $(".modal-body #parent_add_jenis_naskah_dinas_select").prop('disabled', false);
-                $(".modal-body #parent_add_jenis_naskah_dinas_input").prop('disabled', true);
-                $(".modal-body #parent_add_jenis_naskah_dinas_input").addClass('d-none');
-                $(".modal-body #parent_add_unit_pengolah").val(subitem['unit_pengolah']);
-                $(".modal-body #parent_add_kurun_waktu").val(subitem['kurun_waktu']);
-                $(".modal-body #parent_add_no_box").val(subitem['no_box']);
-                $(".modal-body #parent_add_tkt_perk").val(subitem['tkt_perk']);
-                $(".modal-body #parent_add_dokumen_id").val(id);
-                $('#modalSideAddParent').modal('show');
-            });
 
-            $('#addSection').click(function() {
+        $(document).on('click', '.btn-edit-parent', function() {
+            const item = $(this).data('item');
+            $(".modal-body #parent_id").val(item['id']);
+            $(".modal-body #parent_kode_klasifikasi").val(item['kode_klasifikasi']);
+            $(".modal-body #parent_uraian").val(item['uraian']);
+            $(".modal-body #parent_tanggal_validasi").val(item['tanggal_validasi']);
+            $(".modal-body #parent_jumlah_satuan_item").val(item['jumlah_satuan_item']);
+            $(".modal-body #parent_keterangan").val(item['keterangan']);
+            $(".modal-body #parent_no_spm").val(item['no_spm']);
+            $(".modal-body #parent_no_sp2d").val(item['no_sp2d']);
+            $(".modal-body #parent_no_spp").val(item['no_surat']);
+            $(".modal-body #parent_nominal").val(item['nominal']);
+            $(".modal-body #parent_skpd").val(item['skpd']);
+            $(".modal-body #parent_nwp").val(item['nwp']);
+            $(".modal-body #parent_pejabat_penandatangan").val(item['pejabat_penandatangan']);
+            $(".modal-body #parent_unit_pengolah").val(item['unit_pengolah']);
+            $(".modal-body #parent_kurun_waktu").val(item['kurun_waktu']);
+            $(".modal-body #parent_jumlah_satuan_berkas").val(item['jumlah_satuan_berkas']);
+            $(".modal-body #parent_tkt_perkemb").val(item['tkt_perkemb']);
+            $(".modal-body #parent_no_box").val(item['no_box']);
+            $('#modalSideEditParent').modal('show');
+        });
 
-                let section = `<div class="mb-3 position-relative form-group">
+        $(document).on('click', '.btn-add-parent', function() {
+            const id = $(this).data('id');
+            const subitem = $(this).data('subitem');
+            $('#parent_add_pejabat_penandatangan_select').removeClass('d-none');
+            $('#parent_add_pejabat_penandatangan_input').addClass('d-none');
+            $(".modal-body #parent_add_pejabat_penandatangan_select").val('PA/KPA');
+            $(".modal-body #parent_add_pejabat_penandatangan_select").removeClass('d-none');
+            $(".modal-body #parent_add_pejabat_penandatangan_select").prop('disabled', false);
+            $(".modal-body #parent_add_pejabat_penandatangan_input").prop('disabled', true);
+            $(".modal-body #parent_add_pejabat_penandatangan_input").addClass('d-none');
+            $(".modal-body #parent_add_kode_klasifikasi").val(subitem['kode_klasifikasi']);
+            $(".modal-body #parent_add_tanggal_surat").val(subitem['tanggal_surat']);
+            $(".modal-body #parent_add_jumlah_satuan").val(subitem['jumlah_satuan']);
+            $(".modal-body #parent_add_keterangan").val(subitem['keterangan']);
+            $(".modal-body #parent_add_jenis_naskah_dinas_select").val('SPTJM,Ceklis SPM');
+            $(".modal-body #parent_add_jenis_naskah_dinas_select").removeClass('d-none');
+            $(".modal-body #parent_add_jenis_naskah_dinas_select").prop('disabled', false);
+            $(".modal-body #parent_add_jenis_naskah_dinas_input").prop('disabled', true);
+            $(".modal-body #parent_add_jenis_naskah_dinas_input").addClass('d-none');
+            $(".modal-body #parent_add_unit_pengolah").val(subitem['unit_pengolah']);
+            $(".modal-body #parent_add_kurun_waktu").val(subitem['kurun_waktu']);
+            $(".modal-body #parent_add_no_box").val(subitem['no_box']);
+            $(".modal-body #parent_add_tkt_perk").val(subitem['tkt_perk']);
+            $(".modal-body #parent_add_dokumen_id").val(id);
+            $('#modalSideAddParent').modal('show');
+        });
+
+        $('#addSection').click(function() {
+
+            let section = `<div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Uraian</label>
                             <input type="text" class="form-control" name="uraian"
                                 id="parent_uraian" required />
@@ -476,47 +504,47 @@
                                 id="parent_tanggal_surat" required />
                             </div>`
 
-                $('#box').append(section);
-            });
+            $('#box').append(section);
+        });
 
-            $(document).on('click', '.pagination a', function(event) {
-                $('li').removeClass('active');
-                $(this).parent('li').addClass('active');
-                event.preventDefault();
-                var myurl = $(this).attr('href');
-                var page = $(this).attr('href').split('page=')[1];
-                pages = page;
+        $(document).on('click', '.pagination a', function(event) {
+            $('li').removeClass('active');
+            $(this).parent('li').addClass('active');
+            event.preventDefault();
+            var myurl = $(this).attr('href');
+            var page = $(this).attr('href').split('page=')[1];
+            pages = page;
+            getData();
+        });
+
+        $('#search').on('input', function(e) {
+            let val = $(this).val();
+            keyword = val;
+            clearTimeout($(this).data('timeout'));
+            $(this).data('timeout', setTimeout(function() {
                 getData();
-            });
+            }, 500));
+        });
 
-            $('#search').on('input', function(e) {
-                let val = $(this).val();
-                keyword = val;
-                clearTimeout($(this).data('timeout'));
-                $(this).data('timeout', setTimeout(function() {
-                    getData();
-                }, 500));
-            });
+        $(".paginate-item").on('click', function(event) {
+            const item = $(this).data('items');
+            items = item;
+            getData();
+        });
 
-            $(".paginate-item").on('click', function(event) {
-                const item = $(this).data('items');
-                items = item;
-                getData();
-            });
+        $(".btn-reset-filter").on('click', function(event) {
+            start_date_validate = '';
+            end_date_validate = '';
+            $("input[name=start_date_validate]").val('');
+            $("input[name=end_date_validate]").val('');
+        });
 
-            $(".btn-reset-filter").on('click', function(event) {
-                start_date_validate = '';
-                end_date_validate = '';
-                $("input[name=start_date_validate]").val('');
-                $("input[name=end_date_validate]").val('');
-            });
-
-            $(".btn-filter").on('click', function(event) {
-                start_date_validate = $("input[name=start_date_validate]").val();
-                end_date_validate = $("input[name=end_date_validate]").val();
-                getData();
-                $('#modalFilter').modal('hide');
-            });
+        $(".btn-filter").on('click', function(event) {
+            start_date_validate = $("input[name=start_date_validate]").val();
+            end_date_validate = $("input[name=end_date_validate]").val();
+            getData();
+            $('#modalFilter').modal('hide');
+        });
         });
 
         function getData() {
@@ -594,8 +622,7 @@
     @endif
 
     <div class="position-fixed top-0 end-0 p-3" style="z-index: 5">
-        <div id="successToast" class="toast bg-success fade hide" role="alert" aria-live="assertive"
-            aria-atomic="true">
+        <div id="successToast" class="toast bg-success fade hide" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header py-2">
                 <strong class="me-auto text-white">Informasi</strong>
                 <button type="button" class="btn-close text-white" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -853,7 +880,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" id="child_id"/>
+                        <input type="hidden" id="child_id" />
                         <input type="hidden" id="child_dokumen_id" name="dokumen_id" />
 
                         <div class="mb-3 position-relative form-group">
@@ -1096,10 +1123,10 @@
                         </div>
 
                         <!--<div class="col text-end">
-                                                                                                                                                                                                                                    <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
-                                                                                                                                                                                                                                        Kegiatan</button>
+                                                                                                                                                                                                                                        <button id="addSection" class="btn btn-secondary me-3" type="button">Tambah
+                                                                                                                                                                                                                                            Kegiatan</button>
 
-                                                                                                                                                                                                                                </div>-->
+                                                                                                                                                                                                                                    </div>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
@@ -1297,7 +1324,7 @@
     <div class="modal fade" id="modalVerifikasi" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form method="POST" action="{{ route('data-arsip.verifikasi_dokumen') }}" enctype="multipart/form-data">
+            <form id="form_verifikasi" method="POST">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header pt-4 pb-3" style="border-bottom: none !important">
@@ -1309,7 +1336,7 @@
                     </div>
                     <div class="modal-footer pt-0 pb-4" style="border-top: none !important">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Ya</button>
+                        <button type="button" id="submitBtnVerifikasi" class="btn btn-primary">Ya</button>
                     </div>
                 </div>
             </form>

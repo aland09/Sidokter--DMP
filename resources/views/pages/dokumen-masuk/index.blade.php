@@ -61,7 +61,7 @@
                     <div class="row">
                         <!-- Search Start -->
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xxl-4 mb-3">
-                            <form name="seach-form" id="search-form" action="{{ route('dokumen-masuk.create') }}">
+                            <form name="seach-form" id="search-form" action="{{ route('dokumen-masuk.index') }}">
                                 <div
                                     class="d-inline-block float-md-start me-1 mb-1 search-input-container w-100 shadow bg-foreground">
                                     <input class="form-control datatable-search" name="search" placeholder="Pencarian..."
