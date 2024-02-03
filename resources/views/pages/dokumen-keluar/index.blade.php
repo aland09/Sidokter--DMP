@@ -8,6 +8,13 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/vendor/datatables.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/vendor/bootstrap-datepicker3.standalone.min.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .text-sortable a,
+        .text-sortable a:hover {
+            color: #343a40 !important;
+        }
+    </style>
 @endsection
 @section('js_vendor')
     <script src="{{ asset('js/vendor/bootstrap-submenu.js') }}"></script>
@@ -134,23 +141,31 @@
                             <table class="data-table hover dataTable no-footer">
                                 <thead>
                                     <tr>
-                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">No</th>
-                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">Nama
-                                            Peminjam</th>
-                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">Hari/
-                                            Tanggal</td>
-                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">
-                                            Instansi</th>
-                                        <th class="text-muted text-small text-uppercase text-center" rowspan="2">Tujuan
+                                        <th class="text-muted text-small text-uppercase text-center border-white border-end border-5 bg-separator text-sortable rounded-start"
+                                            rowspan="2">@sortablelink('id', 'No.')</th>
+                                        <th class="text-muted text-small text-uppercase text-center border-white border-start border-end border-5 bg-separator text-sortable"
+                                            rowspan="2">@sortablelink('nama_peminjam', 'Nama Peminjam')</th>
+                                        <th class="text-muted text-small text-uppercase text-center border-white border-start border-end border-5 bg-separator text-sortable"
+                                            rowspan="2">@sortablelink('tanggal_peminjaman', 'Hari/Tanggal')</td>
+                                        <th class="text-muted text-small text-uppercase text-center border-white border-start border-end border-5 bg-separator text-sortable"
+                                            rowspan="2">
+                                            @sortablelink('instansi', 'Instansi')</th>
+                                        <th class="text-muted text-small text-uppercase text-center border-white border-start border-end border-5 bg-separator text-sortable"
+                                            rowspan="2"> @sortablelink('tujuan', 'Tujuan')
                                         </th>
-                                        <th class="text-muted text-small text-uppercase text-center" colspan="3">
+                                        <th class="text-muted text-small text-uppercase text-center border-white border-start border-5 bg-separator text-black rounded-top-end pt-3"
+                                            colspan="4">
                                             Dokumen</th>
-                                        <th width="10%" class="empty" rowspan="2"></th>
                                     </tr>
                                     <tr>
-                                        <th class="text-muted text-small text-uppercase text-center">Tahun</th>
-                                        <th class="text-muted text-small text-uppercase text-center">No. SP2D</th>
-                                        <th class="text-muted text-small text-uppercase text-center">Uraian</th>
+                                        <th
+                                            class="text-muted text-small text-uppercase text-center border-white border-start border-end border-5 bg-separator text-sortable pt-3">
+                                            @sortablelink('dokumen.kurun_waktu', 'Tahun')</th>
+                                        <th
+                                            class="text-muted text-small text-uppercase text-center border-white border-start border-end border-5 bg-separator text-sortable pt-3">
+                                            @sortablelink('dokumen.no_sp2d', 'No. SP2D')</th>
+                                        <th class="text-muted text-small text-uppercase text-center border-white border-start border-5 bg-separator text-sortable rounded-bottom-end pt-3"
+                                            colspan="2"> @sortablelink('dokumen.uraian', 'Uraian')</th>
                                     </tr>
                                 </thead>
                                 <tbody>

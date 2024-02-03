@@ -4,13 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 use App\Models\Dokumen;
 
 class DokumenKeluar extends Model
 {
-    use HasFactory;
+    use HasFactory, Sortable;
 
     protected $fillable = [
+        'dokumen_id',
+        'nama_peminjam',
+        'tanggal_peminjaman',
+        'instansi',
+        'tujuan',
+    ];
+
+    public $sortable = [
         'dokumen_id',
         'nama_peminjam',
         'tanggal_peminjaman',
