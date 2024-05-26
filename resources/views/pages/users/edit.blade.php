@@ -64,6 +64,11 @@
                         </div>
 
                         <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">Kode Wilayah</label>
+                            <input type="text" class="form-control" name="kode_wilayah" value="{{$users->kode_wilayah}}" />
+                        </div>
+
+                        <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Nama Pengguna</label>
                             <input type="text" class="form-control" name="username" value="{{$users->username}}" required />
                         </div>
@@ -75,7 +80,7 @@
 
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Password</label>
-                            <input type="password" class="form-control" name="password" required />
+                            <input type="password" class="form-control" name="password" />
                         </div>
 
                         <div class="mb-3 position-relative form-group">

@@ -63,6 +63,11 @@
                         </div>
 
                         <div class="mb-3 position-relative form-group">
+                            <label class="form-label text-primary fw-bold">Kode Wilayah</label>
+                            <input type="text" class="form-control" name="kode_wilayah" />
+                        </div>
+
+                        <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">Nama Pengguna</label>
                             <input type="text" class="form-control" name="username" required />
                         </div>

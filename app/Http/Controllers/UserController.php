@@ -56,13 +56,14 @@ class UserController extends Controller
     */
     public function store(Request $request)
     {
-        
+
 
         $data['name'] = $request['name'];
+        $data['kode_wilayah'] = $request['kode_wilayah'];
         $data['username'] = $request['username'];
         $data['email'] = $request['email'];
         $data['password'] = Hash::make($request['password']);
-        
+
         $user = User::create($data);
 
         $user->assignRole($request['roles']);
@@ -113,9 +114,14 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $data['name'] = $request['name'];
+        $data['kode_wilayah'] = $request['kode_wilayah'];
         $data['username'] = $request['username'];
         $data['email'] = $request['email'];
-        $data['password'] = Hash::make($request['password']);
+
+        // Check if password is not null or empty
+        if (!empty($request['password'])) {
+            $data['password'] = Hash::make($request['password']);
+        }
 
         User::where('id', $user->id)->update($data);
 
@@ -128,8 +134,9 @@ class UserController extends Controller
             ->event('updated')
             ->log('telah melakukan <strong>pengeditan data pengguna</strong> pada sistem');
 
-        return redirect()->route('users.index')->with('message','Pengguna berhasil diperbaharui');
+        return redirect()->route('users.index')->with('message', 'Pengguna berhasil diperbaharui');
     }
+
 
     /**
     * Remove the specified resource from storage.
