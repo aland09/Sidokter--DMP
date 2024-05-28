@@ -7,7 +7,6 @@ use App\Models\Dokumen;
 use App\Models\DetailDokumen;
 use App\Models\AkunJenis;
 use App\Imports\DokumenImport;
-use App\Imports\DetailDokumenImport;
 use App\Imports\DokumenSp2dImport;
 use App\Imports\DokumenSpmImport;
 use App\Imports\DokumenSppImport;
@@ -16,7 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-
+use Illuminate\Support\Facades\Auth;
 
 class DokumenController extends Controller
 {
@@ -25,9 +24,9 @@ class DokumenController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) : View
+    public function index(Request $request): View
     {
-        $akunJenisOptions       = AkunJenis::select('kode_akun','nama_akun')->get();
+        $akunJenisOptions       = AkunJenis::select('kode_akun', 'nama_akun')->get();
 
         $itemsPerPage           = request('items') ?? 10;
 
@@ -35,13 +34,13 @@ class DokumenController extends Controller
         $end_date_validate = $request->input('end_date_validate');
 
         $dokumen = Dokumen::with([
-                'detailDokumen' => function ($query) {
-                    $query->orderBy('id', 'ASC');
-                },
-                'akunJenis' => function ($query) {
-                    $query->select('id', 'kode_akun', 'nama_akun');
-                },
-            ])
+            'detailDokumen' => function ($query) {
+                $query->orderBy('id', 'ASC');
+            },
+            'akunJenis' => function ($query) {
+                $query->select('id', 'kode_akun', 'nama_akun');
+            },
+        ])
             ->filter(request(['search']))
             ->orderBy('tanggal_validasi', 'DESC')
             ->where('status', '=', 'Menunggu Verifikasi')
@@ -73,10 +72,10 @@ class DokumenController extends Controller
     }
 
     /**
-    * Show the form for creating a new resource.
-    *
-    * @return \Illuminate\Http\Response
-    */
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         $listArsip = [
@@ -120,9 +119,9 @@ class DokumenController extends Controller
 
             $nilai_count = $request['nilai_count'];
 
-            if(!empty($request['nilai_count'])) {
+            if (!empty($request['nilai_count'])) {
 
-                foreach($nilai_count as $key=>$value){
+                foreach ($nilai_count as $key => $value) {
 
                     $arsipData['dokumen_id'] = $dokumen_id;
                     $arsipData['kode_klasifikasi'] = $request['kode_klasifikasi'][$key];
@@ -147,26 +146,23 @@ class DokumenController extends Controller
             }
 
             return redirect()->route('data-arsip.index')->with('message', 'Data arsip berhasil ditambahkan.');
-
-
         } else {
-            return redirect()->route('data-arsip.create')->with('message','Data arsip dengan No. SP2D '.$no_sp2d_dokumen.' sudah terdapat pada sistem');
+            return redirect()->route('data-arsip.create')->with('message', 'Data arsip dengan No. SP2D ' . $no_sp2d_dokumen . ' sudah terdapat pada sistem');
         }
-
     }
 
     /**
-    * Update the specified resource in storage.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @param  \App\Dokumen  $data_arsip
-    * @return \Illuminate\Http\Response
-    */
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Dokumen  $data_arsip
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, Dokumen $data_arsip)
     {
-        $url = '/data-arsip/'.$data_arsip->id;
+        $url = '/data-arsip/' . $data_arsip->id;
 
-        $data = $request->except(['_token','_method', $url]);
+        $data = $request->except(['_token', '_method', $url]);
 
         Dokumen::where('id', $data_arsip->id)->update($data);
 
@@ -177,7 +173,7 @@ class DokumenController extends Controller
 
         DetailDokumen::where('dokumen_id', $data_arsip->id)->update($dataDetail);
 
-        return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diperbaharui');
+        return redirect()->route('data-arsip.index')->with('message', 'Data arsip berhasil diperbaharui');
     }
 
 
@@ -190,15 +186,15 @@ class DokumenController extends Controller
     public function show(Dokumen $data_arsip)
     {
         $dokumen = Dokumen::with([
-                    'detailDokumen' => function($query) {
-                        $query->orderBy('id', 'ASC');
-                    },
-                    'akunJenis' => function($query) {
-                        $query->select('id', 'kode_akun','nama_akun');
-                    },
-                ])
-                ->where('id', $data_arsip->id)
-                ->first();
+            'detailDokumen' => function ($query) {
+                $query->orderBy('id', 'ASC');
+            },
+            'akunJenis' => function ($query) {
+                $query->select('id', 'kode_akun', 'nama_akun');
+            },
+        ])
+            ->where('id', $data_arsip->id)
+            ->first();
 
         return view("pages/data-arsip/show", [
             "title"             => "Detail Data Arsip",
@@ -212,43 +208,46 @@ class DokumenController extends Controller
         $status     = $request['status'];
 
         $dokumens   = Dokumen::find($id);
-        if($dokumens) {
+        if ($dokumens) {
             $dokumens->status = $status;
             $dokumens->update();
-            return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diverifikasi');
+            return redirect()->route('data-arsip.index')->with('message', 'Data arsip berhasil diverifikasi');
         }
     }
 
     public function export_excel($ext)
     {
-        return Excel::download(new DokumenExport, 'daftar-berkas.'.$ext);
+        return Excel::download(new DokumenExport, 'daftar-berkas.' . $ext);
     }
 
     public function import_excel(Request $request)
-	{
-		$this->validate($request, [
-			'file' => 'required|mimes:csv,xls,xlsx'
-		]);
+    {
+        $this->validate($request, [
+            'file' => 'required|mimes:csv,xls,xlsx'
+        ]);
 
-		$file = $request->file('file');
+        $file = $request->file('file');
 
-		$nama_file = rand().$file->getClientOriginalName();
+        $nama_file = rand() . $file->getClientOriginalName();
 
-		$file->move('file_dokumen',$nama_file);
+        $file->move('file_dokumen', $nama_file);
 
-        Excel::import(new DokumenImport, public_path('/file_dokumen/'.$nama_file));
-	    // Excel::import(new DetailDokumenImport, public_path('/file_dokumen/'.$nama_file));
-        Excel::import(new DokumenSp2dImport, public_path('/file_dokumen/'.$nama_file));
-        Excel::import(new DokumenSpmImport, public_path('/file_dokumen/'.$nama_file));
-        Excel::import(new DokumenSppImport, public_path('/file_dokumen/'.$nama_file));
+        Excel::import(new DokumenImport, public_path('/file_dokumen/' . $nama_file));
+        // Excel::import(new DetailDokumenImport, public_path('/file_dokumen/'.$nama_file));
+        Excel::import(new DokumenSp2dImport, public_path('/file_dokumen/' . $nama_file));
+        Excel::import(new DokumenSpmImport, public_path('/file_dokumen/' . $nama_file));
+        Excel::import(new DokumenSppImport, public_path('/file_dokumen/' . $nama_file));
 
 
 
-        return redirect()->route('data-arsip.index')->with('message','Data arsip berhasil diimport');
+        return redirect()->route('data-arsip.index')->with('message', 'Data arsip berhasil diimport');
+    }
 
-	}
+    public function import_monitoring(Request $request)
+    {
 
-    public function import_monitoring(Request $request) {
+        $kode_wilayah = Auth::user()->kode_wilayah;
+
         $success = 0;
 
         $method     = $request['method_type'];
@@ -256,38 +255,48 @@ class DokumenController extends Controller
 
         $query_main = "";
         $query_akun = "";
+        $query_wilayah = "";
 
-        if($akun_jenis > 0) {
-           $query_akun .= " AND (";
-           foreach ($akun_jenis as $key => $element) {
+        // Constructing query for akun_jenis
+        if ($akun_jenis > 0) {
+            $query_akun .= " AND (";
+            foreach ($akun_jenis as $key => $element) {
                 if ($key === array_key_first($akun_jenis)) {
-                    $query_akun .= "kode_akun_jenis = '".$element."'";
+                    $query_akun .= "kode_akun_jenis = '" . $element . "'";
                 } else {
-                    $query_akun .= " OR kode_akun_jenis = '".$element."'";
+                    $query_akun .= " OR kode_akun_jenis = '" . $element . "'";
                 }
             }
-
             $query_akun .= ") ";
         }
 
-        if($method === 'periode') {
-            $tahun      = $request['tahun'];
-            $bulan      = $request['bulan'];
-            $hari       = cal_days_in_month(CAL_GREGORIAN,$bulan,$tahun);
-            $start      = '1.'.$bulan.'.'.$tahun;
-            $end        = $hari.'.'.$bulan.'.'.$tahun;
+        // Constructing main query based on method type
+        if ($method === 'periode') {
+            $tahun = $request['tahun'];
+            $bulan = $request['bulan'];
+            $hari = cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun);
+            $start = '1.' . $bulan . '.' . $tahun;
+            $end = $hari . '.' . $bulan . '.' . $tahun;
 
-            $query_main = "SELECT * FROM newsipkd.VW_MONITORING_SP2D_AKUN_JENIS@newsipkd WHERE tgl_sp2d >= to_date('".$start."', 'DD.MM.YYYY') and tgl_sp2d <= to_date('".$end."', 'DD.MM.YYYY')";
+            $query_main = "SELECT * FROM newsipkd.VW_MONITORING_SP2D_AKUN_JENIS@newsipkd WHERE tgl_sp2d >= to_date('" . $start . "', 'DD.MM.YYYY') and tgl_sp2d <= to_date('" . $end . "', 'DD.MM.YYYY')";
         } else {
-            $tanggal      = $request['tanggal'];
+            $tanggal = $request['tanggal'];
             $date = Carbon::createFromFormat('Y-m-d', $tanggal)->format('j.n.Y');
 
-            $query_main = "SELECT * FROM newsipkd.VW_MONITORING_SP2D_AKUN_JENIS@newsipkd WHERE TRUNC(tgl_sp2d) = to_date('".$date."', 'DD.MM.YYYY') ";
+            $query_main = "SELECT * FROM newsipkd.VW_MONITORING_SP2D_AKUN_JENIS@newsipkd WHERE TRUNC(tgl_sp2d) = to_date('" . $date . "', 'DD.MM.YYYY')";
         }
 
-        $sp2d_monitoring = DB::connection('oraclelink')->select($query_main."".$query_akun);
+        // Adding KODE_WILAYAH condition if kode_wilayah is not null or empty
+        if (!empty($kode_wilayah)) {
+            $query_wilayah = " AND KODE_WILAYAH = '" . $kode_wilayah . "'";
+        }
 
-        if($sp2d_monitoring) {
+        // Constructing the final query
+        $final_query = $query_main . $query_akun . $query_wilayah;
+
+        $sp2d_monitoring = DB::connection('oraclelink')->select($final_query);
+
+        if ($sp2d_monitoring) {
             foreach ($sp2d_monitoring as $value) {
                 $uraian = $value->uraian;
                 $no_spm = $value->no_spm;
@@ -298,7 +307,7 @@ class DokumenController extends Controller
                 $nwp = $value->nama_wp;
                 $skpd = $value->nama_opd;
                 $kode_akun_jenis = $value->kode_akun_jenis;
-                $akun_jenis_id = AkunJenis::select('id')->where('kode_akun','=',$kode_akun_jenis)->first()->id;
+                $akun_jenis_id = AkunJenis::select('id')->where('kode_akun', '=', $kode_akun_jenis)->first()->id;
 
                 $dokumens = Dokumen::where('no_sp2d', $no_sp2d)->first();
                 if ($dokumens === null) {
@@ -356,8 +365,6 @@ class DokumenController extends Controller
 
                     $success = $success + 1;
                 }
-
-
             }
 
             $dokumenMonitoring = Dokumen::find(1);
@@ -368,15 +375,15 @@ class DokumenController extends Controller
             //     ->event('created')
             //     ->log('telah melakukan <strong>tarik data monitoring</strong> pada sistem');
             // }
-            return redirect()->route('data-arsip.index')->with('message', number_format($success,0,",",".").' Data arsip berhasil di import.');
+            return redirect()->route('data-arsip.index')->with('message', number_format($success, 0, ",", ".") . ' Data arsip berhasil di import.');
         } else {
             return redirect()->route('data-arsip.index')->with('error', 'Tidak ada data yang dapat ditarik pada periode tersebut');
         }
-
     }
 
     // Get Arsip Budle
-    public function getBerkasArsip($id) {
+    public function getBerkasArsip($id)
+    {
         $list = [
             [
                 "dokumen_id" => 1,
@@ -477,31 +484,34 @@ class DokumenController extends Controller
         return $years;
     }
 
-    public function generate_no_box($year) {
+    public function generate_no_box($year)
+    {
         $counter = Dokumen::whereNotNull('no_box')->where('kurun_waktu', '=', $year)->distinct()->count('no_box');
-        $short_year = substr($year,2);
-        $current_number = sprintf("%05d", $counter+1);
-        $no_box = $current_number."/".$year."/P.".$short_year."/SBPKDJP";
+        $short_year = substr($year, 2);
+        $current_number = sprintf("%05d", $counter + 1);
+        $no_box = $current_number . "/" . $year . "/P." . $short_year . "/SBPKDJP";
         return $no_box;
     }
 
-    public function get_no_box($year) {
+    public function get_no_box($year)
+    {
         return response()->json($this->generate_no_box($year));
     }
 
-    public function update_no_box(Request $request) {
+    public function update_no_box(Request $request)
+    {
         $ids = $request['id'];
-        $id = explode(",",$ids[0]);
+        $id = explode(",", $ids[0]);
         $kurun_waktu = $request['kurun_waktu'];
         $no_box = $this->generate_no_box($kurun_waktu);
         $data['no_box'] = $no_box;
 
-        foreach($id as $item) {
+        foreach ($id as $item) {
 
             Dokumen::where('id', $item)->update($data);
-             DetailDokumen::where('dokumen_id', $item)->update($data);
+            DetailDokumen::where('dokumen_id', $item)->update($data);
         }
 
-        return redirect()->route('data-arsip.index')->with('message','No. Box telah berhasil diperbaharui');
+        return redirect()->route('data-arsip.index')->with('message', 'No. Box telah berhasil diperbaharui');
     }
 }
