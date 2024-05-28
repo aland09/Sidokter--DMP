@@ -32,6 +32,8 @@
     <script src="{{ asset('js/vendor/datepicker/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('js/vendor/datepicker/locales/bootstrap-datepicker.es.min.js') }}"></script>
     <script src="{{ asset('js/vendor/select2.full.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js"></script>
 @endsection
 @section('js_page')
     <script src="{{ asset('js/forms/validation.js') }}"></script>
@@ -351,6 +353,8 @@
                 `);
                 }
 
+                $('#file_dokumen').val('');
+                $('#pdf_preview_container').hide();
                 $('#modalSideEditChild').modal('show');
             });
 
@@ -594,6 +598,44 @@
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
         }
+
+        document.getElementById('file_dokumen').addEventListener('change', function(event) {
+            var file = event.target.files[0];
+            var previewContainer = document.getElementById('pdf_preview_container');
+            var previewFrame = document.getElementById('pdf_preview');
+
+            if (file && file.type === "application/pdf") {
+                var fileReader = new FileReader();
+                fileReader.onload = function() {
+                    var typedarray = new Uint8Array(this.result);
+
+                    pdfjsLib.getDocument(typedarray).promise.then(function(pdf) {
+                        pdf.getPage(1).then(function(page) {
+                            var scale = 1.5;
+                            var viewport = page.getViewport({ scale: scale });
+
+                            var canvas = document.createElement('canvas');
+                            var context = canvas.getContext('2d');
+                            canvas.height = viewport.height;
+                            canvas.width = viewport.width;
+
+                            var renderContext = {
+                                canvasContext: context,
+                                viewport: viewport
+                            };
+                            page.render(renderContext).promise.then(function() {
+                                previewFrame.src = canvas.toDataURL();
+                                previewContainer.style.display = 'block';  // Show the preview
+                            });
+                        });
+                    });
+                };
+                fileReader.readAsArrayBuffer(file);
+            } else {
+                alert('Please upload a PDF file.');
+                previewContainer.style.display = 'none';  // Hide the preview if the file is not a PDF
+            }
+        });
     </script>
 @endsection
 @section('content')
@@ -964,9 +1006,14 @@
                         <div class="mb-3 position-relative form-group">
                             <label class="form-label text-primary fw-bold">File Dokumen</label>
                             <div id="file_dokumen_append"></div>
-
-                            <input class="form-control" type="file" name="file_dokumen" />
+                            <input class="form-control" type="file" name="file_dokumen" id="file_dokumen" accept="application/pdf"/>
                         </div>
+
+                        <div class="mb-3 position-relative form-group" id="pdf_preview_container" style="display: none;">
+                            <label class="form-label text-primary fw-bold">Preview Dokumen</label>
+                            <iframe class="border" id="pdf_preview" style="width: 100%; height: 500px;" frameborder="0"></iframe>
+                        </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Batal</button>
